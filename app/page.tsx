@@ -18,18 +18,6 @@ export default function Home() {
           >
             GitHub Profile →
           </a>
-          <a
-            href="/cv.pdf"
-            className="inline-flex items-center gap-2 rounded-md border border-emerald-400/40 hover:border-emerald-300 px-6 py-3 font-medium backdrop-blur-sm bg-white/5 hover:bg-white/10 transition-colors"
-          >
-            Download CV
-          </a>
-          <a
-            href="/recommendation.pdf"
-            className="inline-flex items-center gap-2 rounded-md border border-slate-400/30 hover:border-emerald-300 px-6 py-3 font-medium backdrop-blur-sm bg-white/5 hover:bg-white/10 transition-colors"
-          >
-            Recommendation
-          </a>
         </div>
       </section>
 

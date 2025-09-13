@@ -3,17 +3,19 @@ import { MealDetails } from "@/components/DataGrids/MealDetails";
 import FoodSearchPanel from "@/components/MealDetails/FoodSearchPanel";
 import { MacroPieChart } from "@/components/MealDetails/MacroPieChart";
 import { QuickMacros } from "@/components/MealDetails/QuickMacros";
-import { ShowMealDetailsName} from "@/components/MealName/ShowMealName";
 
-export default async function Meal({ params }: {params: { id: string }}) {
+export default async function Meal({ params, searchParams }: {params: { id: string }; searchParams: { mealName?: string }}) {
   const mealNameId = Number(params.id);
+  const mealName =  searchParams.mealName;
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-12">
       {/* Header */}
       <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
         <div>
-            <ShowMealDetailsName mealNameId={mealNameId}/>
+            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-emerald-300 to-teal-200 bg-clip-text text-transparent">
+              Meal: {mealName}
+            </h1>
           <p className="mt-2 text-sm text-slate-400">
             Review foods, adjust quantities, and monitor macros.
           </p>

@@ -91,7 +91,7 @@ export default function MealGrid() {
           field: 'Details', headerName: 'Details', type: 'actions', width: 100, 
           renderCell: (params) => (
               <strong>
-                  <Button variant="contained" color="primary" href={`/Meals/${params.row.id}`}>
+                  <Button variant="contained" color="primary" href={`/Meals/${params.row.id}?mealName=${params.row.name}`}>
                       Details
                   </Button>
               </strong>
