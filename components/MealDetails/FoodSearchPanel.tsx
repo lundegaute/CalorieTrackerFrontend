@@ -2,7 +2,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { FoodFromMongo, ErrorResponse, AddFoodDTO, AddMealDTO, MealDTO, FoodDTO} from "@/Types/types";
+import { FoodFromMongo, FoodFromSql, ErrorResponse, AddFoodDTO, AddMealDTO, MealDTO, FoodDTO} from "@/Types/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {fetchPost} from "@/Fetch/fetchPost";
 import {fetchGet} from "@/Fetch/fetchGet";
@@ -11,70 +11,33 @@ import {fetchGet} from "@/Fetch/fetchGet";
 
 export default function FoodSearchPanel({mealId}: {mealId: number}) {
   const queryClient = useQueryClient();
-  const [q, setQ] = useState("");
-  const { data: foods, isLoading: isLoadingFoods, error, refetch: refetchFoods } = useQuery<FoodFromMongo[], ErrorResponse>({
-    queryKey: ["foodsFromMongo", q],
+  const [search, setSearch] = useState("");
+  const { data: foods, isLoading: isLoadingFoods, error, refetch: refetchFoods } = useQuery<FoodFromSql[], ErrorResponse>({
+    queryKey: ["foodsFromSql", search],
     queryFn: async () => {
-      const res = await fetchPost<FoodFromMongo[], string>("/api/Foods/Search", q);
+      const res = await fetchPost<FoodFromSql[], string>("/api/Foods/Search", search);
       if (!res.success) throw res.error;
       return res.data;
     },
-    enabled: q.length >= 3,
+    enabled: search.length >= 3,
     retry: 0, 
   });
 
 
-  async function handleAddFood(food: FoodFromMongo) {
+  async function handleAddFood(food: FoodFromSql) {
     console.log(food);
-    const foodToAdd: AddFoodDTO = {
-      name: food.name,
-      calories: food.calories,
-      protein: food.protein,
-      carbohydrates: food.carbohydrates,
-      fat: food.fat,
+    const addMealDTO: AddMealDTO = {
+      quantity: 100,
+      mealNameId: mealId,
+      foodId: food.id,
+    };
+    const addFoodToMeal = await fetchPost<MealDTO, AddMealDTO>(`/api/Meals`, addMealDTO);
+    if (!addFoodToMeal.success) {
+      alert(addFoodToMeal.error.message.Error[0]); // Change this to use sweetalert2
+    } else {
+      queryClient.refetchQueries({ queryKey: ["MealDetails", mealId] });
     }
-    // Fetch the food based on name
-    try {
-      const res = await fetchGet<FoodDTO>(`/api/Foods/${encodeURIComponent(foodToAdd.name)}`);
-      // If food exists in the database, we go straight to adding food to meal
-      const existingFood = res;
-      const addMealDTO: AddMealDTO = {
-        quantity: 100,
-        mealNameId: mealId,
-        foodId: existingFood.id,
-      };
-      const addFoodToMeal = await fetchPost<MealDTO, AddMealDTO>(`/api/Meals`, addMealDTO);
-      if (!addFoodToMeal.success) {
-        alert(addFoodToMeal.error.message.Error[0]); // sweetalert2: Change this to use sweetalert2
-      } else {
-        queryClient.refetchQueries({ queryKey: ["MealDetails", mealId] });
-      }
-    } catch {
-      console.log("Food does not exist in the database, adding it now.");
-      // If food does not exist, add it to the database first, then add food to meal
-      
-      const addFoodToSql = await fetchPost<FoodDTO, AddFoodDTO>(`/api/Foods`, foodToAdd);
-      console.log("--------------------------------------------")
-      console.log(addFoodToSql.success, addFoodToSql);
-      console.log("--------------------------------------------")
-      if (addFoodToSql.success) {
-        const newlyCreatedFood: FoodDTO = addFoodToSql.data;
-        console.log("Newly created food:", JSON.stringify(newlyCreatedFood)); 
-        const addMealDTO: AddMealDTO = {
-          quantity: 100,
-          mealNameId: mealId,
-          foodId: newlyCreatedFood.id,
-        };
-        const addFoodToMeal = await fetchPost<MealDTO, AddMealDTO>(`/api/Meals`, addMealDTO);
-        if (!addFoodToMeal.success) {
-          alert(addFoodToMeal.error.message.Error[0]);
-        } else {
-          queryClient.refetchQueries({ queryKey: ["MealDetails", mealId] });
-        }
-      } else {
-        alert(addFoodToSql.error.message.Error[0]);
-      }
-    }
+    
   }
 
 
@@ -86,23 +49,23 @@ export default function FoodSearchPanel({mealId}: {mealId: number}) {
         label="Search foods"
         placeholder="Type to search…"
         autoComplete="off"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
       />
 
       <div className="space-y-2 pt-2 max-h-120 overflow-y-auto pr-1">
-        {foods && foods.map((f) => (
+        {foods && foods.map((food) => (
           <div
-            key={f.id}
+            key={food.id}
             className="rounded-lg border-2 border-emerald-400/40 bg-white/5 p-3"
           >
-            <div className="text-sm font-semibold text-slate-200"> {f.name}</div>
+            <div className="text-sm font-semibold text-slate-200"> {food.name}</div>
             <div className="mt-1 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-slate-300">
-              <div>Kcals: <span className="font-medium text-slate-100">{Math.round(f.calories)}</span></div>
-              <div>Prot: <span className="font-medium text-slate-100">{f.protein} g</span></div>
-              <div>Carbs: <span className="font-medium text-slate-100">{f.carbohydrates} g</span></div>
-              <div>Fat: <span className="font-medium text-slate-100">{f.fat} g</span></div>
-              <div role="button" onClick={() => {handleAddFood(f)}} className="cursor-pointer flex flex-row items-center border-emerald-300 text-emerald-300  hover:text-emerald-600  transition ">
+              <div>Kcals: <span className="font-medium text-slate-100">{Math.round(food.calories)}</span></div>
+              <div>Prot: <span className="font-medium text-slate-100">{food.protein} g</span></div>
+              <div>Carbs: <span className="font-medium text-slate-100">{food.carbohydrates} g</span></div>
+              <div>Fat: <span className="font-medium text-slate-100">{food.fat} g</span></div>
+              <div role="button" onClick={() => {handleAddFood(food)}} className="cursor-pointer flex flex-row items-center border-emerald-300 text-emerald-300  hover:text-emerald-600  transition ">
                 <p className="">Add</p>
                 <AddIcon className="" />
               </div>
@@ -110,7 +73,7 @@ export default function FoodSearchPanel({mealId}: {mealId: number}) {
           </div>
         ))}
 
-        {q.length >= 3 && foods?.length === 0 && (
+        {search.length >= 3 && foods?.length === 0 && (
           <div className="text-xs text-slate-400 text-center py-3">No results</div>
         )}
       </div>
