@@ -3,6 +3,7 @@ import { MealDetails } from "@/components/DataGrids/MealDetails";
 import FoodSearchPanel from "@/components/MealDetails/FoodSearchPanel";
 import { MacroPieChart } from "@/components/MealDetails/MacroPieChart";
 import { QuickMacros } from "@/components/MealDetails/QuickMacros";
+import { CreateCustomFood } from "@/components/Form/CreateCustomFood";
 
 export default async function Meal({ params, searchParams }: {params: { id: string }; searchParams: { mealName?: string }}) {
   const mealNameId = Number(params.id);
@@ -32,6 +33,11 @@ export default async function Meal({ params, searchParams }: {params: { id: stri
         <aside className="space-y-5 order-last xl:order-first">
           <Panel title="Add Food">
             <FoodSearchPanel mealId={mealNameId}/>
+          </Panel>
+          {/* Adding custom food with SweetAlert */}
+          <Panel title="Add custom food to Database">
+            <p className="text-sm text-slate-400">Custom food addition coming soon!</p>
+            <CreateCustomFood />
           </Panel>
         </aside>
         {/* Center: Meal Foods Table */}

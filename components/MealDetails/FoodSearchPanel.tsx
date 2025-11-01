@@ -2,10 +2,10 @@
 import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { FoodFromMongo, FoodFromSql, ErrorResponse, AddFoodDTO, AddMealDTO, MealDTO, FoodDTO} from "@/Types/types";
+import { FoodFromSql, ErrorResponse, AddMealDTO, MealDTO} from "@/Types/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {fetchPost} from "@/Fetch/fetchPost";
-import {fetchGet} from "@/Fetch/fetchGet";
+import {sweetAlertMultipleInputs} from "@/components/SweetAlert/formInput";
 
 // Ctrl+Shift+F to search for sweetalert2, to see where to add it throughout the project
 
@@ -16,7 +16,7 @@ export default function FoodSearchPanel({mealId}: {mealId: number}) {
     queryKey: ["foodsFromSql", search],
     queryFn: async () => {
       const res = await fetchPost<FoodFromSql[], string>("/api/Foods/Search", search);
-      if (!res.success) throw res.error;
+      if (!res.success) throw res.error; // This is caught by react query and put into the error variable
       return res.data;
     },
     enabled: search.length >= 3,
@@ -74,7 +74,7 @@ export default function FoodSearchPanel({mealId}: {mealId: number}) {
         ))}
 
         {search.length >= 3 && foods?.length === 0 && (
-          <div className="text-xs text-slate-400 text-center py-3">No results</div>
+          <div className="text-xs text-slate-400 text-center py-3">No results. If you want to add your own food, click the add food button</div>
         )}
       </div>
     </div>

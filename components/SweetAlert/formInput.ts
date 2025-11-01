@@ -37,3 +37,42 @@ export async function sweetAlertAddMealPlan() {
   });
   return result.value.trim();
 }
+
+export async function sweetAlertMultipleInputs() {
+  const result = await Swal.fire({
+    title: "Add Item",
+    html: `
+      <input id="input1" class="swal2-input" placeholder="Name">
+      <input id="input2" class="swal2-input" placeholder="Calories" type="number">
+      <input id="input3" class="swal2-input" placeholder="Protein" type="number">
+      <input id="input4" class="swal2-input" placeholder="Category">
+    `,
+    showCancelButton: true,
+    confirmButtonText: "Add",
+    cancelButtonText: "Cancel",
+    focusConfirm: false,
+    preConfirm: () => {
+      const input1 = (document.getElementById('input1') as HTMLInputElement).value;
+      const input2 = (document.getElementById('input2') as HTMLInputElement).value;
+      const input3 = (document.getElementById('input3') as HTMLInputElement).value;
+      const input4 = (document.getElementById('input4') as HTMLInputElement).value;
+      
+      if (!input1 || !input2 || !input3 || !input4) {
+        Swal.showValidationMessage('Please fill in all fields');
+        return false;
+      }
+      
+      return {
+        name: input1,
+        calories: parseInt(input2),
+        protein: parseInt(input3),
+        category: input4
+      };
+    }
+  });
+  
+  if (result.isConfirmed) {
+    return result.value;
+  }
+  return null;
+}
