@@ -6,8 +6,10 @@ import { QuickMacros } from "@/components/MealDetails/QuickMacros";
 import { CreateCustomFood } from "@/components/Form/CreateCustomFood";
 
 export default async function Meal({ params, searchParams }: {params: { id: string }; searchParams: { mealName?: string }}) {
-  const mealNameId = Number(params.id);
-  const mealName =  searchParams.mealName;
+  const resolvedMealNameId = await params;
+  const resolvedMealName = await searchParams;
+  const mealNameId = Number(resolvedMealNameId.id);
+  const mealName =  resolvedMealName.mealName || "Unknown Meal";
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-12">
@@ -36,7 +38,6 @@ export default async function Meal({ params, searchParams }: {params: { id: stri
           </Panel>
           {/* Adding custom food with SweetAlert */}
           <Panel title="Add custom food to Database">
-            <p className="text-sm text-slate-400">Custom food addition coming soon!</p>
             <CreateCustomFood />
           </Panel>
         </aside>
