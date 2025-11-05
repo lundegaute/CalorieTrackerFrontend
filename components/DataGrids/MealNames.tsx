@@ -47,7 +47,7 @@ export default function MealGrid() {
   };
 
   async function handleAddMealPlanName() {
-    const mealPlanName = { name: await sweetAlertAddMealPlan() };
+    const mealPlanName = { name: await sweetAlertAddMealPlan(mealPlans?.length !== 0) };
     if ( mealPlanName ) {
       console.log(mealPlanName);
       const res = await fetchPost<ResponseMealPlanDTO, AddMealPlanDTO>(`/api/MealPlan`, mealPlanName);

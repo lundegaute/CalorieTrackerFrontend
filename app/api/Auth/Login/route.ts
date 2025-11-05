@@ -16,24 +16,39 @@ export async function POST(req: NextRequest) {
             body: JSON.stringify(body),
             credentials: 'include', // Include cookies in the request
         });
+
+        // ADD DEBUGGING - Check what cookies the backend sent
+        console.log("Backend response headers:", response.headers);
+        console.log("Set-Cookie header:", response.headers.get('set-cookie'));
+
         if (!response.ok) {
             const errorData: ErrorResponse = await response.json();
-            return NextResponse.json(errorData);
+            return NextResponse.json(errorData, { status: response.status });
         }
         
         console.log("---------- API LOGIN ROUTE RESPONSE WITH TOKEN ----------");
-        const token: string = await response.text();
-        return NextResponse.json(token, { status: 200 });
-
+        const data = await response.json();
+        // Set the cookie and return success
+        console.log("---------- TOKEN:");
+        console.log(data.token);
+        const nextResponse = NextResponse.json({data}, { status: 200});
+        nextResponse.cookies.set("token", data.token, {
+            httpOnly: true,
+            secure: false, // Set to true in production
+            sameSite: "lax",
+            path: "/",
+        });
+        
+        return nextResponse;
     } catch (error) {
         console.log("---------- API LOGIN ROUTE ERROR ----------");
         console.error("Error during login:", error);
         const errorResponse: ErrorResponse = {
-            message: { Error: ["An unexpected error occurred during login"] },
+            message: { Error: ["An unexpected error occurred during login, from /api/Auth/Login"] },
             type: "InternalServerError",
             title: "Login Error",
             status: 500
         }
-        return NextResponse.json(errorResponse);
+        return NextResponse.json(errorResponse, { status: 500 });
     }
 }

@@ -49,7 +49,7 @@ export default function Home() {
           />
           <FeatureCard
             title="Visualize stats"
-            status="wip"
+            status="done"
             description="Charts to easily show macronutrient distribution."
           />
         </div>

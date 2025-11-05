@@ -12,7 +12,7 @@ export default async function Meal({ params, searchParams }: {params: { id: stri
   const mealName =  resolvedMealName.mealName || "Unknown Meal";
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-12">
+    <main className="mx-auto max-w-7xl min-h-screen px-6 py-12">
       {/* Header */}
       <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
         <div>

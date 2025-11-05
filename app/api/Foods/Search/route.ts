@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse} from "next/server";
 import { API_ENDPOINTS } from "@/lib/constants";
-import {ErrorResponse, FoodFromMongo, FoodDTO} from "@/Types/types";
+import {ErrorResponse, FoodDTO} from "@/Types/types";
 
 export async function POST(req: NextRequest) {
     const search = await req.json();
     const token = req.cookies.get("token")?.value;
     try {
-        const res = await fetch(API_ENDPOINTS.FOOD, {
+        const res = await fetch(API_ENDPOINTS.FOODSEARCH, {
             method: "POST",
             headers: {
                 "Content-Type": "Application/Json",

@@ -20,12 +20,15 @@ export function MealDetails({ mealNameId }: MealDetailsProps) {
     queryKey: ["MealDetails", mealNameId],
     queryFn: async () => fetchGet<MealFoods[]>(`/api/Meals/${mealNameId}`),
     retry: 0,
-    staleTime: 5 * 60 * 1000
+    staleTime: 5 * 60 * 1000 // 5 minutes
   });
 
-  async function handleQuantityChange(quantity: number, mealId: number, mealNameId: number, foodName: string) {
-      const foodItem = await fetchGet<FoodDTO>(`/api/Foods/${encodeURIComponent(foodName)}`);
-      const foodId = foodItem.id;
+  async function handleQuantityChange(quantity: number, mealId: number, mealNameId: number, foodName: string, foodId: number) {
+      // I need to get the foodId so i can send it to the /api/Meals PUT endpoint
+      console.log("---------- handleQuantityChange called ----------");
+      console.log(`Updating mealId ${mealId} with quantity ${quantity}, foodName: ${foodName}, mealNameId: ${mealNameId}, foodId: ${foodId}`);
+      //const foodItem = await fetchGet<FoodDTO>(`/api/Foods/${encodeURIComponent(foodName)}`);
+      //const foodId = foodItem.id;
       const updateMealDTO: UpdateMealDTO = {
         id: mealId,
         quantity: quantity,
@@ -97,7 +100,7 @@ export function MealDetails({ mealNameId }: MealDetailsProps) {
         columnVisibilityModel={{mealId: false}}
         processRowUpdate={(newRow, oldRow) => {
             if (newRow.quantity !== oldRow.quantity) {
-                handleQuantityChange(newRow.quantity, newRow.mealId, mealNameId, newRow.foodName);
+                handleQuantityChange(newRow.quantity, newRow.mealId, mealNameId, newRow.foodName, newRow.foodId);
             }
             return newRow;
         }}

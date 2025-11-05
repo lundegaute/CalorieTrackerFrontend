@@ -89,6 +89,7 @@ export type MealSummary = {
 export type MealFoods = {
     mealId: number;
     quantity: number;
+    foodId: number;
     foodName: string;
     calories: number;
     protein: number;

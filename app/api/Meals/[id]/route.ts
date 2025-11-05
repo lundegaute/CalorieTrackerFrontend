@@ -1,12 +1,15 @@
-import { ErrorResponse, MealNameDTO, MealFoods, AddMealDTO, MealDTO} from "@/Types/types";
+import { ErrorResponse, MealNameDTO, MealFoods, AddMealDTO, MealDTO, SuccessMessage} from "@/Types/types";
 import { NextResponse, NextRequest } from "next/server";
 import { API_ENDPOINTS } from "@/lib/constants";
 
-export async function GET(req: NextRequest, {params}: { params: { id: string } }) {
-    console.log("---------- API ROUTE GET A MEAL ----------");
-    console.log(`${API_ENDPOINTS.MEAL}/${encodeURIComponent(params.id)}`);
+export async function GET(req: NextRequest, {params}: { params: Promise<{id: string}>}) {
 
+    const resolvedParams = await params;
     const token = req.cookies.get("token")?.value;
+
+    console.log("---------- API ROUTE GET A MEAL ----------");
+    console.log(`${API_ENDPOINTS.MEAL}/${encodeURIComponent(resolvedParams.id)}`);
+
     if ( !token ) {
         console.log("No token found in cookies");
         const errorResponse: ErrorResponse = {
@@ -20,7 +23,7 @@ export async function GET(req: NextRequest, {params}: { params: { id: string } }
         return NextResponse.json(errorResponse, {status: errorResponse.status});
     }
     try {
-        const  res = await fetch(`${API_ENDPOINTS.MEAL}/${encodeURIComponent(params.id)}`, {
+        const  res = await fetch(`${API_ENDPOINTS.MEAL}/${encodeURIComponent(resolvedParams.id)}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json", // Not strictly necessary for GET, but good practice
@@ -54,11 +57,14 @@ export async function GET(req: NextRequest, {params}: { params: { id: string } }
 }
 
 
-export async function DELETE(req: NextRequest, {params}: {params: {id: string}}) {
-    console.log("----- API ROUTE DELETE FOOD ITEM -----");
+export async function DELETE(req: NextRequest, {params}: {params: Promise<{id: string}>}) {
+
+    const resolvedParams = await params;
     const token = req.cookies.get("token")?.value;
+
+    console.log("----- API ROUTE DELETE FOOD ITEM -----");
     try {
-        const res = await fetch(`${API_ENDPOINTS.MEAL}/${(encodeURIComponent(params.id))}`, {
+        const res = await fetch(`${API_ENDPOINTS.MEAL}/${(encodeURIComponent(resolvedParams.id))}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "Application/json",
@@ -71,8 +77,8 @@ export async function DELETE(req: NextRequest, {params}: {params: {id: string}})
                 errorData,
                 {status: errorData.status}
             )
-        }
-        const message: string = await res.json();
+        };
+        const message: SuccessMessage = await res.json();
         return NextResponse.json(
             message,
             { status: 200}

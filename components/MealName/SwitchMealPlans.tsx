@@ -62,7 +62,7 @@ export default function SwitchMealPlans() {
   }
 
   async function handleAddMealPlanName() {
-    const name = await sweetAlertAddMealPlan();
+    const name = await sweetAlertAddMealPlan(mealPlanList.length !== 0);
     if (!name) return;
     const payload: AddMealPlanDTO = { name };
     const res = await fetchPost<ResponseMealPlanDTO, AddMealPlanDTO>("/api/MealPlan", payload);

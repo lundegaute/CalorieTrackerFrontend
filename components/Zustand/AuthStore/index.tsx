@@ -23,13 +23,21 @@ export const useAuthStore = create<AuthState>()(
                 })
             },
             logout: async () => { // Clear the state and remove from localStorage
-                await fetch(API_ENDPOINTS.LOGOUT, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: "include", // Include cookies stored in the browser
-                });
+                try {
+                    await fetch("/api/Auth/Logout", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        credentials: "include",
+                    });
+                // Only remove if API call succeeds
+                
+            } catch (error) {
+                console.error("Logout failed:", error);
+                // Remove cookie even if API call fails
+                
+            }
                 set({
                     isAuthenticated: false,
                 });

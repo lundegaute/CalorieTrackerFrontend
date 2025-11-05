@@ -16,15 +16,16 @@ export async function sweetAlertInput(title: string, mealPlanName: string) {
     return result.value;
 }
 
-export async function sweetAlertAddMealPlan() {
+export async function sweetAlertAddMealPlan(hasMealPlans: boolean = false) {
   const result = await Swal.fire({
     title: "Add meal plan name",
     input: "text",
     inputPlaceholder: "Enter name",
-    showCancelButton: false,
+    showCancelButton: hasMealPlans,
     confirmButtonText: "Add",
-    //cancelButtonText: "Cancel",
-    allowOutsideClick: false,
+    cancelButtonText: "Cancel",
+    allowOutsideClick: hasMealPlans,
+    allowEscapeKey: hasMealPlans,
     inputValidator: (value) => {
       if (!value || !value.trim()) {
         return "Meal plan name cannot be empty";
@@ -32,9 +33,12 @@ export async function sweetAlertAddMealPlan() {
       if (value.trim().length < 2) {
         return "At least 2 characters";
       }
-      return null;
+      return null; // This means the input is valid
     },
   });
+  if ( result.isDismissed || !result.value) {
+    return null;
+  }
   return result.value.trim();
 }
 

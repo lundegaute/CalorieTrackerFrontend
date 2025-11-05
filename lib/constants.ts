@@ -1,6 +1,7 @@
 
-const BASE_URL = process.env.NEXT_PUBLIC_CalorieTracker_Base_Url || "http://localhost:5299/api";
-
+//const BASE_URL = process.env.NEXT_PUBLIC_CalorieTracker_Base_Url || "http://localhost:5299/api"
+const BASE_URL = process.env.NEXT_PUBLIC_CalorieTracker_Base_Azure_Url;
+console.log("BASE_URL:", BASE_URL);
 export const API_ENDPOINTS = {
     base: BASE_URL,
     LOGIN: `${BASE_URL}/User/Login`,
@@ -13,5 +14,6 @@ export const API_ENDPOINTS = {
     SEARCH: `${BASE_URL}/Search`,
     FOOD: `${BASE_URL}/Foods`,
     FOODSQL: `${BASE_URL}/FoodSql`,
+    FOODSEARCH: `${BASE_URL}/FoodSql/Search`,
 
 }

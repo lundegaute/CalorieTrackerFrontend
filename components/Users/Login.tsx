@@ -22,11 +22,11 @@ function Login () {
         }
         console.log("---------- LOGIN COMPONENT FILE ----------");
         const res = await FetchLoginPost(loginUserDTO);
-        if ( typeof res === "string" ) {
+        if ( res.success ) {
             login();
             router.push("/");
         } else {
-            const errorResponse = res as ErrorResponse;
+            const errorResponse = res.error;
             console.log("Error Response:", errorResponse);
             alert(`Error: ${errorResponse.message.Error[0]}`);
         }

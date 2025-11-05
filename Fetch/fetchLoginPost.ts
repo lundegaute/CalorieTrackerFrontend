@@ -1,9 +1,9 @@
 import { ErrorResponse, LoginUserDTO } from '@/Types/types';
 import { API_ENDPOINTS } from '@/lib/constants';
 
-export async function FetchLoginPost(body: LoginUserDTO): Promise<string | ErrorResponse> {
+export async function FetchLoginPost(body: LoginUserDTO): Promise<{success: true, token: string} | {success: false, error: ErrorResponse}> {
     console.log("---------- FETCH LOGIN POST ----------");
-    const res = await fetch(API_ENDPOINTS.LOGIN, {  
+    const res = await fetch("/api/Auth/Login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -14,9 +14,9 @@ export async function FetchLoginPost(body: LoginUserDTO): Promise<string | Error
 
     if (!res.ok) {
         const errorData: ErrorResponse = await res.json();
-        return errorData || "An error occurred while fetching data";
+        return {success: false, error: errorData || "An error occurred while fetching data"};
     }
     console.log("---------- Login Success ----------");
-    const data: string = await res.text();
-    return data;
+    const data = await res.json();
+    return {success: true, token: data.token};
 }
