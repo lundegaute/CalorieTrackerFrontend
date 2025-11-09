@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ThemeProvider from "@/components/Theme/themeProvider";
 import QueryProvider from "@/components/Tanstack/tanstackProvider";
 import CheckAuthStatus from "@/components/Zustand/AuthStore/checkAuthStatus";
+import NavigationLoadingOverlay from "@/components/UI/NavigationLoadingOverlay";
 
 
 const lato = Lato({ subsets: ["latin"], weight: ["400", "700", "900"] });
@@ -28,6 +29,7 @@ export default function RootLayout({
         <ThemeProvider>
           <QueryProvider>
             <CheckAuthStatus />
+            <NavigationLoadingOverlay />
             <Header />
             <main className="px-8 pb-24">
               {children}

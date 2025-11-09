@@ -5,6 +5,7 @@ import ThemeSwitch from "@/components/Theme/ThemeSwitch";
 import LoggedIn from "@/components/Header/LoggedInHeader";
 import LoggedOut from "@/components/Header/LoggedOutHeader";
 import {useAuthStore} from "@/components/Zustand/AuthStore";
+import LoadingLink from "@/components/UI/LoadingLink";
 
 function Header() {
     const pathname = usePathname();
@@ -22,13 +23,13 @@ function Header() {
             <nav className="mt-2 flex items-center">
                 <ul className="flex space-x-4">
                     <li>
-                        <Link href="/" className={`hover:text-emerald-300 transition-colors ${pathname == "/" ? "text-emerald-300": ""}`}>Home</Link>
+                        <LoadingLink href="/" className={`hover:text-emerald-300 transition-colors ${pathname == "/" ? "text-emerald-300": ""}`}>Home</LoadingLink>
                     </li>
                     <li>
-                        <Link href="/Meals" className={`hover:text-emerald-300 transition-colors ${pathname == "/Meals" ? "text-emerald-300" : ""}`}>Meals</Link>
+                        <LoadingLink href="/Meals" className={`hover:text-emerald-300 transition-colors ${pathname == "/Meals" ? "text-emerald-300" : ""}`}>Meals</LoadingLink>
                     </li>
                     <li>
-                        <Link href="/Aboutme" className={`hover:text-emerald-300 transition-colors ${pathname == "/Aboutme" ? "text-emerald-300" : ""}`}>About Me</Link>
+                        <LoadingLink href="/Aboutme" className={`hover:text-emerald-300 transition-colors ${pathname == "/Aboutme" ? "text-emerald-300" : ""}`}>About Me</LoadingLink>
                     </li>
                     {isAuthenticated ? (
                         <li>
