@@ -5,8 +5,8 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "start": "next start -p $PORT",
-        "postinstall": "next build",
+        "start": "./node_modules/.bin/next start -p $PORT",
+        "postinstall": "./node_modules/.bin/next build",
         "lint": "next lint"
     },
     "dependencies": {
