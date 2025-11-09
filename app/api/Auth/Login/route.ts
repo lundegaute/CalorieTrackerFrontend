@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         const nextResponse = NextResponse.json({data}, { status: 200});
         nextResponse.cookies.set("token", data.token, {
             httpOnly: true,
-            secure: false, // Set to true in production
+            secure: process.env.NODE_ENV === "production", // Use secure cookies in production
             sameSite: "lax",
             path: "/",
         });
