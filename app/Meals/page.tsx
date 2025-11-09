@@ -16,9 +16,6 @@ export default function Meals() {
             Overview of your logged meals with totals and future insights.
           </p>
         </div>
-        <div className="flex gap-3">
-          <AddMealName />
-        </div>
       </header>
 
       {/* Layout: Left info rail / Center grid / Right analytics */}
@@ -38,6 +35,7 @@ export default function Meals() {
         >
           <div className="flex items-center justify-between mb-4">
             <SwitchMealPlans />
+            <AddMealName />
           </div>
           <div className="flex justify-center">
             <MealNames />

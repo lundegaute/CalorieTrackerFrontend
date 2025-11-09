@@ -48,7 +48,31 @@ export function MealDetails({ mealNameId }: MealDetailsProps) {
   const columns: GridColDef[] = [
     { field: "mealId", headerName: "ID", width: 50},
     { field: "foodName", headerName: "Food", width: 150},
-    { field: "quantity", headerName: "Qty", type: "number", editable: true, width: 70, },
+    { 
+      field: "quantity", 
+      headerName: "Qty (g)", 
+      type: "number", 
+      editable: true, 
+      width: 85,
+      renderCell: (params) => (
+        <div 
+          className="flex items-center gap-1 cursor-pointer group"
+          title="Click to edit quantity"
+        >
+          <span className="text-sm font-medium text-slate-100 group-hover:text-emerald-300 transition-colors">
+            {params.row.quantity}g
+          </span>
+          <svg 
+            className="w-3 h-3 text-slate-500 group-hover:text-emerald-400 opacity-50 group-hover:opacity-100 transition-all" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </div>
+      )
+    },
     { field: "calories", headerName: "Kcal", type: "number", width: 70 },
     { field: "protein", headerName: "Prot", type: "number", width: 70 },
     { field: "carbohydrates", headerName: "Carbs", type: "number", width: 70 },
@@ -97,6 +121,16 @@ export function MealDetails({ mealNameId }: MealDetailsProps) {
         disableColumnMenu
         hideFooterSelectedRowCount
         density="compact"
+        editMode="cell"
+        onCellClick={(params) => {
+          // Only start editing for the quantity column
+          if (params.field === 'quantity') {
+            params.api.startCellEditMode({
+              id: params.id,
+              field: params.field,
+            });
+          }
+        }}
         columnVisibilityModel={{mealId: false}}
         processRowUpdate={(newRow, oldRow) => {
             if (newRow.quantity !== oldRow.quantity) {
@@ -130,6 +164,15 @@ export function MealDetails({ mealNameId }: MealDetailsProps) {
             fontSize: 13.5,
             letterSpacing: ".35px",
             color: "#F1F5F9",
+          },
+          // Style the quantity column specifically
+          "& .MuiDataGrid-cell--editable": {
+            backgroundColor: "rgba(16,185,129,0.05)",
+            borderLeft: "2px solid rgba(16,185,129,0.2)",
+            "&:hover": {
+              backgroundColor: "rgba(16,185,129,0.08)",
+              borderLeftColor: "rgba(16,185,129,0.4)",
+            }
           },
           "& .MuiDataGrid-cell": {
             fontSize: 14,
