@@ -5,7 +5,7 @@ import { MacroPieChart } from "@/components/MealDetails/MacroPieChart";
 import { QuickMacros } from "@/components/MealDetails/QuickMacros";
 import { CreateCustomFood } from "@/components/Form/CreateCustomFood";
 
-export default async function Meal({ params, searchParams }: {params: { id: string }; searchParams: { mealName?: string }}) {
+export default async function Meal({ params, searchParams }: {params: Promise<{ id: string }>; searchParams: Promise<{ mealName?: string }>}) {
   const resolvedMealNameId = await params;
   const resolvedMealName = await searchParams;
   const mealNameId = Number(resolvedMealNameId.id);

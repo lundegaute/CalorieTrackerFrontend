@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
 }
 
 
-export async function POST(req: NextRequest, {params}: {params: {id: string}}) {
+export async function POST(req: NextRequest) {
     const body: AddMealDTO = await req.json();
     const token = req.cookies.get("token")?.value;
     console.log("---------- API ROUTE POST A MEAL ----------");

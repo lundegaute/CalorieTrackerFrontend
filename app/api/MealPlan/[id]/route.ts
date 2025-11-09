@@ -3,10 +3,11 @@ import { ErrorResponse, ResponseMealPlanDTO, SuccessMessage } from "@/Types/type
 import { API_ENDPOINTS } from "@/lib/constants";
 import ValidateToken from "@/HelperFunctions/validateToken";
 
-export async function GET(req: NextRequest, {params}: { params: { id: number}}) {
+export async function GET(req: NextRequest, {params}: { params: Promise<{ id: string}>}) {
+    const resolvedParams = await params;
     const token = req.cookies.get("token")?.value;
     try {
-        const res = await fetch(`${API_ENDPOINTS.MEALPLAN}/${params.id}`, {
+        const res = await fetch(`${API_ENDPOINTS.MEALPLAN}/${resolvedParams.id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "Application/json",
@@ -44,7 +45,8 @@ export async function GET(req: NextRequest, {params}: { params: { id: number}}) 
     }
 }
 
-export async function DELETE(req: NextRequest, {params}: { params: { id: string}}) {
+export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id: string}>}) {
+    const resolvedParams = await params;
     const token = await req.cookies.get("token")?.value;
     const tokenResult: ErrorResponse = ValidateToken(token || "");
     if ( tokenResult.title === "Token expired" || tokenResult.title === "Token invalid") {
@@ -54,7 +56,7 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: string}
         );
     };
     try {
-        const res = await fetch(`${API_ENDPOINTS.MEALPLAN}/${encodeURIComponent(params.id)}`, {
+        const res = await fetch(`${API_ENDPOINTS.MEALPLAN}/${encodeURIComponent(resolvedParams.id)}`, {
             method: "DELETE",
             headers: {
                 "Content-Types": "application/json",

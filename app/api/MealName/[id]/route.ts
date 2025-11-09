@@ -3,7 +3,8 @@ import { ErrorResponse, MealNameDTO } from "@/Types/types";
 import { NextResponse, NextRequest } from "next/server";
 import ValidateToken from "@/HelperFunctions/validateToken";
 
-export async function GET(req: NextRequest, {params}: { params: {id: number}}) {
+export async function GET(req: NextRequest, {params}: { params: Promise<{id: string}>}) {
+    const resolvedParams = await params;
     console.log("----- WE IN HERE -----" );
     // ----- Handle expired and invalid token
     const token = req.cookies.get("token")?.value;
@@ -14,9 +15,9 @@ export async function GET(req: NextRequest, {params}: { params: {id: number}}) {
             { status: tokenResult.status}
         );
     };
-    console.log(`${API_ENDPOINTS.MEAL_NAME}/${params.id}`);
+    console.log(`${API_ENDPOINTS.MEAL_NAME}/${resolvedParams.id}`);
     try {
-        const res = await fetch(`${API_ENDPOINTS.MEAL_NAME}/${params.id}`, {
+        const res = await fetch(`${API_ENDPOINTS.MEAL_NAME}/${resolvedParams.id}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -54,9 +55,10 @@ export async function GET(req: NextRequest, {params}: { params: {id: number}}) {
     }
 }
 
-export async function DELETE(req: NextRequest, {params}: {params: {id: string}} ) {
+export async function DELETE(req: NextRequest, {params}: {params: Promise<{id: string}>} ) {
+    const resolvedParams = await params;
     console.log("----- API DELETE -----");
-    console.log(API_ENDPOINTS.MEAL_NAME + "/" + params.id);
+    console.log(API_ENDPOINTS.MEAL_NAME + "/" + resolvedParams.id);
 
     // ----- Handle expired and invalid token
     const token = req.cookies.get("token")?.value;
@@ -69,7 +71,7 @@ export async function DELETE(req: NextRequest, {params}: {params: {id: string}} 
     };
 
     try {
-        const res = await fetch(`${API_ENDPOINTS.MEAL_NAME}/${encodeURIComponent(params.id)}`, {
+        const res = await fetch(`${API_ENDPOINTS.MEAL_NAME}/${encodeURIComponent(resolvedParams.id)}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`

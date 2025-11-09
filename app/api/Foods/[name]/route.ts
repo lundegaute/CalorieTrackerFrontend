@@ -2,13 +2,14 @@ import { ErrorResponse, MealNameDTO, MealFoods, FoodDTO } from "@/Types/types";
 import { NextResponse, NextRequest } from "next/server";
 import { API_ENDPOINTS } from "@/lib/constants";
 
-export async function GET(req: NextRequest, {params}: { params: { name: string } }) {
+export async function GET(req: NextRequest, {params}: { params: Promise<{ name: string }> }) {
+    const resolvedParams = await params;
     console.log("---------- API ROUTE GET A FOOD ITEM ----------");
-    console.log(`${API_ENDPOINTS.FOODSQL}/${encodeURIComponent(params.name)}`);
+    console.log(`${API_ENDPOINTS.FOODSQL}/${encodeURIComponent(resolvedParams.name)}`);
 
     const token = req.cookies.get("token")?.value;
     try {
-        const  res = await fetch(`${API_ENDPOINTS.FOODSQL}/${encodeURIComponent(params.name)}`, {
+        const  res = await fetch(`${API_ENDPOINTS.FOODSQL}/${encodeURIComponent(resolvedParams.name)}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json", // Not strictly necessary for GET, but good practice

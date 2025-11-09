@@ -1,4 +1,4 @@
-import { MealSummary, MealDTO, MealFood } from "@/Types/types";
+import { MealSummary, MealDTO, MealFoods } from "@/Types/types";
 
 export const helper = { 
     
