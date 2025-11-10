@@ -24,7 +24,6 @@ export default function Meals() {
         <aside className="space-y-5 order-last xl:order-first">
           {/* Create infocard component to load in here  */}
           <ShowTotals />
-          <InfoCard title="Last Updated" value={new Date().toLocaleDateString()} hint="Local date" />
         </aside>
 
         {/* Center (DataGrid) */}
