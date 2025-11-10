@@ -4,12 +4,13 @@ import FoodSearchPanel from "@/components/MealDetails/FoodSearchPanel";
 import { MacroPieChart } from "@/components/MealDetails/MacroPieChart";
 import { QuickMacros } from "@/components/MealDetails/QuickMacros";
 import { CreateCustomFood } from "@/components/Form/CreateCustomFood";
+import Link from "next/link";
 
 export default async function Meal({ params, searchParams }: {params: Promise<{ id: string }>; searchParams: Promise<{ mealName?: string }>}) {
   const resolvedMealNameId = await params;
   const resolvedMealName = await searchParams;
   const mealNameId = Number(resolvedMealNameId.id);
-  const mealName =  resolvedMealName.mealName || "Unknown Meal";
+  const mealName = resolvedMealName.mealName || "Unknown Meal";
 
   return (
     <main className="mx-auto max-w-7xl min-h-screen px-6 py-12">
@@ -48,6 +49,15 @@ export default async function Meal({ params, searchParams }: {params: Promise<{ 
           aria-label="Meal items"
         >
           <div className="flex items-center justify-between mb-4">
+            <Link 
+              href={`/Meals`}
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-emerald-300 bg-slate-800/50 hover:bg-slate-700/50 rounded-md border border-slate-600/50 hover:border-emerald-400/30 transition-all"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to Meals
+            </Link>
             <h2 className="text-lg font-semibold text-slate-200">Foods In Meal</h2>
           </div>
           <div className="h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent mb-4" />
