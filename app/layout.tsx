@@ -25,13 +25,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} "min-h-screen text-slate-100 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-800 selection:bg-emerald-400/30 selection:text-white"`}>
+      {/* 1. Added flex, flex-col, and fixed a syntax typo with your quotes */}
+      <body className={`${inter.className} flex flex-col min-h-screen text-slate-100 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-800 selection:bg-emerald-400/30 selection:text-white`}>
         <ThemeProvider>
           <QueryProvider>
             <CheckAuthStatus />
             <NavigationLoadingOverlay />
             <Header />
-            <main className="px-8 pb-24">
+            {/* 2. Added flex-grow so this section expands to fill all empty space */}
+            <main className="flex-grow px-8 pb-24">
               {children}
             </main>
             <Footer />

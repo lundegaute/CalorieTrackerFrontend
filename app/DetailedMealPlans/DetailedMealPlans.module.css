@@ -1,0 +1,110 @@
+/* ==========================================================================
+   DASHBOARD LAYOUT DESIGN TOKENS (Variables)
+   ========================================================================== */
+.dashboardContainer {
+  /* Layout Spacing Tokens */
+  --layout-max-width: 1500px;
+  --layout-gap: 1.5rem;         /* Equal to Tailwind's gap-6 */
+  --sidebar-min-height: 400px;
+  --table-min-height: 500px;
+
+  /* Architectural Color Matrix */
+  --bg-panel-solid: rgba(30, 41, 59, 0.8);    /* Slate 800 with 80% opacity */
+  --bg-panel-trans: rgba(30, 41, 59, 0.4);    /* Slate 800 with 40% opacity */
+  --border-color-soft: rgba(71, 85, 105, 0.3); /* Slate 600 soft edge */
+  --border-color-accent: rgba(16, 185, 129, 0.3); /* Emerald 500 accent edge */
+}
+
+/* ==========================================================================
+   LAYOUT STRUCTURES
+   ========================================================================== */
+
+/* The outer blueprint alignment wrapper */
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-gap);
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin: 2rem auto 0; /* Centers the whole dashboard on large screens */
+}
+
+/* 1. TOP SECTION: THE HEADER CAP */
+.headerCap {
+  padding: 1.5rem;
+  background-color: var(--bg-panel-trans);
+  border: 1px solid var(--border-color-soft);
+  border-radius: 0.75rem; /* Clean modern rounded corners */
+}
+
+/* 2. MAIN MIDDLE SECTION: THE PROPORTIONAL BLUEPRINT GRID */
+.gridMatrix {
+  display: grid;
+  /* Slices the monitor into 3 clean structural tracks: 
+     Left panel gets 2 parts, Center table gets 6 parts, Right panel gets 3 parts */
+  grid-template-columns: 2fr 6fr 3fr;
+  gap: var(--layout-gap);
+  
+  /* Industry standard: align elements to the top of their row track 
+     so they don't stretch vertically to look awkward when text scales */
+  align-items: start; 
+}
+
+/* ==========================================================================
+   PANEL CARD OUTLINES
+   ========================================================================== */
+
+/* Base reusable card layout configuration */
+.panelCard {
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Left Sidebar: Macro numeric aggregations */
+.leftSidebar {
+  composes: panelCard; /* Reuses base panel card styles */
+  min-height: var(--sidebar-min-height);
+  background-color: var(--bg-panel-trans);
+  border: 1px dashed var(--border-color-soft);
+}
+
+/* Center Section: Main Interactive Table Matrix */
+.centerTableSection {
+  composes: panelCard;
+  min-height: var(--table-min-height);
+  background-color: var(--bg-panel-solid);
+  border: 1px solid var(--border-color-accent);
+  box-shadow: 0 20px 25px -5px rgba(2, 44, 34, 0.15); /* Soft glowing depth shadow */
+}
+
+/* Right Sidebar: Analytical Graphic Frameworks */
+.rightSidebar {
+  composes: panelCard;
+  min-height: var(--sidebar-min-height);
+  background-color: var(--bg-panel-trans);
+  border: 1px dashed var(--border-color-soft);
+}
+
+/* Typography Helpers for outlines */
+.outlineLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 1em;
+  text-transform: uppercase;
+  color: #64748b; /* Slate 500 */
+}
+
+.centerLabel {
+  composes: outlineLabel;
+  color: #34d399; /* Emerald 400 */
+}
+
+.footerLabel {
+  font-size: 0.75rem;
+  color: #475569; /* Slate 600 */
+  text-align: center;
+}

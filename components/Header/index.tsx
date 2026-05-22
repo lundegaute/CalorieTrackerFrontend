@@ -29,6 +29,9 @@ function Header() {
                         <LoadingLink href="/Meals" className={`hover:text-emerald-300 transition-colors ${pathname == "/Meals" ? "text-emerald-300" : ""}`}>Meals</LoadingLink>
                     </li>
                     <li>
+                        <LoadingLink href="/DetailedMealPlans" className={`hover:text-emerald-300 transition-colors ${pathname == "/DetailedMealPlans" ? "text-emerald-300" : ""}`}>Detailed Mealplans</LoadingLink>
+                    </li>
+                    <li>
                         <LoadingLink href="/Aboutme" className={`hover:text-emerald-300 transition-colors ${pathname == "/Aboutme" ? "text-emerald-300" : ""}`}>About Me</LoadingLink>
                     </li>
                     {isAuthenticated ? (
