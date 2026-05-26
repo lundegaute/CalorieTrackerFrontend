@@ -58,9 +58,9 @@ export function DetailedCompleteOverview() {
 
                 {/* CENTER SECTION */}
                 <section className={styles.centerTableSection}>
-                    <select multiple name="MealPlans" size={apiResponse.data.length}>
+                    <select name="MealPlans">
                         {apiResponse.data.map((plan) => (
-                            <option selected="selected" value={plan.name}>Test</option>
+                            <option key={plan.id} value={plan.name}>{plan.name}</option>
                         ))}
                     </select>
                     <DetailedMeals apiResponse={apiResponse}/>
