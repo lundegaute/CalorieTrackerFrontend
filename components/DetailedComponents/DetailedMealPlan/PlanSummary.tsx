@@ -1,20 +1,22 @@
 import styles from "./PlanSummary.module.css";
+import {DetailedMealDTO} from "@/Types/DetailedTypes";
 
-export function DetailedPlanSummary() {
+export function DetailedPlanSummary({detailedMeals}: {detailedMeals: DetailedMealDTO[]}) {
 
+  const totalCalories = detailedMeals.reduce((acc, meal) => acc + meal.totalCalories, 0);
+  const totalProtein = detailedMeals.reduce((acc, meal) => acc + meal.totalProtein, 0);
+  const totalCarbs = detailedMeals.reduce((acc, meal) => acc + meal.totalCarbs, 0);
+  const totalFats = detailedMeals.reduce((acc, meal) => acc + meal.totalFats, 0);
 
   return (
     <div className={styles.totals}>
-      <InfoCard title={"Total Calories"} value={2500} />
-      <InfoCard title={"Total Protein"} value={200} />
-      <InfoCard title={"Total Carbs"} value={350} />
-      <InfoCard title={"Total Fats"} value={90} />
+      <InfoCard title={"Total Calories"} value={parseFloat(totalCalories.toFixed(2))} />
+      <InfoCard title={"Total Protein"} value={parseFloat(totalProtein.toFixed(2))} />
+      <InfoCard title={"Total Carbs"} value={parseFloat(totalCarbs.toFixed(2))} />
+      <InfoCard title={"Total Fats"} value={parseFloat(totalFats.toFixed(2))} />
     </div>
   )
 }
-
-
-
 
 
 function InfoCard({ title, value }: { title: string; value: number;}) {
