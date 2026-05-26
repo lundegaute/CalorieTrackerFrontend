@@ -81,6 +81,7 @@
 /* Center Section: Main Interactive Table Matrix */
 .centerTableSection {
   composes: panelCard;
+  justify-content: start;
   min-height: var(--table-min-height);
   background-color: var(--bg-panel-solid);
   border: 1px solid var(--border-color-accent);

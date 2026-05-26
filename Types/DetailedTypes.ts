@@ -1,4 +1,4 @@
-export type ApiResponse<T> = {
+export type ApiResponse<T = any> = {
     isSuccess: boolean;
     data: T | null;
     errors: string[];

@@ -4,7 +4,7 @@ export function DetailedPlanSummary() {
 
 
   return (
-    <div className={""}>
+    <div className={styles.totals}>
       <InfoCard title={"Total Calories"} value={2500} />
       <InfoCard title={"Total Protein"} value={200} />
       <InfoCard title={"Total Carbs"} value={350} />
