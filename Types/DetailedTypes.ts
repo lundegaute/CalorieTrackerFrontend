@@ -14,13 +14,13 @@ export type DetailedCompleteOverviewDTO = {
 }
 
 // A single meal: Frokost or Middag or Kveldsmat
-type DetailedMealDTO = {
+export type DetailedMealDTO = {
     id: number;
     name: string;
     totalCalories: number; // Sum of all components
     totalProtein: number;
     totalCarbs: number;
-    totalFat: number;
+    totalFats: number;
 
     components: DetailedMealComponentDTO[];
 }

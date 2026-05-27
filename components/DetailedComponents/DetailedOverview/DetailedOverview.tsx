@@ -4,6 +4,7 @@ import {useQuery} from "@tanstack/react-query";
 import {useState } from "react";
 import { ApiResponse, DetailedCompleteOverviewDTO } from "@/Types/DetailedTypes";
 import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
+import {DetailedPlanSummary} from "@/components/DetailedComponents/DetailedMealPlan/PlanSummary";
 
 
 export function DetailedCompleteOverview() {
@@ -35,35 +36,33 @@ export function DetailedCompleteOverview() {
             <h1>Error during fetch: {error?.message}</h1>
         )
     }
-
     const activePlan = apiResponse?.data[0];
     if ( !activePlan ) {
         return <h1>User has no active plan.</h1>
     }
 
     if (apiResponse && apiResponse.data) {
-        console.log("-- ApiResponse --");
-        console.log(apiResponse.data[0].name);
         return (
             <main className={styles.gridMatrix}>
                 {/* 2.1 LEFT PANEL */}
                 <aside className={styles.leftSidebar}>
                     <div className={styles.leftComponents}>
                         <div className={styles.outlineLabel}>
-                        Calories: Macro
+                        Total Calories:
                         </div>
+                        <DetailedPlanSummary detailedMeals={activePlan.detailedMeals}/> 
                         {/* Real macro numeric squares will go here */}
                     </div>
                 </aside>
 
                 {/* CENTER SECTION */}
                 <section className={styles.centerTableSection}>
-                    <select name="MealPlans">
+                    <select className={styles.DropDownMenu} name="MealPlans" >
                         {apiResponse.data.map((plan) => (
                             <option key={plan.id} value={plan.name}>{plan.name}</option>
                         ))}
                     </select>
-                    <DetailedMeals apiResponse={apiResponse}/>
+                    <DetailedMeals detailedMeals={apiResponse.data[activeMealPlan].detailedMeals}/>
                 </section>
 
                 {/* RIGHT PANEL */}

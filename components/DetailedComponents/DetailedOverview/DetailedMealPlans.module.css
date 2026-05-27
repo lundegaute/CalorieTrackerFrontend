@@ -116,3 +116,7 @@
   color: #475569; /* Slate 600 */
   text-align: center;
 }
+
+.DropDownMenu {
+  width: 10rem;
+}

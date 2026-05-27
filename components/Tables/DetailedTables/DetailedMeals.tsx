@@ -1,10 +1,10 @@
-import { ApiResponse, DetailedCompleteOverviewDTO } from "@/Types/DetailedTypes";
+import { DetailedMealDTO } from "@/Types/DetailedTypes";
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 
+export default function DetailedMeals({detailedMeals}: {detailedMeals: DetailedMealDTO[]}) {
 
-
-export default function DetailedMeals({apiResponse}: {apiResponse: ApiResponse<DetailedCompleteOverviewDTO[]>}) {
-
-    if ( !apiResponse || !apiResponse.data) {
+    if ( !detailedMeals) {
         return (
             <h1>No data found</h1>
         )
@@ -15,24 +15,40 @@ export default function DetailedMeals({apiResponse}: {apiResponse: ApiResponse<D
                 <table className="w-full text-center border-collapse">
                     <thead className="border-b border-slate-700/60 bg-slate-800/60 text-xs font-bold uppercase tracking-wider text-slate-400">
                         <tr>
-                            <th className="px-6">Id</th> {/* Added an explicit narrow width helper for status */}
-                            <th className="px-6 py-4 w-32">Status</th> {/* Added an explicit narrow width helper for status */}
-                            <th className="px-6 py-4">MealPlan</th>
+                            <th className="px-6">MealName</th> {/* Added an explicit narrow width helper for status */}
+                            <th className="px-6 py-4 w-32">Calories</th> {/* Added an explicit narrow width helper for status */}
+                            <th className="px-6 py-4">Protein</th>
+                            <th className="px-6 py-4">Carbs</th>
+                            <th className="px-6 py-4">Fat</th>
+                            <th className="px-6 py-4">Details</th>
+                            <th className="px-6 py-4">Delete</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-700/40 text-sm text-slate-200">
-                        {apiResponse.data.map((plan) => (
-                            <tr key={plan.id} className="hover:bg-slate-700/20 transition-colors">
+                        {detailedMeals.map((meal: DetailedMealDTO) => (
+                            <tr key={meal.id} className="hover:bg-slate-700/20 transition-colors ">
                                 <td className="px-6 py-4 font-medium text-white">
-                                    {plan.id}
+                                    {meal.name}
                                 </td>
-                                <td className="px-6 py-4">
-                                    <span className={`inline-block px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${apiResponse?.isSuccess ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`}>
-                                        {apiResponse?.isSuccess ? "Success" : "Failed"}
-                                    </span>
+                                <td className="font-semibold text-emerald-300 tabular-nums">
+                                    {meal.totalCalories}
                                 </td>
-                                <td className="px-6 py-4 font-medium text-white">
-                                    {plan.name}
+                                <td className="font-semibold text-emerald-300 tabular-nums">
+                                    {meal.totalProtein}
+                                </td>
+                                <td className="font-semibold text-emerald-300 tabular-nums">
+                                    {meal.totalCarbs}
+                                </td>
+                                <td className="font-semibold text-emerald-300 tabular-nums">
+                                    {meal.totalFats}
+                                </td>
+                                <td className="font-semibold text-emerald-300 tabular-nums">
+                                    <Button variant="contained" >Details</Button>
+                                </td>
+                                <td className="font-semibold text-emerald-300 tabular-nums">
+                                    <Button variant="outlined" color="error">
+                                        <DeleteIcon />
+                                    </Button>
                                 </td>
                             </tr>
                         ))}

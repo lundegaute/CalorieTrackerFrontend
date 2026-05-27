@@ -1,6 +1,6 @@
 
 // Use Azure URL if available, otherwise fallback to localhost for development
-const BASE_URL = process.env.NEXT_PUBLIC_CalorieTracker_Base_Azure_Url || "http://localhost:5299/api";
+const BASE_URL = "http://localhost:5299/api";
 console.log("BASE_URL:", BASE_URL);
 export const API_ENDPOINTS = {
     base: BASE_URL,
