@@ -1,7 +1,6 @@
 import React from "react";
 import { Series, ArgumentAxis, ValueAxis, Label, Format, Legend, Tooltip,Grid } from 'devextreme-react/chart';
 import {PieChart, Connector} from "devextreme-react/pie-chart";
-import { DetailedCompleteOverviewDTO } from "@/Types/DetailedTypes";
 
 interface overviewSource {
   totalProtein: number;

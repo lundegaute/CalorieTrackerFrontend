@@ -1,7 +1,7 @@
 "use client";
 import styles from "./DetailedCompleteOverview.module.css";
 import {useQuery} from "@tanstack/react-query";
-import {useState } from "react";
+import {useState, useEffect } from "react";
 import { ApiResponse, DetailedCompleteOverviewDTO } from "@/Types/DetailedTypes";
 import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
 import DetailedMealComponents from "@/components/Tables/DetailedTables/DetailedMealComponents";
@@ -13,8 +13,8 @@ import Button from '@mui/material/Button';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 export default function DetailedCompleteOverview() {
-    const [selectedMealId, setSelectedMealId] = useState<number | null>(null)
-    const [activeMealPlan, setActiveMealPlan] = useState<number>(1)
+    const [activeMealPlan, setActiveMealPlan] = useState<number | null>(1);
+    const [selectedMealId, setSelectedMealId] = useState<number | null>(null);
     const {data: apiResponse, isLoading, error} = useQuery<ApiResponse<DetailedCompleteOverviewDTO[]>>({
         queryKey: ["detailedOverview"],
         queryFn: async () => {
@@ -30,6 +30,12 @@ export default function DetailedCompleteOverview() {
         },
         retry: 0
     });
+
+    useEffect(() => {
+        if (apiResponse?.data?.[0]?.id) {
+            setActiveMealPlan(apiResponse.data[0].id);
+        }
+    }, [apiResponse]);
 
     if (isLoading) {
         return (
