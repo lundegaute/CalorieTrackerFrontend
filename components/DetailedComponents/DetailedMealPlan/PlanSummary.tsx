@@ -1,19 +1,21 @@
 import styles from "./PlanSummary.module.css";
-import {DetailedMealDTO} from "@/Types/DetailedTypes";
+import {DetailedCompleteOverviewDTO} from "@/Types/DetailedTypes";
 
-export function DetailedPlanSummary({detailedMeals}: {detailedMeals: DetailedMealDTO[]}) {
+interface overviewSource {
+  totalCalories: number;
+  totalProtein: number;
+  totalCarbs: number;
+  totalFats: number;
+}
 
-  const totalCalories = detailedMeals.reduce((acc, meal) => acc + meal.totalCalories, 0);
-  const totalProtein = detailedMeals.reduce((acc, meal) => acc + meal.totalProtein, 0);
-  const totalCarbs = detailedMeals.reduce((acc, meal) => acc + meal.totalCarbs, 0);
-  const totalFats = detailedMeals.reduce((acc, meal) => acc + meal.totalFats, 0);
+export function DetailedPlanSummary({dataSource}: {dataSource: overviewSource}) {
 
   return (
     <div className={styles.totals}>
-      <InfoCard title={"Total Calories"} value={parseFloat(totalCalories.toFixed(2))} />
-      <InfoCard title={"Total Protein"} value={parseFloat(totalProtein.toFixed(2))} />
-      <InfoCard title={"Total Carbs"} value={parseFloat(totalCarbs.toFixed(2))} />
-      <InfoCard title={"Total Fats"} value={parseFloat(totalFats.toFixed(2))} />
+      <InfoCard title={"Total Calories"} value={dataSource.totalCalories} />
+      <InfoCard title={"Total Protein"} value={dataSource.totalProtein} />
+      <InfoCard title={"Total Carbs"} value={dataSource.totalCarbs} />
+      <InfoCard title={"Total Fats"} value={dataSource.totalFats} />
     </div>
   )
 }

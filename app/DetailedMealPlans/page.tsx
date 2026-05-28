@@ -1,5 +1,5 @@
 import styles from "./DetailedMealPlans.module.css";
-import {DetailedCompleteOverview} from "@/components/DetailedComponents/DetailedOverview/DetailedOverview";
+import DetailedCompleteOverview from "@/components/DetailedComponents/DetailedOverview/DetailedCompleteOverview";
 
 export default function DetailedTrackerPage() {
   return (
@@ -11,7 +11,7 @@ export default function DetailedTrackerPage() {
           Detailed Meal Plans
         </h1>
         <p style={{ color: "#94a3b8", fontSize: "0.875rem", marginTop: "0.25rem" }}>
-          Measure macro and micro nutrients for every meal plan.
+          Measure macro and micro nutrients for every MealPlan.
         </p>
       </header>
 

@@ -10,13 +10,17 @@ export type ApiResponse<T = any> = {
 export type DetailedCompleteOverviewDTO = {
     id: number;
     name: string;
+    totalCalories: number;
+    totalProtein: number;
+    totalCarbs: number;
+    totalFats: number;
     detailedMeals: DetailedMealDTO[];
 }
 
 // A single meal: Frokost or Middag or Kveldsmat
 export type DetailedMealDTO = {
     id: number;
-    name: string;
+    name: string; // Frokost
     totalCalories: number; // Sum of all components
     totalProtein: number;
     totalCarbs: number;
@@ -26,19 +30,19 @@ export type DetailedMealDTO = {
 }
 
 // Logged meal: 120g Havregryn
-type DetailedMealComponentDTO = {
+export type DetailedMealComponentDTO = {
     id: number;
     quantity: number; // 120g
     totalCalories: number; // 443.2 Kcals
     totalProtein: number; // 22g
     totalCarbs: number; // 67.3g
-    totalFat: number; // 6.9g
+    totalFats: number; // 6.9g
 
-    detailedFoodDTO: DetailedFoodDTO;
+    detailedFood: DetailedFoodDTO;
 }
 
 // Details about a single food item ( Havregryn )
-type DetailedFoodDTO = {
+export type DetailedFoodDTO = {
     id: number;
     foodName: string;
     foodGroupId: number;
@@ -49,7 +53,7 @@ type DetailedFoodDTO = {
 }
 
 // Macro and micro nutrients for a specific food item ( havregryn )
-type FoodConstituentsDTO = {
+export type FoodConstituentsDTO = {
     id: number;
     quantity: number | null;
     nutrientId: number; 
@@ -57,7 +61,7 @@ type FoodConstituentsDTO = {
 }
 
 // Details about a single nutrient ( Protein, Vitamin A, Sink )
-type NutrientDTO = {
+export type NutrientDTO = {
     nutrientId: string; // VitA, Zn, Vit B12
     nutrientName: string; // Protein, Sink
     defaultUnit: string | null; // g, mg

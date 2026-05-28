@@ -1,0 +1,12 @@
+
+
+
+.DropDownMenu {
+  width: 10rem;
+  background-color: var(--bg-panel-solid); 
+  color: #f8fafc;
+  padding: 0.2rem;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
