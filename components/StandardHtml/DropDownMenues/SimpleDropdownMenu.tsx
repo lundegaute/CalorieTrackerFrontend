@@ -1,4 +1,5 @@
 "use client";
+import { DetailedCompleteOverviewDTO } from "@/Types/DetailedTypes";
 import DropDownStyles from "./DropDown.module.css";
 
 interface BasicItem {
@@ -8,13 +9,14 @@ interface BasicItem {
 
 interface DropDownInterface<T> {
     dataSource: T[];
-    setValue: (id: number) => void;
+    setActiveMealPlanId: (id: number) => void;
+    activeMealPlanId: number | null;
 }
 
-export default function SimpleDropdownMenu<T extends BasicItem>({dataSource, setValue}: DropDownInterface<T>) {
+export default function SimpleDropdownMenu<T extends BasicItem>({dataSource, setActiveMealPlanId, activeMealPlanId}: DropDownInterface<T>) {
 
     return (
-        <select className={DropDownStyles.DropDownMenu} name="GenericSelector" onChange={(event) => setValue(parseInt(event.target.value))}>
+        <select className={DropDownStyles.DropDownMenu} name="GenericSelector" value={activeMealPlanId ? activeMealPlanId : 0} onChange={(event) => setActiveMealPlanId(parseInt(event.target.value))}>
             {dataSource.map((data) => (
                 <option key={data.id} value={data.id}>{data.name}</option>
             ))}

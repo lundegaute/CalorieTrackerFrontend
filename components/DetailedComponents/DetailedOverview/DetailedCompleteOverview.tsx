@@ -13,8 +13,10 @@ import Button from '@mui/material/Button';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 export default function DetailedCompleteOverview() {
-    const [activeMealPlan, setActiveMealPlan] = useState<number | null>(1);
-    const [selectedMealId, setSelectedMealId] = useState<number | null>(null);
+    const [activeMealPlanId, setActiveMealPlanId] = useState<number | null>(null); // This is important to tell which mealPlan to show
+    const [selectedMealId, setSelectedMealId] = useState<number | null>(null); // When clicking on details, selectedMealId is needed to decide which meal to show
+
+
     const {data: apiResponse, isLoading, error} = useQuery<ApiResponse<DetailedCompleteOverviewDTO[]>>({
         queryKey: ["detailedOverview"],
         queryFn: async () => {
@@ -30,13 +32,14 @@ export default function DetailedCompleteOverview() {
         },
         retry: 0
     });
-
     useEffect(() => {
-        if (apiResponse?.data?.[0]?.id) {
-            setActiveMealPlan(apiResponse.data[0].id);
+        if ( apiResponse?.data?.[0] ){
+            setActiveMealPlanId(apiResponse.data[0].id);
         }
-    }, [apiResponse]);
+        
+    },[apiResponse])
 
+    
     if (isLoading) {
         return (
             <h1>Fetching data...</h1>
@@ -47,12 +50,13 @@ export default function DetailedCompleteOverview() {
             <h1>Error during fetch: {error?.message}</h1>
         )
     }
-
+    
     // ---------------------- USE ACTIVEPLAN FOR DATA ----------------------
-    const activePlan = apiResponse.data.find(plan => plan.id === activeMealPlan);
+    const activePlan = apiResponse.data.find(plan => plan.id === activeMealPlanId);
     if ( !activePlan ) {
         return <h1>User has no active plan.</h1>
     }
+    
     if (apiResponse && apiResponse.data) {
         return (
             <main className={styles.gridMatrix}>
@@ -77,7 +81,7 @@ export default function DetailedCompleteOverview() {
                                 <KeyboardBackspaceIcon />
                             </Button>
                             :
-                            <SimpleDropdownMenu dataSource={apiResponse.data} setValue={setActiveMealPlan}/>
+                            <SimpleDropdownMenu dataSource={apiResponse.data} setActiveMealPlanId={setActiveMealPlanId} activeMealPlanId={activeMealPlanId}/>
                         }
                     </div>
                     { selectedMealId ? 
