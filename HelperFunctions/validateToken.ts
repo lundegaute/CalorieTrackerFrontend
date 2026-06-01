@@ -1,9 +1,17 @@
 import jwt from 'jsonwebtoken';
 import { DecodedToken, ErrorResponse } from "@/Types/types";
 
-function response(message: string, type: string, title: string, status: number, redirect: string) {
+interface ValidateToken {
+    message: string;
+    type: string; 
+    title: string; 
+    status: number; 
+    redirect: string;
+}
+
+function response(message: string, type: string, title: string, status: number, redirect: string):ValidateToken {
     return {
-        message: { Error: [message] },
+        message,
         type,
         title,
         status,

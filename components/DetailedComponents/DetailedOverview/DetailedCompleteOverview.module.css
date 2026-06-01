@@ -50,6 +50,12 @@
   align-items: start; 
 }
 
+/* New grid for charts section beneath the MainGrid */
+.analyticsGridSection {
+  display: grid;
+  
+}
+
 /* ==========================================================================
    PANEL CARD OUTLINES
    ========================================================================== */

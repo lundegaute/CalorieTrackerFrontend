@@ -1,18 +1,21 @@
 "use client";
-import styles from "./DetailedCompleteOverview.module.css";
-import {useQuery} from "@tanstack/react-query";
-import {useState, useEffect } from "react";
-import { ApiResponse, DetailedCompleteOverviewDTO } from "@/Types/DetailedTypes";
-import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
 import DetailedMealComponents from "@/components/Tables/DetailedTables/DetailedMealComponents";
 import {DetailedPlanSummary} from "@/components/DetailedComponents/DetailedMealPlan/PlanSummary";
 import SimpleDropdownMenu from "@/components/StandardHtml/DropDownMenues/SimpleDropdownMenu";
+import { ApiResponse, DetailedCompleteOverviewDTO } from "@/Types/DetailedTypes";
+import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import MacroBarChart from "@/components/Charts/BarCharts/MacroBarChart";
 import MacroPieChart from "@/components/Charts/PieCharts/MacroPieChart";
+import styles from "./DetailedCompleteOverview.module.css";
+import CheckToken from "@/HelperFunctions/checkToken";
+import {useQuery} from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import {useState, useEffect } from "react";
 import Button from '@mui/material/Button';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 export default function DetailedCompleteOverview() {
+    const router = useRouter();
     const [activeMealPlanId, setActiveMealPlanId] = useState<number | null>(null); // This is important to tell which mealPlan to show
     const [selectedMealId, setSelectedMealId] = useState<number | null>(null); // When clicking on details, selectedMealId is needed to decide which meal to show
 
@@ -24,6 +27,12 @@ export default function DetailedCompleteOverview() {
                 method: "GET",
                 credentials: "include"
             });
+            if ( res.status === 401) {
+                const authStatus: ApiResponse = await res.json();
+                alert("Login required");
+                router.push("/Auth/Login");
+                throw new Error(authStatus.errors[0]);
+            }
             if (!res.ok) {
                 throw new Error(`Server Error! Status: ${res.status}`)
             }
@@ -32,13 +41,12 @@ export default function DetailedCompleteOverview() {
         },
         retry: 0
     });
+
     useEffect(() => {
         if ( apiResponse?.data?.[0] ){
             setActiveMealPlanId(apiResponse.data[0].id);
         }
-        
     },[apiResponse])
-
     
     if (isLoading) {
         return (
@@ -53,6 +61,7 @@ export default function DetailedCompleteOverview() {
     
     // ---------------------- USE ACTIVEPLAN FOR DATA ----------------------
     const activePlan = apiResponse.data.find(plan => plan.id === activeMealPlanId);
+    const currentMeal = activePlan?.detailedMeals.find(meal => meal.id === selectedMealId)?.name ?? "Måltid";
     if ( !activePlan ) {
         return <h1>User has no active plan.</h1>
     }
@@ -77,9 +86,12 @@ export default function DetailedCompleteOverview() {
                 <section className={styles.centerTableSection}>
                     <div className="flex gap-2">
                         { selectedMealId ? 
-                            <Button variant="text" onClick={() => setSelectedMealId(null)}>
-                                <KeyboardBackspaceIcon />
-                            </Button>
+                            <div className="flex items-center gap-2">
+                                <Button variant="text" onClick={() => setSelectedMealId(null)}>
+                                    <KeyboardBackspaceIcon />
+                                </Button>
+                                <h1 className="text-emerald-300 font-semibold">{currentMeal}</h1>
+                            </div>
                             :
                             <SimpleDropdownMenu dataSource={apiResponse.data} setActiveMealPlanId={setActiveMealPlanId} activeMealPlanId={activeMealPlanId}/>
                         }
@@ -102,6 +114,10 @@ export default function DetailedCompleteOverview() {
                         }
                     </div>
                 </aside>
+
+                <section>
+                    <h1>Testing for test</h1>
+                </section>
             </main>
         )
     }
