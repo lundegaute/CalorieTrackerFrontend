@@ -2,10 +2,11 @@
 import DetailedMealComponents from "@/components/Tables/DetailedTables/DetailedMealComponents";
 import {DetailedPlanSummary} from "@/components/DetailedComponents/DetailedMealPlan/PlanSummary";
 import SimpleDropdownMenu from "@/components/StandardHtml/DropDownMenues/SimpleDropdownMenu";
-import { ApiResponse, DetailedCompleteOverviewDTO } from "@/Types/DetailedTypes";
+import { ApiResponse, DetailedCompleteOverviewDTO, DetailedMealDTO } from "@/Types/DetailedTypes";
 import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import MacroBarChart from "@/components/Charts/BarCharts/MacroBarChart";
+import VitaminBarChart from "@/components/Charts/BarCharts/VitaminBarChart";
 import MacroPieChart from "@/components/Charts/PieCharts/MacroPieChart";
 import styles from "./DetailedCompleteOverview.module.css";
 import CheckToken from "@/HelperFunctions/checkToken";
@@ -115,8 +116,17 @@ export default function DetailedCompleteOverview() {
                     </div>
                 </aside>
 
-                <section>
-                    <h1>Testing for test</h1>
+                {/* Micro Nutrient Chart section */}
+                <section className={styles.analyticsGridSection}>
+                    <div className={styles.panelTopStack} >
+                        <div className={styles.outlineLabel}>Vitamin Distribution</div>
+                        { selectedMealId ? 
+                            <VitaminBarChart currentMeal={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/>
+                            /* <VitaminBarChart currentMeal={activePlan.detailedMeals}/> */
+                            :
+                            <h1>In progress</h1>
+                        }
+                    </div>
                 </section>
             </main>
         )

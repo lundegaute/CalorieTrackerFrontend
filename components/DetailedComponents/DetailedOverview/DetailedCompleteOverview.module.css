@@ -40,22 +40,36 @@
 /* 2. MAIN MIDDLE SECTION: THE PROPORTIONAL BLUEPRINT GRID */
 .gridMatrix {
   display: grid;
-  /* Slices the monitor into 3 clean structural tracks: 
-     Left panel gets 2 parts, Center table gets 6 parts, Right panel gets 3 parts */
-  grid-template-columns: 2fr 6fr 3fr;
+  grid-template-columns: 1fr;
   gap: var(--layout-gap);
-  
-  /* Industry standard: align elements to the top of their row track 
-     so they don't stretch vertically to look awkward when text scales */
   align-items: start; 
 }
 
 /* New grid for charts section beneath the MainGrid */
 .analyticsGridSection {
   display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
   
 }
 
+@media (min-width: 1024px) {
+  .gridMatrix {
+    /* 🌟 THE STABILIZER: 
+       Left sidebar: Never shrinks below 240px, grows to 2fr
+       Center table: Floats freely at 6fr
+       Right sidebar: Never shrinks below 320px (perfect for charts!), grows to 3fr */
+    grid-template-columns: minmax(240px, 2fr) 6fr minmax(320px, 3fr);
+  }
+
+  .analyticsGridSection {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    
+    
+  }
+}
 /* ==========================================================================
    PANEL CARD OUTLINES
    ========================================================================== */

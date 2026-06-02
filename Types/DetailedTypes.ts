@@ -56,7 +56,7 @@ export type DetailedFoodDTO = {
 export type FoodConstituentsDTO = {
     id: number;
     quantity: number | null;
-    nutrientId: number; 
+    nutrientId: string; 
     nutrient: NutrientDTO;
 }
 
