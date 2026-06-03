@@ -119,12 +119,12 @@ export default function DetailedCompleteOverview() {
                 {/* Micro Nutrient Chart section */}
                 <section className={styles.analyticsGridSection}>
                     <div className={styles.panelTopStack} >
-                        <div className={styles.outlineLabel}>Vitamin Distribution</div>
+                        <div className={styles.outlineLabel}>Vitamins</div>
                         { selectedMealId ? 
-                            <VitaminBarChart currentMeal={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/>
+                            <VitaminBarChart activePlan={activePlan} selectedMealId={selectedMealId}/>
                             /* <VitaminBarChart currentMeal={activePlan.detailedMeals}/> */
                             :
-                            <h1>In progress</h1>
+                            <VitaminBarChart activePlan={activePlan} selectedMealId={selectedMealId}/>
                         }
                     </div>
                 </section>

@@ -14,6 +14,7 @@ export type DetailedCompleteOverviewDTO = {
     totalProtein: number;
     totalCarbs: number;
     totalFats: number;
+    microSummary: Record<string, MicroSummary>;
     detailedMeals: DetailedMealDTO[];
 }
 
@@ -25,6 +26,7 @@ export type DetailedMealDTO = {
     totalProtein: number;
     totalCarbs: number;
     totalFats: number;
+    microSummary: Record<string, MicroSummary>;
 
     components: DetailedMealComponentDTO[];
 }
@@ -65,4 +67,10 @@ export type NutrientDTO = {
     nutrientId: string; // VitA, Zn, Vit B12
     nutrientName: string; // Protein, Sink
     defaultUnit: string | null; // g, mg
+}
+
+export type MicroSummary = {
+    nutrientId: string;
+    nutrientName: string;
+    totalQuantity: number;
 }
