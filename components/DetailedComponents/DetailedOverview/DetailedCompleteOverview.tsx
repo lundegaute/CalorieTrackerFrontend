@@ -2,11 +2,11 @@
 import DetailedMealComponents from "@/components/Tables/DetailedTables/DetailedMealComponents";
 import {DetailedPlanSummary} from "@/components/DetailedComponents/DetailedMealPlan/PlanSummary";
 import SimpleDropdownMenu from "@/components/StandardHtml/DropDownMenues/SimpleDropdownMenu";
-import { ApiResponse, DetailedCompleteOverviewDTO, DetailedMealDTO } from "@/Types/DetailedTypes";
+import { ApiResponse, DetailedCompleteOverviewDTO, DetailedMealDTO, NutrientCategories } from "@/Types/DetailedTypes";
 import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import MacroBarChart from "@/components/Charts/BarCharts/MacroBarChart";
-import VitaminBarChart from "@/components/Charts/BarCharts/VitaminBarChart";
+import MicroAnalyticsCharts from "@/components/Charts/BarCharts/MicroAnalyticsChart";
 import MacroPieChart from "@/components/Charts/PieCharts/MacroPieChart";
 import styles from "./DetailedCompleteOverview.module.css";
 import CheckToken from "@/HelperFunctions/checkToken";
@@ -118,14 +118,12 @@ export default function DetailedCompleteOverview() {
 
                 {/* Micro Nutrient Chart section */}
                 <section className={styles.analyticsGridSection}>
-                    <div className={styles.panelTopStack} >
-                        <div className={styles.outlineLabel}>Vitamins</div>
-                        { selectedMealId ? 
-                            <VitaminBarChart activePlan={activePlan} selectedMealId={selectedMealId}/>
-                            /* <VitaminBarChart currentMeal={activePlan.detailedMeals}/> */
-                            :
-                            <VitaminBarChart activePlan={activePlan} selectedMealId={selectedMealId}/>
-                        }
+                    <div className={styles.analyticsGridSection} >
+                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.WaterSoluble} label=""/>
+                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.FatSoluble} label=""/>
+                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.TraceMineral} label=""/>
+                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.LipidProfile} label=""/>
+                           
                     </div>
                 </section>
             </main>

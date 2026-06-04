@@ -73,4 +73,16 @@ export type MicroSummary = {
     nutrientId: string;
     nutrientName: string;
     totalQuantity: number;
+    category: string;
+}
+
+export const NutrientCategories = {
+    WaterSoluble: "WaterSolubleVitamin",
+    FatSoluble: "FatSolubleVitamin",
+    LipidProfile: "LipidProfile",
+    CarbProfile: "CarbProfile",
+    TraceMineral: "TraceMineral",
+    MacroMineral: "MacroMineral",
+    MacroTotals: "MacroTotals",
+
 }
