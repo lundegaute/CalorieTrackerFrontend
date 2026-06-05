@@ -1,0 +1,16 @@
+.dashboardContainer {
+  /* Color design */
+  --bg-panel-solid: rgba(30, 41, 59, 0.8);    /* Slate 800 with 80% opacity */
+  --bg-panel-trans: rgba(30, 41, 59, 0.4);    /* Slate 800 with 40% opacity */
+  --border-color-soft: rgba(71, 85, 105, 0.3); /* Slate 600 soft edge */
+  --border-color-accent: rgba(16, 185, 129, 0.3); /* Emerald 500 accent edge */
+}
+
+
+.detailedFoodSearch {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+

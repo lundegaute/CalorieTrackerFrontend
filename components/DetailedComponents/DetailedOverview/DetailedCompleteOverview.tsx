@@ -5,15 +5,15 @@ import SimpleDropdownMenu from "@/components/StandardHtml/DropDownMenues/SimpleD
 import { ApiResponse, DetailedCompleteOverviewDTO, DetailedMealDTO, NutrientCategories } from "@/Types/DetailedTypes";
 import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import MacroBarChart from "@/components/Charts/BarCharts/MacroBarChart";
 import MicroAnalyticsCharts from "@/components/Charts/BarCharts/MicroAnalyticsChart";
 import MacroPieChart from "@/components/Charts/PieCharts/MacroPieChart";
 import styles from "./DetailedCompleteOverview.module.css";
-import CheckToken from "@/HelperFunctions/checkToken";
 import {useQuery} from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import {useState, useEffect } from "react";
-import Button from '@mui/material/Button';
+import {Button, Tooltip} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+
 
 export default function DetailedCompleteOverview() {
     const router = useRouter();
@@ -76,8 +76,8 @@ export default function DetailedCompleteOverview() {
                         <div className={styles.outlineLabel}>
                         Total Calories:
                         </div>
-                        { selectedMealId ? 
-                            <DetailedPlanSummary dataSource={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/> 
+                        { selectedMealId ?
+                            <DetailedPlanSummary dataSource={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/>     
                             :
                             <DetailedPlanSummary dataSource={activePlan}/> 
                         }
@@ -94,7 +94,16 @@ export default function DetailedCompleteOverview() {
                                 <h1 className="text-emerald-300 font-semibold">{currentMeal}</h1>
                             </div>
                             :
-                            <SimpleDropdownMenu dataSource={apiResponse.data} setActiveMealPlanId={setActiveMealPlanId} activeMealPlanId={activeMealPlanId}/>
+                            <div className="flex items-center gap-2">
+                                <SimpleDropdownMenu dataSource={apiResponse.data} setActiveMealPlanId={setActiveMealPlanId} activeMealPlanId={activeMealPlanId}/>
+                                {/* Add new mealplan - not yet implemented */}
+                                {/* Add new mealplan - not yet implemented */}
+                                {/* Add new mealplan - not yet implemented */}
+                                {/* Add new mealplan - not yet implemented */}
+                                <Tooltip title="Add new mealplan">
+                                    <Button > <AddIcon /> </Button>
+                                </Tooltip>
+                            </div>
                         }
                     </div>
                     { selectedMealId ? 
@@ -118,11 +127,13 @@ export default function DetailedCompleteOverview() {
 
                 {/* Micro Nutrient Chart section */}
                 <section className={styles.analyticsGridSection}>
-                    <div className={styles.analyticsGridSection} >
-                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.WaterSoluble} label=""/>
-                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.FatSoluble} label=""/>
-                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.TraceMineral} label=""/>
-                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.LipidProfile} label=""/>
+                    <div className={styles.analyticsGridSection}>
+                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.WaterSoluble}/>
+                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.MacroMineral}/>
+                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.TraceMineral}/>
+                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.FatSoluble}/>
+                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.LipidProfile}/>
+                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.CarbProfile}/>
                            
                     </div>
                 </section>

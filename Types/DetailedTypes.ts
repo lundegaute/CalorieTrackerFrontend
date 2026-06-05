@@ -59,7 +59,7 @@ export type FoodConstituentsDTO = {
     id: number;
     quantity: number | null;
     nutrientId: string; 
-    nutrient: NutrientDTO;
+    nutrient?: NutrientDTO;
 }
 
 // Details about a single nutrient ( Protein, Vitamin A, Sink )
@@ -73,6 +73,7 @@ export type MicroSummary = {
     nutrientId: string;
     nutrientName: string;
     totalQuantity: number;
+    unit: string;
     category: string;
 }
 

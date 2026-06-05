@@ -1,6 +1,7 @@
 import { DetailedMealDTO } from "@/Types/DetailedTypes";
-import Button from '@mui/material/Button';
+import {Button, Tooltip} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 interface params {
     detailedMealDTO: DetailedMealDTO[];
@@ -51,12 +52,23 @@ export default function DetailedMeals({detailedMealDTO, setSelectedMealId}: para
                                     <Button variant="contained" onClick={() => setSelectedMealId(meal.id)}>Details</Button>
                                 </td>
                                 <td className="font-semibold text-emerald-300 tabular-nums">
-                                    <Button variant="outlined" color="error" onClick={() => setSelectedMealId(meal.id)}>
+                                    <Button variant="outlined" color="error" onClick={() => console.log(meal.id)}>
                                         <DeleteIcon />
                                     </Button>
                                 </td>
                             </tr>
                         ))}
+                            <tr key="AddNewMeal" className="hover:bg-slate-700/20 transition-colors">
+                                <td className="py-2">
+                                    {/* Add new meal to mealPlan - Functionality not yet implemented */}
+                                    {/* Add new meal to mealPlan - Functionality not yet implemented */}
+                                    {/* Add new meal to mealPlan - Functionality not yet implemented */}
+                                    {/* Add new meal to mealPlan - Functionality not yet implemented */}
+                                    <Tooltip title="Add new Meal">
+                                        <Button variant="contained" color="success" className=""><AddIcon fontSize="small"/></Button>
+                                    </Tooltip>
+                                </td>
+                            </tr>
                     </tbody>
                 </table>
             </div>

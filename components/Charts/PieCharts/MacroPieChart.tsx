@@ -23,7 +23,7 @@ export default function MacroPieChart({overviewDTO}: {overviewDTO: overviewSourc
             <PieChart
                 id="MacroPieChart"
                 dataSource={dataListPercent}
-                animation={{enabled: true, duration: 400}}
+                animation={{enabled: true, duration: 600}}
                 palette={"Material"}
                 type="doughnut"
                 innerRadius={0.5}

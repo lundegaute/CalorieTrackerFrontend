@@ -8,11 +8,11 @@ interface IMicroAnalyticsChart {
     activePlan: DetailedCompleteOverviewDTO;
     selectedMealId: number | null;
     category: string;
-    label: string;
+    //groupOn: keyof MicroSummary; // For further development grouping charts on category or unit(grams, miligrams) or Quantity
 }
 
-export default function MicroAnalyticsCharts({activePlan, selectedMealId, category, label}: IMicroAnalyticsChart) {
-    var categoryBasedSummary: MicroSummary[] = [];
+export default function MicroAnalyticsCharts({activePlan, selectedMealId, category }: IMicroAnalyticsChart) {
+    var filteredSummary: MicroSummary[] = [];
     const chartColor: Record<string, "Green Mist" | "Office" | "Pastel" | "Violet" | "Material" | "Bright" | "Carmine" | "Dark Moon" | "Dark Violet" | "Harmony Light"> = {
     "WaterSolubleVitamin": "Green Mist",
     "FatSolubleVitamin": "Office",
@@ -23,35 +23,34 @@ export default function MicroAnalyticsCharts({activePlan, selectedMealId, catego
     "MacroTotals": "Dark Moon",
 };
 
+
     // If 
     if ( selectedMealId == null) {
         var microSummary = Object.values(activePlan.microSummary);
     
-        categoryBasedSummary = microSummary.filter(micro => micro.category == category);
+        filteredSummary = microSummary.filter(micro => micro.category == category);
     } 
     else {
         var currentMeal = activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!
         const microSummary = Object.values(currentMeal.microSummary);
     
-        categoryBasedSummary = microSummary.filter(micro => micro.category == category);
+        filteredSummary = microSummary.filter(micro => micro.category == category);
     }
     
 
-
     return (
         <div>
-            <div className={styles.outlineLabel}>{label}</div>
             {}
             <Chart 
                 id={category}
-                dataSource={categoryBasedSummary}
+                dataSource={filteredSummary}
                 animation={{enabled: true, duration: 500}}
                 palette={chartColor[category]}
                 >
                 <Series 
                     valueField="totalQuantity"
                     argumentField="nutrientId"
-                    name={categoryBasedSummary[0].category} // How do i move this around?
+                    name={filteredSummary[0].category} // How do i move this around?
                     type="bar"
                     >
                     <Label
@@ -62,26 +61,22 @@ export default function MicroAnalyticsCharts({activePlan, selectedMealId, catego
                 </Series>
                 <Tooltip 
                     enabled={true}
-                    shared={false}
                     location="edge"
                     font={{ size: 14 }}
-                    border={{ visible: true, color: "#64748b", width: 1 }}
                     customizeTooltip={currentBar => {
-                        var nutrientData = categoryBasedSummary.find(nut => nut.nutrientId === currentBar.argument);
+                        var nutrientData = filteredSummary.find(nut => nut.nutrientId === currentBar.argument);
                         var nutrientName = nutrientData?.nutrientName ?? currentBar.argument;
                         return {
                             text: `${nutrientName}`
                         }
                     }}
-                    
                 /> 
                 <Legend 
                     verticalAlignment="bottom" 
                     horizontalAlignment="center"
-                    title={"Chart Headline"}
                     columnCount={3}
                     itemTextPosition="right"
-                    font={{ color: "#94a3b8", size: 12 }} 
+                    font={{ color: "#94a3b8", size: 12 , weight: 600}} 
                 />
             </Chart>
         
