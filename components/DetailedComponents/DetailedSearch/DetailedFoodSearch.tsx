@@ -1,11 +1,11 @@
 import {TextField} from "@mui/material";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {useQuery} from "@tanstack/react-query";
 import { ApiResponse, DetailedFoodDTO} from "@/Types/DetailedTypes";
 import {fetchDetailedPost} from "@/Fetch/fetchDetailedPost";
 
 interface IDetailedFoodSearch {
-    setFoodFromSearch: (apiResponse: DetailedFoodDTO[]) => void;
+    setFoodFromSearch: (data: DetailedFoodDTO[]) => void;
 }
 
 export default function DetailedFoodSearch({setFoodFromSearch}: IDetailedFoodSearch) {
@@ -23,10 +23,11 @@ export default function DetailedFoodSearch({setFoodFromSearch}: IDetailedFoodSea
         retry: 0,
     })
 
-    if ( apiResponse && apiResponse.data ) {
-        setFoodFromSearch(apiResponse.data);
-    }
-
+    useEffect(() => {
+        if ( !isLoading && apiResponse && apiResponse.data ){
+            setFoodFromSearch(apiResponse.data)
+        }
+    }, [apiResponse, isLoading, setFoodFromSearch])
 
     return (
             <TextField variant="standard" label="Search Foods" value={search} onChange={(e) => setSearch(e.target.value)}/>
