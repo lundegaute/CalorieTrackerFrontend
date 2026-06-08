@@ -59,6 +59,11 @@ export default function DetailedCompleteOverview() {
             <h1>Error during fetch: {error?.message}</h1>
         )
     }
+    if ( apiResponse.data.length === 0) {
+        return (
+            <p>No Data</p>
+        )
+    }
     
     // ---------------------- USE ACTIVEPLAN FOR DATA ----------------------
     const activePlan = apiResponse.data.find(plan => plan.id === activeMealPlanId);
@@ -126,17 +131,17 @@ export default function DetailedCompleteOverview() {
                 </aside>
 
                 {/* Micro Nutrient Chart section */}
-                <section className={styles.analyticsGridSection}>
-                    <div className={styles.analyticsGridSection}>
-                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.WaterSoluble}/>
-                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.MacroMineral}/>
-                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.TraceMineral}/>
-                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.FatSoluble}/>
-                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.LipidProfile}/>
-                        <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.CarbProfile}/>
-                           
-                    </div>
-                </section>
+                    <section className={styles.analyticsGridSection}>
+                        <div className={styles.analyticsGridSection}>
+                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.WaterSoluble}/>
+                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.MacroMineral}/>
+                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.TraceMineral}/>
+                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.FatSoluble}/>
+                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.LipidProfile}/>
+                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.CarbProfile}/>
+                            
+                        </div>
+                    </section>
             </main>
         )
     }

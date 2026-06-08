@@ -24,12 +24,18 @@ export default function DetailedFoodSearch({setFoodFromSearch}: IDetailedFoodSea
     })
 
     useEffect(() => {
+        if ( search.length < 3 ) {
+            setFoodFromSearch([]);
+        }
+    }, [search, setFoodFromSearch ]);
+
+    useEffect(() => {
         if ( !isLoading && apiResponse && apiResponse.data ){
             setFoodFromSearch(apiResponse.data)
         }
     }, [apiResponse, isLoading, setFoodFromSearch])
 
     return (
-            <TextField variant="standard" label="Search Foods" value={search} onChange={(e) => setSearch(e.target.value)}/>
+            <TextField  variant="standard" label="Search Foods" value={search} onChange={(e) => setSearch(e.target.value)}/>
     )
 }

@@ -1,0 +1,69 @@
+.tableContainer {
+  /* --- Color Design Tokens --- */
+  --bg-panel-dark: #0f172a;               /* slate-900 */
+  --bg-panel-medium: rgba(30, 41, 59, 0.4); /* bg-slate-800/40 */
+  --bg-header: rgba(30, 41, 59, 0.6);       /* bg-slate-800/60 */
+  --text-muted: #94a3b8;                    /* text-slate-400 */
+  
+  /* --- Borders & Effects --- */
+  --border-color: rgba(51, 65, 85, 0.5);    /* border-slate-700/50 */
+  --border-header: rgba(51, 65, 85, 0.6);   /* border-slate-700/60 */
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 
+               0 8px 10px -6px rgba(0, 0, 0, 0.3);
+               
+  /* --- Spacing & Layout --- */
+  --radius-xl: 0.75rem;                     /* rounded-xl (12px) */
+  --layout-gap: 0.5rem;                     /* gap-2 (8px) */
+}
+
+/* 1. THE OUTER WRAPPER CONTAINER */
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-panel-medium);
+  box-shadow: var(--shadow-xl);
+  display: flex; /* Added flex to make the 'gap' property actually function */
+  flex-direction: column;
+  gap: var(--layout-gap);
+  
+  /* backdrop-blur-sm */
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px); 
+}
+
+/* 2. THE TABLE STUCTURE */
+.mainTable {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+.mainTable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #1e293b;
+}
+
+/* 3. THE TABLE HEADER ENGINE */
+.tableHeader {
+  border-bottom: 1px solid var(--border-header);
+  background-color: var(--bg-header);
+  font-size: 0.75rem; /* text-xs */
+  font-weight: 700; /* font-bold */
+  text-transform: uppercase; /* uppercase */
+  letter-spacing: 0.05em; /* tracking-wider */
+  color: var(--text-muted);
+}
+
+
+.scrollContainer {
+    max-height: 30rem;
+    overflow-x: auto;
+    width: fit-content;
+    overscroll-behavior: none;
+    /* fit-content */
+}
+
