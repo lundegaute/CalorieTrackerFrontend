@@ -131,6 +131,7 @@ export default function DetailedCompleteOverview() {
                 </aside>
 
                 {/* Micro Nutrient Chart section */}
+                { activePlan.microSummary && Object.keys(activePlan.microSummary).length > 0 &&(
                     <section className={styles.analyticsGridSection}>
                         <div className={styles.analyticsGridSection}>
                             <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.WaterSoluble}/>
@@ -142,6 +143,7 @@ export default function DetailedCompleteOverview() {
                             
                         </div>
                     </section>
+                )}
             </main>
         )
     }

@@ -23,16 +23,24 @@ export default function MicroAnalyticsCharts({activePlan, selectedMealId, catego
     "MacroTotals": "Dark Moon",
 };
 
-
     // If 
     if ( selectedMealId == null) {
-        var microSummary = Object.values(activePlan.microSummary);
+        let microSummary = Object.values(activePlan.microSummary);
+        if ( microSummary.length === 0 ) {
+            return (
+                <h1>No data yet</h1>
+            )
+        }
     
         filteredSummary = microSummary.filter(micro => micro.category == category);
     } 
     else {
-        var currentMeal = activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!
+        let currentMeal = activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!
         const microSummary = Object.values(currentMeal.microSummary);
+        // This prevents the page from crashing when loading a specific meal
+        if ( microSummary.length === 0) {
+            return 
+        }
     
         filteredSummary = microSummary.filter(micro => micro.category == category);
     }
