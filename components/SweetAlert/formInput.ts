@@ -3,7 +3,9 @@ import Swal from "sweetalert2";
 export async function sweetAlertInput(title: string, mealPlanName: string) {
     const result = await Swal.fire( {
         title: title,
+
         input: "text",
+        theme: "dark",
         inputPlaceholder: "Enter name",
         inputValue: mealPlanName,
         showCancelButton: true,
@@ -13,6 +15,7 @@ export async function sweetAlertInput(title: string, mealPlanName: string) {
     if ( result.isDismissed || !result.value) {
         return;
     }
+    
     return result.value;
 }
 

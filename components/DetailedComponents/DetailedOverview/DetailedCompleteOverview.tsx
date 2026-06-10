@@ -3,23 +3,32 @@ import DetailedMealComponents from "@/components/Tables/DetailedTables/DetailedM
 import {DetailedPlanSummary} from "@/components/DetailedComponents/DetailedMealPlan/PlanSummary";
 import SimpleDropdownMenu from "@/components/StandardHtml/DropDownMenues/SimpleDropdownMenu";
 import { ApiResponse, DetailedCompleteOverviewDTO, DetailedMealDTO, NutrientCategories } from "@/Types/DetailedTypes";
+import { DetailedMealPlanRequest } from "@/Types/DetailedRequests";
 import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import MicroAnalyticsCharts from "@/components/Charts/BarCharts/MicroAnalyticsChart";
 import MacroPieChart from "@/components/Charts/PieCharts/MacroPieChart";
 import styles from "./DetailedCompleteOverview.module.css";
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import {useState, useEffect } from "react";
 import {Button, Tooltip} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { SweetAlertSingleInput } from "@/components/SweetAlert/DetailedSweetAlert/OneInputForm";
 
 
 export default function DetailedCompleteOverview() {
+    const queryClient = useQueryClient();
     const router = useRouter();
     const [activeMealPlanId, setActiveMealPlanId] = useState<number | null>(null); // This is important to tell which mealPlan to show
     const [selectedMealId, setSelectedMealId] = useState<number | null>(null); // When clicking on details, selectedMealId is needed to decide which meal to show
 
+    // ---------------------------------------------
+    // ------------- Api CRUD Section --------------
+    
+    
+    // ---------------------------------------------
+    // ---------------------------------------------
 
     const {data: apiResponse, isLoading, error} = useQuery<ApiResponse<DetailedCompleteOverviewDTO[]>>({
         queryKey: ["detailedOverview"],
@@ -82,7 +91,7 @@ export default function DetailedCompleteOverview() {
                         Total Calories:
                         </div>
                         { selectedMealId ?
-                            <DetailedPlanSummary dataSource={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/>     
+                            <DetailedPlanSummary dataSource={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/>
                             :
                             <DetailedPlanSummary dataSource={activePlan}/> 
                         }
@@ -101,12 +110,9 @@ export default function DetailedCompleteOverview() {
                             :
                             <div className="flex items-center gap-2">
                                 <SimpleDropdownMenu dataSource={apiResponse.data} setActiveMealPlanId={setActiveMealPlanId} activeMealPlanId={activeMealPlanId}/>
-                                {/* Add new mealplan - not yet implemented */}
-                                {/* Add new mealplan - not yet implemented */}
-                                {/* Add new mealplan - not yet implemented */}
-                                {/* Add new mealplan - not yet implemented */}
                                 <Tooltip title="Add new mealplan">
-                                    <Button > <AddIcon /> </Button>
+                                    <Button onClick={ async () => await SweetAlertSingleInput("Add new MealPlan", "")
+                                        .then(() => queryClient.refetchQueries({queryKey: ["detailedOverview"]}))}> <AddIcon /> </Button>
                                 </Tooltip>
                             </div>
                         }

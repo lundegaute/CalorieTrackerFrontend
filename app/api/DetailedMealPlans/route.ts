@@ -7,6 +7,39 @@ interface AuthResponse {
     reason: string;
 }
 
+export async function POST<T>(req: NextRequest) {
+    const token = req.cookies.get("token")?.value;
+    const body: T = await req.json();
+    try {
+        const res = await fetch(API_ENDPOINTS.DETAILED_ADD_MEALPLAN, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `bearer ${token}`
+            },
+            body: JSON.stringify(body),
+        });
+        if ( !res.ok ) {
+            const apiResponse: ApiResponse<T> = await res.json();
+            return NextResponse.json(apiResponse, {status: res.status});
+        }
+        const apiResponse = await res.json();
+        return NextResponse.json(apiResponse, {status: apiResponse.statusCode});
+    }
+    catch (error) {
+        const apiResponse: ApiResponse<T> = {
+            isSuccess: false,
+            data: null,
+            errors: ["Error during fetch from Next.js API to Backend"],
+            types: ["Server Error"],
+            statusCode: 500,
+        };
+        return NextResponse.json(apiResponse, {status: apiResponse.statusCode});
+    }
+}
+
+
+
 export async function GET(req: NextRequest) {
     const token = req.cookies.get("token")?.value;
     try {

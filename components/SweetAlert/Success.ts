@@ -37,3 +37,12 @@ export function SweetAlertCustomFoodAdded(customFood: FoodDTO) {
         }
     })
 }
+
+export function SweetAlertDetailedMealPlanAdded(message: string) {
+    return Swal.fire({
+        title: message,
+        icon: "success",
+        confirmButtonText: "Ok",
+        theme: "dark",
+    })
+}
