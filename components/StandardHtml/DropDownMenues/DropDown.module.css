@@ -2,7 +2,8 @@
 
 
 .DropDownMenu {
-  width: 10rem;
+  width: 13rem;
+  height: 2rem;
   background-color: var(--bg-panel-solid); 
   color: #f8fafc;
   padding: 0.2rem;

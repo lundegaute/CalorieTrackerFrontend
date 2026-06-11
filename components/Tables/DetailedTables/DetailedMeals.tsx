@@ -2,14 +2,19 @@ import { DetailedMealDTO } from "@/Types/DetailedTypes";
 import {Button, Tooltip} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { NewMealNameForm } from "@/components/SweetAlert/DetailedSweetAlert/NewMealNameForm";
+import { DetailedDelete } from "@/Fetch/DetailedFetch/DetailedDelete";
+import { useQueryClient } from "@tanstack/react-query";
+
 
 interface params {
     detailedMealDTO: DetailedMealDTO[];
-    setSelectedMealId: (value: number) => void
+    setSelectedMealId: (value: number) => void;
+    activeMealPlanId: number;
 }
 
-export default function DetailedMeals({detailedMealDTO, setSelectedMealId}: params) {
-
+export default function DetailedMeals({detailedMealDTO, setSelectedMealId, activeMealPlanId}: params) {
+    const queryClient = useQueryClient();
     if ( !detailedMealDTO) {
         return (
             <h1>No data found</h1>
@@ -52,7 +57,12 @@ export default function DetailedMeals({detailedMealDTO, setSelectedMealId}: para
                                     <Button variant="contained" onClick={() => setSelectedMealId(meal.id)}>Details</Button>
                                 </td>
                                 <td className="font-semibold text-emerald-300 tabular-nums">
-                                    <Button variant="outlined" color="error" onClick={() => console.log(meal.id)}>
+                                    <Button 
+                                        variant="outlined" 
+                                        color="error" 
+                                        onClick={() => DetailedDelete("/api/DetailedMeals", meal.id)
+                                            .then(() => queryClient.invalidateQueries({queryKey:["detailedOverview"]}))
+                                        }>
                                         <DeleteIcon />
                                     </Button>
                                 </td>
@@ -60,12 +70,15 @@ export default function DetailedMeals({detailedMealDTO, setSelectedMealId}: para
                         ))}
                             <tr key="AddNewMeal" className="hover:bg-slate-700/20 transition-colors">
                                 <td className="py-2">
-                                    {/* Add new meal to mealPlan - Functionality not yet implemented */}
-                                    {/* Add new meal to mealPlan - Functionality not yet implemented */}
-                                    {/* Add new meal to mealPlan - Functionality not yet implemented */}
-                                    {/* Add new meal to mealPlan - Functionality not yet implemented */}
                                     <Tooltip title="Add new Meal">
-                                        <Button variant="contained" color="success" className=""><AddIcon fontSize="small"/></Button>
+                                        <Button 
+                                            variant="contained"
+                                            color="success" 
+                                            onClick={ async () => NewMealNameForm("Create a new meal", "", activeMealPlanId)
+                                                .then(() => queryClient.invalidateQueries({ queryKey:["detailedOverview"]}))
+                                            }>
+                                                <AddIcon fontSize="small"/>
+                                        </Button>
                                     </Tooltip>
                                 </td>
                             </tr>

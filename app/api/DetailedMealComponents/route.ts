@@ -1,22 +1,16 @@
 import { NextResponse, NextRequest } from "next/server";
-import {ApiResponse, DetailedCompleteOverviewDTO } from "@/Types/DetailedTypes";
 import { API_ENDPOINTS } from "@/lib/constants";
-import { DetailedDeleteRequest } from "@/Types/DetailedRequests";
-
-interface AuthResponse {
-    authenticated: boolean;
-    reason: string;
-}
+import { ApiResponse } from "@/Types/DetailedTypes";
 
 export async function POST<T>(req: NextRequest) {
     const token = req.cookies.get("token")?.value;
     const body: T = await req.json();
     try {
-        const res = await fetch(API_ENDPOINTS.DETAILED_ADD_MEALPLAN, {
+        const res = await fetch(API_ENDPOINTS.DETAILED_ADD_MEALCOMPONENT, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `bearer ${token}`
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify(body),
         });
@@ -39,11 +33,11 @@ export async function POST<T>(req: NextRequest) {
     }
 }
 
-export async function DELETE(req: NextRequest) {
-    const deleteRequest: DetailedDeleteRequest = await req.json();
+export async function DELETE(req: NextRequest, {params}: {params: Promise<{id: number}>}) {
+    const deleteRequest = await params;
     const token = await req.cookies.get("token")?.value;
     try {
-        const res = await fetch(`${API_ENDPOINTS.DETAILED_DELETE_MEALPLAN}/${encodeURIComponent(deleteRequest.id)}`, {
+        const res = await fetch(`${API_ENDPOINTS.DETAILED_DELETE_MEAL_COMPONENT}/${encodeURIComponent(deleteRequest.id)}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -66,51 +60,4 @@ export async function DELETE(req: NextRequest) {
         };
         return NextResponse.json(apiResponse, { status: 500 });
     }
-}
-
-export async function GET(req: NextRequest) {
-    const token = req.cookies.get("token")?.value;
-    try {
-        const res = await fetch(API_ENDPOINTS.DETAILED_MEAL_PLAN_OVERVIEW, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `bearer ${token}`
-            }
-        });
-
-        if ( res.status === 401) {
-            const apiResponse: ApiResponse<string> = {
-                isSuccess: false,
-                data: null,
-                errors: ["Unauthorized"],
-                types: ["Authentication Error"],
-                statusCode: 401
-            }
-            return NextResponse.json(apiResponse, {status: apiResponse.statusCode})
-        }
-
-        if ( res.ok) {
-            const apiResponse: ApiResponse<DetailedCompleteOverviewDTO[]> = await res.json();
-            const nextResponse = NextResponse.json(apiResponse, {status: res.status});
-            return nextResponse;
-        }
-    } 
-    catch (error) {
-        console.error("BFF Route Handler Error:", error);
-        const apiResponse: ApiResponse = {
-            isSuccess: false,
-            data: null,
-            errors: ["Internal Server error"],
-            types: ["Server Error"],
-            statusCode: 500,
-        };
-
-        return NextResponse.json(
-            apiResponse, 
-            { status: 500 }
-        );
-    }
-
-
 }

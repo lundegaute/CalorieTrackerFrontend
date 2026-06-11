@@ -1,6 +1,8 @@
 "use client";
 import { DetailedCompleteOverviewDTO } from "@/Types/DetailedTypes";
 import DropDownStyles from "./DropDown.module.css";
+import { Select, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface BasicItem {
     id: number;
@@ -18,7 +20,9 @@ export default function SimpleDropdownMenu<T extends BasicItem>({dataSource, set
     return (
         <select className={DropDownStyles.DropDownMenu} name="GenericSelector" value={activeMealPlanId ? activeMealPlanId : 0} onChange={(event) => setActiveMealPlanId(parseInt(event.target.value))}>
             {dataSource.map((data) => (
-                <option key={data.id} value={data.id}>{data.name}</option>
+                <option key={data.id} value={data.id}>
+                        {data.name}
+                </option>
             ))}
         </select>
     )

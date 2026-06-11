@@ -1,10 +1,9 @@
 import Swal from "sweetalert2";
-import { DetailedMealPlanRequest } from "@/Types/DetailedRequests";
+import { DetailedMealRequest } from "@/Types/DetailedRequests";
 import { fetchDetailedPost } from "@/Fetch/DetailedFetch/DetailedPost";
 import { SweetAlertWarning, SweetAlertSuccess } from "@/components/SweetAlert/DetailedSweetAlert/FeedBack";
-import { ApiResponse } from "@/Types/DetailedTypes";
 
-export async function SweetAlertSingleInput<T, X>(title: string, placeHolderName: string, bodyFactory: () => X){
+export async function NewMealNameForm(title: string, placeHolderName: string, detailedMealPlanId: number) {
     const result = await Swal.fire( {
         title: title,
         input: "text",
@@ -19,17 +18,18 @@ export async function SweetAlertSingleInput<T, X>(title: string, placeHolderName
     if ( result.isDismissed || !result.value) {
         return;
     }
-    if ( result.isConfirmed && result.value.length > 2) {
-        const body: DetailedMealPlanRequest = {
-            name: result.value
-            };
-        const res = await fetchDetailedPost<T, DetailedMealPlanRequest>("/api/DetailedMealPlans", body);
+    if ( result.isConfirmed && result.value.length >= 2) {
+        const body: DetailedMealRequest = {
+            name: result.value,
+            detailedMealPlanId: detailedMealPlanId
+        };
+        const res = await fetchDetailedPost<string, DetailedMealRequest>("/api/DetailedMeals", body);
         if ( !res.isSuccess) {
             SweetAlertWarning(res.errors[0], "Ok");
             return
         }
         else {
-            return res;
+            return;
         }
     }
 

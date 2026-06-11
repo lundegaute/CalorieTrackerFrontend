@@ -6,6 +6,7 @@ import { ApiResponse, DetailedCompleteOverviewDTO, DetailedMealDTO, NutrientCate
 import { DetailedMealPlanRequest } from "@/Types/DetailedRequests";
 import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import DeleteIcon from '@mui/icons-material/Delete';
 import MicroAnalyticsCharts from "@/components/Charts/BarCharts/MicroAnalyticsChart";
 import MacroPieChart from "@/components/Charts/PieCharts/MacroPieChart";
 import styles from "./DetailedCompleteOverview.module.css";
@@ -15,6 +16,7 @@ import {useState, useEffect } from "react";
 import {Button, Tooltip} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { SweetAlertSingleInput } from "@/components/SweetAlert/DetailedSweetAlert/OneInputForm";
+import { DetailedDelete } from "@/Fetch/DetailedFetch/DetailedDelete";
 
 
 export default function DetailedCompleteOverview() {
@@ -54,7 +56,7 @@ export default function DetailedCompleteOverview() {
 
     useEffect(() => {
         if ( apiResponse?.data?.[0] ){
-            setActiveMealPlanId(apiResponse.data[0].id);
+            setActiveMealPlanId( activeMealPlanId ?? apiResponse.data[0].id);
         }
     },[apiResponse])
     
@@ -111,8 +113,26 @@ export default function DetailedCompleteOverview() {
                             <div className="flex items-center gap-2">
                                 <SimpleDropdownMenu dataSource={apiResponse.data} setActiveMealPlanId={setActiveMealPlanId} activeMealPlanId={activeMealPlanId}/>
                                 <Tooltip title="Add new mealplan">
-                                    <Button onClick={ async () => await SweetAlertSingleInput("Add new MealPlan", "")
-                                        .then(() => queryClient.refetchQueries({queryKey: ["detailedOverview"]}))}> <AddIcon /> </Button>
+                                    <Button onClick={ async () => {
+                                        const apiResponse: ApiResponse<number> | void = await SweetAlertSingleInput<number>("Add new MealPlan", "")
+                                        if ( apiResponse && apiResponse.data ) {
+                                            await queryClient.invalidateQueries({queryKey:["detailedOverview"]})
+                                            setActiveMealPlanId(apiResponse.data)
+                                        }
+                                    }
+                                    }> <AddIcon /> 
+                                    </Button>
+                                </Tooltip>
+                                <Tooltip title="Delete Current MealPlan">
+                                    <Button 
+                                        variant="outlined" 
+                                        color="error"
+                                        size="small" 
+                                        onClick={() => DetailedDelete("/api/DetailedMealPlans", activePlan.id)
+                                            .then(() => queryClient.invalidateQueries({queryKey:["detailedOverview"]}))
+                                        }>
+                                        <DeleteIcon />
+                                    </Button>
                                 </Tooltip>
                             </div>
                         }
@@ -120,7 +140,7 @@ export default function DetailedCompleteOverview() {
                     { selectedMealId ? 
                         <DetailedMealComponents detailedMealDTO={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/>
                         :
-                        <DetailedMeals detailedMealDTO={activePlan.detailedMeals} setSelectedMealId={setSelectedMealId}/>
+                        <DetailedMeals detailedMealDTO={activePlan.detailedMeals} setSelectedMealId={setSelectedMealId} activeMealPlanId={activePlan.id}/>
                     }
                 </section>
                 {/* RIGHT PANEL */}

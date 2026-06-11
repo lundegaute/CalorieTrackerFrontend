@@ -17,9 +17,15 @@ export const API_ENDPOINTS = {
     FOODSEARCH: `${BASE_URL}/FoodSql/Search`,
 
     DETAILED_MEAL_PLAN_OVERVIEW: `${BASE_URL}/DetailedMealPlan/overview`,
+
     DETAILED_ADD_MEALPLAN: `${BASE_URL}/DetailedMealPlan/add`,
     DETAILED_ADD_MEAL: `${BASE_URL}/DetailedMeal/add`,
     DETAILED_ADD_MEALCOMPONENT: `${BASE_URL}/DetailedMealComponent/add`,
+
+    DETAILED_DELETE_MEALPLAN: `${BASE_URL}/DetailedMealPlan/Delete`,
+    DETAILED_DELETE_MEAL: `${BASE_URL}/DetailedMeal/Delete`,
+    DETAILED_DELETE_MEAL_COMPONENT: `${BASE_URL}/DetailedMealComponent/Delete`,
+
     DETAILED_SEARCH: `${BASE_URL}/DetailedFood/search`,
 
 }

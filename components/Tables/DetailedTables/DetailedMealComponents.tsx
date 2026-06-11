@@ -7,6 +7,7 @@ import {useState} from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import DetailedFoodSearch from "@/components/DetailedComponents/DetailedSearch/DetailedFoodSearch";
 import styles from "./DetailedMealComponent.module.css";
+import { DetailedDelete } from "@/Fetch/DetailedFetch/DetailedDelete";
 
 export default function DetailedMealComponents({detailedMealDTO}: {detailedMealDTO: DetailedMealDTO}) {
     const queryClient = useQueryClient(); // Used after adding food to a meal, to refetch the detailedOverviewDTO queryClient.refetchQueries({ queryKey: ["detailedOverview"] });
@@ -66,7 +67,12 @@ export default function DetailedMealComponents({detailedMealDTO}: {detailedMealD
                                     {component.totalFats}
                                 </td>
                                 <td className="font-semibold text-emerald-300 tabular-nums">
-                                    <Button variant="outlined" color="error" onClick={() => console.log(component.id)}>
+                                    <Button 
+                                        variant="outlined" 
+                                        color="error" 
+                                        onClick={() => DetailedDelete("/api/DetailedMealComponents", component.id)
+                                            .then(() => queryClient.invalidateQueries({queryKey:["DetailedOverview"]}))
+                                        }>
                                         <DeleteIcon />
                                     </Button>
                                 </td>
