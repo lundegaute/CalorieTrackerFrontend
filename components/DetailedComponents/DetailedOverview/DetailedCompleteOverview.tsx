@@ -25,6 +25,13 @@ export default function DetailedCompleteOverview() {
     const [activeMealPlanId, setActiveMealPlanId] = useState<number | null>(null); // This is important to tell which mealPlan to show
     const [selectedMealId, setSelectedMealId] = useState<number | null>(null); // When clicking on details, selectedMealId is needed to decide which meal to show
 
+    const addNewMealPlan = async () => {
+        const result = await SweetAlertSingleInput<number>("Create your first MealPlan", "");
+        if ( result?.isSuccess ) {
+            await queryClient.refetchQueries({queryKey: ["detailedOverview"]});
+            setActiveMealPlanId(result.data);
+        }
+    }
     // ---------------------------------------------
     // ------------- Api CRUD Section --------------
     
@@ -59,6 +66,19 @@ export default function DetailedCompleteOverview() {
             setActiveMealPlanId( activeMealPlanId ?? apiResponse.data[0].id);
         }
     },[apiResponse])
+
+    useEffect(() => {
+        if (apiResponse && apiResponse.data && apiResponse.data.length > 0) {
+            const planExists = apiResponse.data.some(item => item.id == activeMealPlanId);
+            if ( !planExists ) {
+                setActiveMealPlanId(apiResponse.data[0].id);
+            }
+        } else {
+            setActiveMealPlanId(null);
+        }
+
+
+    }, [apiResponse, activeMealPlanId])
     
     if (isLoading) {
         return (
@@ -70,18 +90,11 @@ export default function DetailedCompleteOverview() {
             <h1>Error during fetch: {error?.message}</h1>
         )
     }
-    if ( apiResponse.data.length === 0) {
-        return (
-            <p>No Data</p>
-        )
-    }
-    
     // ---------------------- USE ACTIVEPLAN FOR DATA ----------------------
+    const hasPlans = apiResponse.data.length > 0;
     const activePlan = apiResponse.data.find(plan => plan.id === activeMealPlanId);
     const currentMeal = activePlan?.detailedMeals.find(meal => meal.id === selectedMealId)?.name ?? "Måltid";
-    if ( !activePlan ) {
-        return <h1>User has no active plan.</h1>
-    }
+    
     
     if (apiResponse && apiResponse.data) {
         return (
@@ -89,15 +102,17 @@ export default function DetailedCompleteOverview() {
                 {/* 2.1 LEFT PANEL */}
                 <aside className={styles.leftSidebar}>
                     <div className={styles.leftComponents}>
-                        <div className={styles.outlineLabel}>
-                        Total Calories:
-                        </div>
-                        { selectedMealId ?
-                            <DetailedPlanSummary dataSource={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/>
-                            :
-                            <DetailedPlanSummary dataSource={activePlan}/> 
-                        }
-                    </div>
+                    <div className={styles.outlineLabel}>Total Calories:</div>
+                        { hasPlans && activePlan ? (
+                            selectedMealId ? (
+                                <DetailedPlanSummary dataSource={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/>
+                            ) : (
+                                <DetailedPlanSummary dataSource={activePlan}/> 
+                            )
+                        ) : (
+                            <div className="text-slate-500 text-sm italic p-4 text-center">Ingen kaloridata tilgjengelig</div>
+                        )}    
+                </div>
                 </aside>
                 {/* CENTER SECTION */}
                 <section className={styles.centerTableSection}>
@@ -111,66 +126,99 @@ export default function DetailedCompleteOverview() {
                             </div>
                             :
                             <div className="flex items-center gap-2">
-                                <SimpleDropdownMenu dataSource={apiResponse.data} setActiveMealPlanId={setActiveMealPlanId} activeMealPlanId={activeMealPlanId}/>
-                                <Tooltip title="Add new mealplan">
-                                    <Button onClick={ async () => {
-                                        const apiResponse: ApiResponse<number> | void = await SweetAlertSingleInput<number>("Add new MealPlan", "")
-                                        if ( apiResponse && apiResponse.data ) {
-                                            await queryClient.invalidateQueries({queryKey:["detailedOverview"]})
-                                            setActiveMealPlanId(apiResponse.data)
-                                        }
-                                    }
-                                    }> <AddIcon /> 
-                                    </Button>
-                                </Tooltip>
-                                <Tooltip title="Delete Current MealPlan">
-                                    <Button 
-                                        variant="outlined" 
-                                        color="error"
-                                        size="small" 
-                                        onClick={() => DetailedDelete("/api/DetailedMealPlans", activePlan.id)
-                                            .then(() => queryClient.invalidateQueries({queryKey:["detailedOverview"]}))
-                                        }>
-                                        <DeleteIcon />
-                                    </Button>
-                                </Tooltip>
+                                { hasPlans && activePlan ? (
+                                    <div>
+                                        <SimpleDropdownMenu dataSource={apiResponse.data} setActiveMealPlanId={setActiveMealPlanId} activeMealPlanId={activeMealPlanId}/>
+                                        <Tooltip title="Add new mealplan">
+                                            <Button onClick={ async () => {
+                                                const apiResponse: ApiResponse<number> | void = await SweetAlertSingleInput<number>("Add new MealPlan", "")
+                                                if ( apiResponse && apiResponse.data ) {
+                                                    await queryClient.invalidateQueries({queryKey:["detailedOverview"]})
+                                                    setActiveMealPlanId(apiResponse.data)
+                                                }
+                                            }
+                                            }> <AddIcon /> 
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
+                                ) : (
+                                    <Tooltip title="Add new mealplan">
+                                        <Button variant="contained" onClick={addNewMealPlan}>
+                                            <AddIcon /> Click me
+                                        </Button>
+                                    </Tooltip>
+                                )}
+                                { hasPlans && activePlan ? (
+                                    <Tooltip title="Delete Current MealPlan">
+                                        <Button 
+                                            variant="outlined" 
+                                            color="error"
+                                            size="small"
+                                            disabled={apiResponse.data.length === 0}
+                                            onClick={() => DetailedDelete("/api/DetailedMealPlans", activePlan.id)
+                                                .then( async () => {
+                                                    await queryClient.refetchQueries({queryKey:["detailedOverview"]})
+
+                                                    if ( apiResponse && apiResponse.data && apiResponse.data.length > 0)
+                                                        setActiveMealPlanId(apiResponse.data.find(item => item.id !== activePlan.id)!.id)
+                                                })
+                                            }>
+                                            <DeleteIcon />
+                                        </Button>
+                                    </Tooltip>
+                                ) : (
+                                    <div className="text-500 text-sm italic p-4 text-center"></div>
+                                )}
                             </div>
                         }
                     </div>
-                    { selectedMealId ? 
-                        <DetailedMealComponents detailedMealDTO={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/>
-                        :
-                        <DetailedMeals detailedMealDTO={activePlan.detailedMeals} setSelectedMealId={setSelectedMealId} activeMealPlanId={activePlan.id}/>
-                    }
+                    { hasPlans && activePlan ? (
+                        selectedMealId ? 
+                            <DetailedMealComponents detailedMealDTO={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!}/>
+                            :
+                            <DetailedMeals detailedMealDTO={activePlan.detailedMeals} setSelectedMealId={setSelectedMealId} activeMealPlanId={activePlan.id}/>    
+                    ) : (
+                        <div className="text-slate-500 text-sm italic p-4 text-center">Ingen kaloridata tilgjengelig</div>
+                    )}
                 </section>
                 {/* RIGHT PANEL */}
                 <aside className={styles.rightSidebar}>
                     <div className={styles.panelTopStack}>
                         <div className={styles.outlineLabel}>Micro Distribution</div>
                         {/* <MacroBarChart dataSource={activePlan}/> */}
-                        { selectedMealId ? 
-                            <MacroPieChart overviewDTO={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!} />
-                            :
-                            <MacroPieChart overviewDTO={activePlan} />
-                        }
+                        { hasPlans && activePlan ? (
+                            selectedMealId ? (
+                                <MacroPieChart overviewDTO={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!} />
+                            ) : (
+                                <MacroPieChart overviewDTO={activePlan} />
+                            )
+                        ) : (
+                            <div className="text-slate-500 text-sm italic p-4 text-center">Ingen kaloridata tilgjengelig</div>
+                        )}
                     </div>
                 </aside>
-
                 {/* Micro Nutrient Chart section */}
-                { activePlan.microSummary && Object.keys(activePlan.microSummary).length > 0 &&(
-                    <section className={styles.analyticsGridSection}>
-                        <div className={styles.analyticsGridSection}>
-                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.WaterSoluble}/>
-                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.MacroMineral}/>
-                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.TraceMineral}/>
-                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.FatSoluble}/>
-                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.LipidProfile}/>
-                            <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.CarbProfile}/>
-                            
-                        </div>
-                    </section>
+                { hasPlans && activePlan ? (
+                    activePlan.microSummary && Object.keys(activePlan.microSummary).length > 0 &&(
+                        <section className={styles.analyticsGridSection}>
+                            <div className={styles.analyticsGridSection}>
+                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.WaterSoluble}/>
+                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.MacroMineral}/>
+                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.TraceMineral}/>
+                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.FatSoluble}/>
+                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.LipidProfile}/>
+                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.CarbProfile}/>
+                                
+                            </div>
+                        </section>
+                    )
+                ) : (
+                    <p>No data</p>
                 )}
             </main>
         )
     }
+    
 }
+
+

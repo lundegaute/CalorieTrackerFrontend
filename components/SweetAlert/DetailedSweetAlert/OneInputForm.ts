@@ -4,7 +4,7 @@ import { fetchDetailedPost } from "@/Fetch/DetailedFetch/DetailedPost";
 import { SweetAlertWarning, SweetAlertSuccess } from "@/components/SweetAlert/DetailedSweetAlert/FeedBack";
 import { ApiResponse } from "@/Types/DetailedTypes";
 
-export async function SweetAlertSingleInput<T, X>(title: string, placeHolderName: string, bodyFactory: () => X){
+export async function SweetAlertSingleInput<T>(title: string, placeHolderName: string){
     const result = await Swal.fire( {
         title: title,
         input: "text",
@@ -23,7 +23,7 @@ export async function SweetAlertSingleInput<T, X>(title: string, placeHolderName
         const body: DetailedMealPlanRequest = {
             name: result.value
             };
-        const res = await fetchDetailedPost<T, DetailedMealPlanRequest>("/api/DetailedMealPlans", body);
+        const res: ApiResponse<T> = await fetchDetailedPost<T, DetailedMealPlanRequest>("/api/DetailedMealPlans", body);
         if ( !res.isSuccess) {
             SweetAlertWarning(res.errors[0], "Ok");
             return
