@@ -1,29 +1,45 @@
 import { DetailedMealComponentDTO, DetailedMealDTO,  DetailedFoodDTO} from "@/Types/DetailedTypes";
+import DetailedFoodSearch from "@/components/DetailedComponents/DetailedSearch/DetailedFoodSearch";
+import { DetailedMealComponentRequest } from "@/Types/DetailedRequests";
+import AddFoodRow from "@/components/Tables/DetailedTables/AddFoodRow";
+import { DetailedDelete } from "@/Fetch/DetailedFetch/DetailedDelete";
 import {Button, TextField, Tooltip} from '@mui/material';
+import styles from "./DetailedMealComponent.module.css";
+import { useQueryClient } from "@tanstack/react-query";
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from '@mui/icons-material/Add';
 import {useState} from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import DetailedFoodSearch from "@/components/DetailedComponents/DetailedSearch/DetailedFoodSearch";
-import styles from "./DetailedMealComponent.module.css";
-import { DetailedDelete } from "@/Fetch/DetailedFetch/DetailedDelete";
+import { fetchDetailedPost } from "@/Fetch/fetchDetailedPost";
+
 
 export default function DetailedMealComponents({detailedMealDTO}: {detailedMealDTO: DetailedMealDTO}) {
     const queryClient = useQueryClient(); // Used after adding food to a meal, to refetch the detailedOverviewDTO queryClient.refetchQueries({ queryKey: ["detailedOverview"] });
     const [isLockedIn, setIsLockedIn] = useState<boolean>(false)
-    const [foodsToAdd, setFoodsToAdd] = useState<string[]>([]);
+    const [foodsToAdd, setFoodsToAdd] = useState<DetailedMealComponentRequest[]>([]);
     const [foodFromSearch, setFoodFromSearch] = useState<DetailedFoodDTO[]>([]);
     if ( !detailedMealDTO) { return ( <h1>No data found</h1> ) }
 
-    function toggleFoodToAdd(id: string) {
-        if ( foodsToAdd.includes(id)) {
-            var idRemoved = foodsToAdd.filter(foodsId => foodsId !== id);
+    function toggleFoodToAdd(newFood: DetailedFoodDTO, quantity: number) {
+        if ( foodsToAdd.find( food => food.detailedFoodId == newFood.id)) {
+            var idRemoved = foodsToAdd.filter(food => food.detailedFoodId !== newFood.id);
             setFoodsToAdd(idRemoved);
         }
         else {
-            setFoodsToAdd([...foodsToAdd, id]);
+            const newFoodToAdd: DetailedMealComponentRequest = {
+                detailedFoodId: newFood.id,
+                quantity: quantity,
+                detailedMealId: detailedMealDTO.id,
+            };
+            setFoodsToAdd([...foodsToAdd, newFoodToAdd]);
         }
+        console.log(foodsToAdd)
+    }
+
+    const addNewMealComponent = async (foodsToAdd: DetailedMealComponentRequest[]) => {
+        // the function underneath should be invoked with foodsToAdd, to add new mealComponents
+        // A new method in the backend is needed to add a list of components at once
+        // fetchDetailedPost
     }
 
 
@@ -71,7 +87,7 @@ export default function DetailedMealComponents({detailedMealDTO}: {detailedMealD
                                         variant="outlined" 
                                         color="error" 
                                         onClick={() => DetailedDelete("/api/DetailedMealComponents", component.id)
-                                            .then(() => queryClient.invalidateQueries({queryKey:["DetailedOverview"]}))
+                                            .then(() => queryClient.invalidateQueries({queryKey:["detailedOverview"]}))
                                         }>
                                         <DeleteIcon />
                                     </Button>
@@ -102,34 +118,12 @@ export default function DetailedMealComponents({detailedMealDTO}: {detailedMealD
                             </ thead>
                             <tbody className="divide-y divide-slate-700/40 text-sm text-slate-200">
                                 { foodFromSearch.map((food: DetailedFoodDTO) => (
-                                    <tr key={food.id} className="hover:bg-slate-700/20 transition-colors">
-                                        <td className="px-6 py-4 font-medium text-white">
-                                            {food.foodName}
-                                        </td>
-                                        <td>
-                                            <div className="flex items-center justify-center gap-1 mx-auto pl-3 pr-3">
-                                                <TextField variant="standard" type="number" defaultValue={100} size="small"/>
-                                                <CreateIcon className="text-emerald-300" fontSize="inherit" />
-                                            </div>
-                                        </td>
-                                        <td className="font-semibold text-emerald-300 tabular-nums">
-                                            {food.calories}
-                                        </td>
-                                        <td className="font-semibold text-emerald-300 tabular-nums">
-                                            {food.constituents.find(nut => nut.nutrientId === "Protein")?.quantity ?? 0}
-                                        </td>
-                                        <td className="font-semibold text-emerald-300 tabular-nums">
-                                            {food.constituents.find(nut => nut.nutrientId === "Karbo")?.quantity ?? 0}
-                                        </td>
-                                        <td className="font-semibold text-emerald-300 tabular-nums">
-                                            {food.constituents.find(nut => nut.nutrientId === "Fett")?.quantity ?? 0}
-                                        </td>
-                                        <td className="font-semibold text-emerald-300 tabular-nums">
-                                            <Button variant="text" color={foodsToAdd.includes(food.id.toString()) ? "success" : "primary"} onClick={() => toggleFoodToAdd(food.id.toString())}>
-                                                <AddIcon />
-                                            </Button>
-                                        </td>
-                                    </tr>
+                                    <AddFoodRow 
+                                        key={food.id}
+                                        food={food}
+                                        toggleFoodToAdd={toggleFoodToAdd}
+                                        foodsToAdd={foodsToAdd}
+                                    />
                                 ))}
                             </tbody>
                         </table>

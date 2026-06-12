@@ -33,8 +33,8 @@ export async function POST<T>(req: NextRequest) {
     }
 }
 
-export async function DELETE(req: NextRequest, {params}: {params: Promise<{id: number}>}) {
-    const deleteRequest = await params;
+export async function DELETE(req: NextRequest) {
+    const deleteRequest = await req.json();
     const token = await req.cookies.get("token")?.value;
     try {
         const res = await fetch(`${API_ENDPOINTS.DETAILED_DELETE_MEAL_COMPONENT}/${encodeURIComponent(deleteRequest.id)}`, {
