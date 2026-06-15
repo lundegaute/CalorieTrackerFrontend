@@ -38,7 +38,7 @@ export default function DetailedMealComponents({detailedMealDTO}: {detailedMealD
 
     const addNewMealComponent = async (foodsToAdd: DetailedMealComponentRequest[]) => {
         // the function underneath should be invoked with foodsToAdd, to add new mealComponents
-        // A new method in the backend is needed to add a list of components at once
+        // Backend now has an endpoint for taking in a list of components /DetailedMealComponent/add
         // fetchDetailedPost
     }
 
