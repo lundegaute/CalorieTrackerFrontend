@@ -12,6 +12,12 @@ export type DetailedMealComponentRequest = {
     detailedFoodId: number;
 }
 
+export type UpdateDetailedMealComponentRequest = {
+    detailedMealComponentId: number;
+    detailedMealId: number;
+    quantity: number;
+}
+
 export type DetailedDeleteRequest = {
     id: number;
 }

@@ -1,4 +1,4 @@
-import { DetailedFoodDTO } from "@/Types/DetailedTypes";
+import { DetailedFoodDTO, DetailedMealComponentDTO } from "@/Types/DetailedTypes";
 import { TextField, Button } from "@mui/material";
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from '@mui/icons-material/Add';
@@ -7,11 +7,10 @@ import {useState} from "react";
 
 interface IAddFoodRow {
     food: DetailedFoodDTO;
-    foodsToAdd: DetailedMealComponentRequest[];
-    toggleFoodToAdd: (newFood: DetailedFoodDTO, quantity: number) => void;
+    AddFoodToMeal: (item: DetailedFoodDTO, quantity: number) => void;
 }
 
-export default function AddFoodRow({food, foodsToAdd, toggleFoodToAdd}: IAddFoodRow) {
+export default function AddFoodRow({food, AddFoodToMeal}: IAddFoodRow) {
     const [quantity, setQuantity] = useState<number>(100);
 
     return(
@@ -21,7 +20,12 @@ export default function AddFoodRow({food, foodsToAdd, toggleFoodToAdd}: IAddFood
             </td>
             <td>
                 <div className="flex items-center justify-center gap-1 mx-auto pl-3 pr-3">
-                    <TextField variant="standard" type="number" value={quantity} onChange={(e) => setQuantity(parseInt(e.currentTarget.value))} size="small"/>
+                    <TextField 
+                        variant="standard" 
+                        type="number" 
+                        value={quantity} 
+                        onChange={(e) => setQuantity(parseInt(e.currentTarget.value))} size="small"
+                    />
                     <CreateIcon className="text-emerald-300" fontSize="inherit" />
                 </div>
             </td>
@@ -38,8 +42,13 @@ export default function AddFoodRow({food, foodsToAdd, toggleFoodToAdd}: IAddFood
                 {food.constituents.find(nut => nut.nutrientId === "Fett")?.quantity ?? 0}
             </td>
             <td className="font-semibold text-emerald-300 tabular-nums">
-                <Button variant="text" color={foodsToAdd.find(f => f.detailedFoodId === food.id) ? "success" : "primary"} onClick={() => toggleFoodToAdd(food, quantity)}>
-                    <AddIcon />
+                <Button 
+                    variant="text" 
+                    color="primary" 
+                    //onClick={() => toggleFoodToAdd(food, quantity)}
+                    onClick={() => AddFoodToMeal(food, quantity)}
+                    >
+                        <AddIcon />
                 </Button>
             </td>
         </tr>

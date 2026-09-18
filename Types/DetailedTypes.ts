@@ -39,7 +39,6 @@ export type DetailedMealComponentDTO = {
     totalProtein: number; // 22g
     totalCarbs: number; // 67.3g
     totalFats: number; // 6.9g
-
     detailedFood: DetailedFoodDTO;
 }
 
@@ -50,7 +49,6 @@ export type DetailedFoodDTO = {
     foodGroupId: number;
     calories: number | null; // Base calories per 100g
     energy: number | null;
-
     constituents: FoodConstituentsDTO[];
 }
 

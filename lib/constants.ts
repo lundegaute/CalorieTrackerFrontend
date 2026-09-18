@@ -21,6 +21,7 @@ export const API_ENDPOINTS = {
     DETAILED_ADD_MEALPLAN: `${BASE_URL}/DetailedMealPlan/add`,
     DETAILED_ADD_MEAL: `${BASE_URL}/DetailedMeal/add`,
     DETAILED_ADD_MEALCOMPONENT: `${BASE_URL}/DetailedMealComponent/add`,
+    DETAILED_UPDATE_MEALCOMPONENT: `${BASE_URL}/DetailedMealComponent/update`,
 
     DETAILED_DELETE_MEALPLAN: `${BASE_URL}/DetailedMealPlan/Delete`,
     DETAILED_DELETE_MEAL: `${BASE_URL}/DetailedMeal/Delete`,

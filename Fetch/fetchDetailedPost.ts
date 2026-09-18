@@ -1,8 +1,8 @@
 import { ApiResponse, DetailedFoodDTO } from "@/Types/DetailedTypes";
 import { ErrorResponse } from "@/Types/types";
 
-export async function fetchDetailedPost<T, bodyType>(url: string, body: bodyType)
-    : Promise<T> {
+export async function fetchDetailedPost<T, BodyType>(url: string, body: BodyType)
+    : Promise<ApiResponse<T>> {
     console.log("----- FETCH DETAILED POST -----");
     console.log(url);
     const res = await fetch(url, {
@@ -13,7 +13,7 @@ export async function fetchDetailedPost<T, bodyType>(url: string, body: bodyType
         body: JSON.stringify(body),
         credentials: "include",
     });
-    const data: T = await res.json();
+    const data: ApiResponse<T> = await res.json();
     return data;
 
 }
