@@ -74,8 +74,10 @@ export default function MicroAnalyticsCharts({activePlan, selectedMealId, catego
                     customizeTooltip={currentBar => {
                         var nutrientData = filteredSummary.find(nut => nut.nutrientId === currentBar.argument);
                         var nutrientName = nutrientData?.nutrientName ?? currentBar.argument;
+                        console.log(nutrientData);
+                        
                         return {
-                            text: `${nutrientName}`
+                            text: `${nutrientName}: ${currentBar.valueText}${nutrientData?.unit ?? ""}`
                         }
                     }}
                 /> 

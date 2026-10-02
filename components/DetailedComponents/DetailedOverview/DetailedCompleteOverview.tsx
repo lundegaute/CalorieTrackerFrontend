@@ -32,12 +32,6 @@ export default function DetailedCompleteOverview() {
             setActiveMealPlanId(result.data);
         }
     }
-    // ---------------------------------------------
-    // ------------- Api CRUD Section --------------
-    
-    
-    // ---------------------------------------------
-    // ---------------------------------------------
 
     const {data: apiResponse, isLoading, error} = useQuery<ApiResponse<DetailedCompleteOverviewDTO[]>>({
         queryKey: ["detailedOverview"],

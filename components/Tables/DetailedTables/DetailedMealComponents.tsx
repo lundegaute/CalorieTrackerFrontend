@@ -46,9 +46,9 @@ export default function DetailedMealComponents({detailedMealDTO}: {detailedMealD
             quantity: quantity
         }
         const res = await fetchDetailedPut("api/DetailedMealComponents", request);
-        console.log(res.data);
-        
+        queryClient.invalidateQueries();
     }
+
     const handleKeyDownEvent = (event: any) => {
         if ( event.key == "Enter"){
             event.target.blur();
@@ -84,7 +84,7 @@ export default function DetailedMealComponents({detailedMealDTO}: {detailedMealD
                                             defaultValue={component.quantity}
                                             size="small"
                                             onKeyDown={(e) => handleKeyDownEvent(e)}
-                                            onBlur={(e) => UpdateComponentQuantity(component, parseInt(e.currentTarget.value))}
+                                            onBlur={(e) => UpdateComponentQuantity(component, parseFloat(e.currentTarget.value))}
                                         />
                                         <CreateIcon className="text-emerald-300" fontSize="inherit" />
                                     </div>

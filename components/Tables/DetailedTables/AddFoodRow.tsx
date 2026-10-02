@@ -24,7 +24,7 @@ export default function AddFoodRow({food, AddFoodToMeal}: IAddFoodRow) {
                         variant="standard" 
                         type="number" 
                         value={quantity} 
-                        onChange={(e) => setQuantity(parseInt(e.currentTarget.value))} size="small"
+                        onChange={(e) => setQuantity(parseFloat(e.currentTarget.value))} size="small"
                     />
                     <CreateIcon className="text-emerald-300" fontSize="inherit" />
                 </div>

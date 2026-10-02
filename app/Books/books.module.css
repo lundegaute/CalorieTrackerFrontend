@@ -1,0 +1,18 @@
+
+.booksPageContainer {
+    --bg-panel-solid: rgba(30, 41, 59, 0.8);    /* Slate 800 with 80% opacity */
+    --bg-panel-trans: rgba(30, 41, 59, 0.4);    /* Slate 800 with 40% opacity */
+    --border-color-soft: rgba(71, 85, 105, 0.3); /* Slate 600 soft edge */
+    --border-color-accent: rgba(16, 185, 129, 0.3); /* Emerald 500 accent edge */
+}
+
+.booksPageContainer {
+    padding-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px, dotted, var(--border-color-soft); use to see the actual width of the grid */
+    max-width: 1800px;
+    width: 90%;
+    margin: 0 auto;
+}

@@ -16,7 +16,7 @@ const useMealPlanStore = create<MealPlanStore>((set) => ({
     })),
     mealPlanId: null,
     setMealPlanId: (id) => set(() => ({
-        mealPlanId: id
+        mealPlanId: id,
     }))
 }));
 

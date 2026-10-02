@@ -1,0 +1,93 @@
+.theme {
+    --bg-panel-solid: rgba(30, 41, 59, 0.8); /* Slate 800 with 80% opacity */
+    --bg-panel-trans: rgba(30, 41, 59, 0.4); /* Slate 800 with 40% opacity */
+    --border-color-soft: rgba(71, 85, 105, 0.3); /* Slate 600 soft edge */
+    --border-color-accent: rgba(16,185,129,0.3); /* Emerald 500 accent edge */
+}
+
+/* Default color settings for the grid ------------------ */
+.gridContainer :global(.MuiDataGrid-columnHeader),
+.gridContainer :global(.MuiDataGrid-columnHeaders) {
+    background-color: var(--bg-panel-trans) !important;
+    color: #ffffff !important;
+}
+.gridContainer :global(.MuiDataGrid-footerContainer) {
+  background-color: var(--bg-panel-trans) !important;
+  color: #ffffff !important;
+}
+
+.gridContainer :global(.MuiDataGrid-columnHeader .MuiIconButton-root),
+.gridContainer :global(.MuiDataGrid-columnHeaderTitle) {
+    color: #ffffff !important;
+}
+
+.rowDefault {
+    background-color: var(--bg-panel-trans) !important;
+    color: #fefefe !important;
+    border-color: var(--border-color-accent);
+}
+/* Default color settings for the grid ------------------ */
+
+
+
+.rowDune {
+    background-color: rgba(251, 116, 43, 0.15) !important;
+    color: #ffffff !important;
+}
+.rowDune:hover {
+    background-color: rgba(230, 81, 0, 0.28) !important;
+}
+
+
+.rowLotr {
+    background-color: rgba(4, 173, 41, 0.15) !important;
+    color: #ffffff !important;
+}
+.rowLotr:hover {
+    background-color: rgba(70, 238, 44, 0.28) !important;
+}
+
+
+.rowMiddleEarth {
+    background-color: rgba(18, 135, 5, 0.15) !important;
+    color: #ffffff !important;
+}
+.rowMiddleEarth:hover {
+    background-color: rgba(66, 237, 28, 0.28) !important;
+}
+
+
+.rowMalazan {
+    background-color: rgba(251, 116, 43, 0.15) !important;
+    color: #ffffff !important;
+}
+.rowMalazan:hover {
+    background-color: rgba(230, 81, 0, 0.28) !important;
+}
+
+
+.rowLightbringer {
+    background-color: rgba(251, 116, 43, 0.15) !important;
+    color: #ffffff !important;
+}
+.rowLightbringer:hover {
+    background-color: rgba(230, 81, 0, 0.28) !important;
+}
+
+
+.rowTheFirstLaw {
+    background-color: rgba(251, 116, 43, 0.15) !important;
+    color: #ffffff !important;
+}
+.rowTheFirstLaw:hover {
+    background-color: rgba(230, 81, 0, 0.28) !important;
+}
+
+
+.rowRemembranceOfEarthsPast {
+    background-color: rgba(214, 83, 28, 0.15) !important;
+    color: #ffffff !important;
+}
+.rowRemembranceOfEarthsPast:hover {
+    background-color: rgba(182, 66, 16, 0.15) !important;
+}
