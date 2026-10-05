@@ -118,12 +118,15 @@
 
 /* Typography Helpers for outlines */
 .outlineLabel {
+  display: flex;
+  justify-content: space-between;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   margin-bottom: 1em;
   text-transform: uppercase;
   color: #64748b; /* Slate 500 */
+  align-items: center;
 }
 
 .centerLabel {
@@ -145,4 +148,10 @@
   border: 1px solid rgba(71, 85, 105, 0.5);
   border-radius: 0.5rem;
   cursor: pointer;
+}
+
+/* Styling for the PieChart Macro distribution */
+.pieChartMacroDistribution {
+  display: flex;
+  justify-content: space-between;
 }

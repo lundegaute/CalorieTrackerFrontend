@@ -17,6 +17,7 @@ import {Button, Tooltip} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { SweetAlertSingleInput } from "@/components/SweetAlert/DetailedSweetAlert/OneInputForm";
 import { DetailedDelete } from "@/Fetch/DetailedFetch/DetailedDelete";
+import { ToggleButtons } from "@/components/Toggle/Buttons/ToggleButton";
 
 
 export default function DetailedCompleteOverview() {
@@ -24,6 +25,8 @@ export default function DetailedCompleteOverview() {
     const router = useRouter();
     const [activeMealPlanId, setActiveMealPlanId] = useState<number | null>(null); // This is important to tell which mealPlan to show
     const [selectedMealId, setSelectedMealId] = useState<number | null>(null); // When clicking on details, selectedMealId is needed to decide which meal to show
+    const macroDistributions = ["Grams", "Energy"];
+    const [distributionCalculation, setDistributionCalculation] = useState(macroDistributions[0]);
 
     const addNewMealPlan = async () => {
         const result = await SweetAlertSingleInput<number>("Create your first MealPlan", "");
@@ -178,13 +181,16 @@ export default function DetailedCompleteOverview() {
                 {/* RIGHT PANEL */}
                 <aside className={styles.rightSidebar}>
                     <div className={styles.panelTopStack}>
-                        <div className={styles.outlineLabel}>Micro Distribution</div>
+                        <div className={styles.outlineLabel}>
+                            Macro Distribution
+                            <ToggleButtons names={macroDistributions} value={distributionCalculation} setFunction={setDistributionCalculation}/>
+                        </div>
                         {/* <MacroBarChart dataSource={activePlan}/> */}
                         { hasPlans && activePlan ? (
                             selectedMealId ? (
-                                <MacroPieChart overviewDTO={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!} />
+                                <MacroPieChart overviewDTO={activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!} macroDistribution={distributionCalculation} />
                             ) : (
-                                <MacroPieChart overviewDTO={activePlan} />
+                                <MacroPieChart overviewDTO={activePlan} macroDistribution={distributionCalculation}/>
                             )
                         ) : (
                             <div className="text-slate-500 text-sm italic p-4 text-center">Ingen kaloridata tilgjengelig</div>
