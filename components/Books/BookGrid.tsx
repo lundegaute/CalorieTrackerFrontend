@@ -1,32 +1,31 @@
-"use client";
+'use client';
 import { BaseGrid } from '@/components/DataGrids/BaseGrid';
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { BookDto } from '@/Types/BookTypes';
-import styles from "./BookGrid.module.css";
+import styles from './BookGrid.module.css';
 
 export default function BookGrid() {
-
     const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "Mai",
-        "Juni",
-        "JulI",
-        "Aug",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Des"
-    ]
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'Mai',
+        'Juni',
+        'JulI',
+        'Aug',
+        'Sep',
+        'Okt',
+        'Nov',
+        'Des',
+    ];
 
     const columns: GridColDef<BookDto>[] = [
         {
             field: 'title',
             type: 'string', // 'string' | 'number' | 'date' | 'dateTime' | 'boolean' | 'singleSelect'
             headerName: 'Title',
-            width: 300,                               
+            width: 300,
             colSpan: 1,
             //flex: 1, // Auto-fill available space
             //editable: true,                             // Enable cell editing
@@ -91,9 +90,9 @@ export default function BookGrid() {
         },
         {
             field: 'releaseYear',
-            type: 'number',
+            type: 'string',
             headerName: 'Release Year',
-            width: 150
+            width: 150,
         },
     ];
 
@@ -191,26 +190,25 @@ export default function BookGrid() {
     ];
 
     const getRowClassName = (param: GridRowParams<BookDto>) => {
-        if (param.row.series === "Dune Chronicles")
-            return styles.rowDune;
-        if (param.row.series === "The Lord of the Rings" )
-            return styles.rowLotr
-        if (param.row.series === "Malazan Book of the Fallen" )
-            return styles.rowMalazan
-        if (param.row.series === "Middle-earth")
-            return styles.rowMiddleEarth
-        if (param.row.series === "Lightbringer")
-            return styles.rowLightbringer
-        if (param.row.series === "The First Law")
-            return styles.rowTheFirstLaw
-        if (param.row.series === "Remembrance of Earths Past")
-            return styles.rowRemembranceOfEarthsPast
+        if (param.row.series === 'Dune Chronicles') return styles.rowDune;
+        if (param.row.series === 'The Lord of the Rings') return styles.rowLotr;
+        if (param.row.series === 'Malazan Book of the Fallen')
+            return styles.rowMalazan;
+        if (param.row.series === 'Middle-earth') return styles.rowMiddleEarth;
+        if (param.row.series === 'Lightbringer') return styles.rowLightbringer;
+        if (param.row.series === 'The First Law') return styles.rowTheFirstLaw;
+        if (param.row.series === 'Remembrance of Earths Past')
+            return styles.rowRemembranceOfEarthsPast;
         return styles.rowDefault;
-    }
+    };
 
     return (
         <div className={styles.gridContainer}>
-            <BaseGrid columns={columns} rows={rows} getRowClassName={getRowClassName} />
+            <BaseGrid
+                columns={columns}
+                rows={rows}
+                getRowClassName={getRowClassName}
+            />
         </div>
-    )
+    );
 }

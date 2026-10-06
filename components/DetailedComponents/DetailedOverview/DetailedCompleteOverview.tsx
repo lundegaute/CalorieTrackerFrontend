@@ -26,7 +26,7 @@ export default function DetailedCompleteOverview() {
     const [activeMealPlanId, setActiveMealPlanId] = useState<number | null>(null); // This is important to tell which mealPlan to show
     const [selectedMealId, setSelectedMealId] = useState<number | null>(null); // When clicking on details, selectedMealId is needed to decide which meal to show
     const macroDistributions = ["Grams", "Energy"];
-    const [distributionCalculation, setDistributionCalculation] = useState(macroDistributions[0]);
+    const [distributionCalculation, setDistributionCalculation] = useState(macroDistributions[1]);
 
     const addNewMealPlan = async () => {
         const result = await SweetAlertSingleInput<number>("Create your first MealPlan", "");

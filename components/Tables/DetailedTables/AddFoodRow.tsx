@@ -3,7 +3,7 @@ import { TextField, Button } from "@mui/material";
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from '@mui/icons-material/Add';
 import { DetailedMealComponentRequest } from "@/Types/DetailedRequests";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 
 interface IAddFoodRow {
     food: DetailedFoodDTO;
@@ -11,7 +11,24 @@ interface IAddFoodRow {
 }
 
 export default function AddFoodRow({food, AddFoodToMeal}: IAddFoodRow) {
-    const [quantity, setQuantity] = useState<number>(100);
+    const [quantity, setQuantity] = useState<number | "">(100);
+
+    const handleSetQuantity = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = e.currentTarget.value;
+        if (value == ""){
+            setQuantity(value);
+        }
+        else {
+            const parsed = parseFloat(value);
+            setQuantity(isNaN(parsed) ? "" : parsed);
+        }
+
+    };
+
+    const handleAddFood = () => {
+        const parsedQuantity = quantity === "" ? 0 : quantity; 
+        AddFoodToMeal(food, parsedQuantity);
+    }
 
     return(
         <tr key={food.id} className="hover:bg-slate-700/20 transition-colors">
@@ -24,7 +41,8 @@ export default function AddFoodRow({food, AddFoodToMeal}: IAddFoodRow) {
                         variant="standard" 
                         type="number" 
                         value={quantity} 
-                        onChange={(e) => setQuantity(parseFloat(e.currentTarget.value))} size="small"
+                        onChange={(e) => handleSetQuantity(e)} 
+                        size="small"
                     />
                     <CreateIcon className="text-emerald-300" fontSize="inherit" />
                 </div>
@@ -45,8 +63,7 @@ export default function AddFoodRow({food, AddFoodToMeal}: IAddFoodRow) {
                 <Button 
                     variant="text" 
                     color="primary" 
-                    //onClick={() => toggleFoodToAdd(food, quantity)}
-                    onClick={() => AddFoodToMeal(food, quantity)}
+                    onClick={() => handleAddFood()}
                     >
                         <AddIcon />
                 </Button>
