@@ -83,5 +83,6 @@ export const NutrientCategories = {
     TraceMineral: "TraceMineral",
     MacroMineral: "MacroMineral",
     MacroTotals: "MacroTotals",
-
+    Proximates: "Proximates",
+    Other: "Other",
 }
