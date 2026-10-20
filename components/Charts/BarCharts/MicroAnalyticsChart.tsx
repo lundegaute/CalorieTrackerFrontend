@@ -21,6 +21,8 @@ export default function MicroAnalyticsCharts({activePlan, selectedMealId, catego
     "TraceMineral": "Bright",
     "MacroMineral": "Material",
     "MacroTotals": "Dark Moon",
+    "Proximates": "Carmine",
+    "Other": "Harmony Light",
 };
 
     // If 

@@ -208,6 +208,8 @@ export default function DetailedCompleteOverview() {
                                 <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.FatSoluble}/>
                                 <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.LipidProfile}/>
                                 <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.CarbProfile}/>
+                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.Proximates}/>
+                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.Other}/>
                                 
                             </div>
                         </section>
