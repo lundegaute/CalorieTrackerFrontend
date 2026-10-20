@@ -1,4 +1,3 @@
-// ...existing code...
 export default function Home() {
   return (
     <>
@@ -51,6 +50,21 @@ export default function Home() {
             title="Visualize stats"
             status="done"
             description="Charts to easily show macronutrient distribution."
+          />
+          <FeatureCard
+            title="Vitamins & minerals"
+            status="done"
+            description="Charts that show the distribution of vitamins and minerals."
+          />
+          <FeatureCard
+            title="Recommended intake"
+            status="wip"
+            description="Charts indicating how macro and micronutrient intake compares to recommended daily intake."
+          />
+          <FeatureCard
+            title="Recommendations"
+            status="planned"
+            description="Based on missing macro and micronutrients, get certain food recommendations."
           />
         </div>
       </section>
@@ -106,4 +120,3 @@ function FeatureCard({
     </div>
   );
 }
-// ...existing code...
