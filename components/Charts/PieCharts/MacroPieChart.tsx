@@ -10,6 +10,7 @@ import {
     Grid,
 } from 'devextreme-react/chart';
 import PieChart, { Connector, type PieChartTypes } from 'devextreme-react/pie-chart';
+import { CalorieDistributionCalculations } from '@/Types/DetailedTypes';
     
 interface overviewSource {
     totalProtein: number;
@@ -78,7 +79,7 @@ export default function MacroPieChart({
         <div>
             <PieChart
                 id="MacroPieChart"
-                dataSource={macroDistribution === "Grams" ? dataListPercent : dataListPercentBasedOnEnergy}
+                dataSource={macroDistribution === CalorieDistributionCalculations[0] ? dataListPercent : dataListPercentBasedOnEnergy}
                 animation={{ enabled: true, duration: 600 }}
                 palette={'Material'}
                 type="doughnut"

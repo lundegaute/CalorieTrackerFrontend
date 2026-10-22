@@ -1,7 +1,6 @@
 
 // Use Azure URL if available, otherwise fallback to localhost for development
 const BASE_URL = "http://localhost:5299/api";
-console.log("BASE_URL:", BASE_URL);
 export const API_ENDPOINTS = {
     base: BASE_URL,
     LOGIN: `${BASE_URL}/User/Login`,

@@ -2,7 +2,7 @@
 import DetailedMealComponents from "@/components/Tables/DetailedTables/DetailedMealComponents";
 import {DetailedPlanSummary} from "@/components/DetailedComponents/DetailedMealPlan/PlanSummary";
 import SimpleDropdownMenu from "@/components/StandardHtml/DropDownMenues/SimpleDropdownMenu";
-import { ApiResponse, DetailedCompleteOverviewDTO, DetailedMealDTO, NutrientCategories } from "@/Types/DetailedTypes";
+import { ApiResponse, CalorieDistributionCalculations, DetailedCompleteOverviewDTO, DetailedMealDTO, MicroNutrientCalculations, NutrientCategories } from "@/Types/DetailedTypes";
 import { DetailedMealPlanRequest } from "@/Types/DetailedRequests";
 import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -25,9 +25,20 @@ export default function DetailedCompleteOverview() {
     const router = useRouter();
     const [activeMealPlanId, setActiveMealPlanId] = useState<number | null>(null); // This is important to tell which mealPlan to show
     const [selectedMealId, setSelectedMealId] = useState<number | null>(null); // When clicking on details, selectedMealId is needed to decide which meal to show
-    const macroDistributions = ["Grams", "Energy"];
+    const macroDistributions = CalorieDistributionCalculations;
     const [distributionCalculation, setDistributionCalculation] = useState(macroDistributions[1]);
-
+    const microNutrientCalculations = MicroNutrientCalculations;
+    const [microNutrientCalculation, setMicroNutrientCalculation] = useState(MicroNutrientCalculations[0]);
+    const categories = [
+        NutrientCategories.MacroMineral,
+        NutrientCategories.TraceMineral,
+        NutrientCategories.WaterSoluble,
+        NutrientCategories.FatSoluble,
+        NutrientCategories.LipidProfile,
+        NutrientCategories.CarbProfile,
+        NutrientCategories.Proximates,
+        NutrientCategories.Other,
+    ];
     const addNewMealPlan = async () => {
         const result = await SweetAlertSingleInput<number>("Create your first MealPlan", "");
         if ( result?.isSuccess ) {
@@ -200,18 +211,18 @@ export default function DetailedCompleteOverview() {
                 {/* Micro Nutrient Chart section */}
                 { hasPlans && activePlan ? (
                     activePlan.microSummary && Object.keys(activePlan.microSummary).length > 0 &&(
-                        <section className={styles.analyticsGridSection}>
-                            <div className={styles.analyticsGridSection}>
-                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.WaterSoluble}/>
-                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.MacroMineral}/>
-                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.TraceMineral}/>
-                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.FatSoluble}/>
-                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.LipidProfile}/>
-                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.CarbProfile}/>
-                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.Proximates}/>
-                                <MicroAnalyticsCharts activePlan={activePlan} selectedMealId={selectedMealId} category={NutrientCategories.Other}/>
-                                
-                            </div>
+                        <section className={`${styles.analyticsGridSection} border border-white/10 rounded-lg px-4 py-3`}>
+                                <ToggleButtons names={microNutrientCalculations} value={microNutrientCalculation} setFunction={setMicroNutrientCalculation}/>
+                                {categories.map((category) => (
+                                    <MicroAnalyticsCharts 
+                                        key={category}
+                                        activePlan={activePlan}
+                                        selectedMealId={selectedMealId}
+                                        category={category}
+                                        microCalc={microNutrientCalculation}
+                                        //nutrientRecommendations={activePlan.nutrientRecommendations}
+                                    />
+                                ))}
                         </section>
                     )
                 ) : (

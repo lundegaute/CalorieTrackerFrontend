@@ -1,17 +1,19 @@
 "use client";
 import React from "react";
 import styles from "./AnalyticsCharts.module.css";
-import { DetailedMealDTO, DetailedCompleteOverviewDTO, MicroSummary, NutrientCategories } from "@/Types/DetailedTypes";
+import { DetailedMealDTO, DetailedCompleteOverviewDTO, MicroSummary, NutrientCategories, NutrientRecommendationDTO, MicroNutrientCalculations } from "@/Types/DetailedTypes";
 import { Chart, Series, ArgumentAxis, ValueAxis, Label, Format, Legend, Tooltip,Grid, SelectionStyle } from "devextreme-react/chart";
 
 interface IMicroAnalyticsChart {
     activePlan: DetailedCompleteOverviewDTO;
     selectedMealId: number | null;
     category: string;
+    //nutrientRecommendations: NutrientRecommendationDTO[];
+    microCalc: string;
     //groupOn: keyof MicroSummary; // For further development grouping charts on category or unit(grams, miligrams) or Quantity
 }
 
-export default function MicroAnalyticsCharts({activePlan, selectedMealId, category }: IMicroAnalyticsChart) {
+export default function MicroAnalyticsCharts({activePlan, selectedMealId, category, microCalc}: IMicroAnalyticsChart) {
     var filteredSummary: MicroSummary[] = [];
     const chartColor: Record<string, "Green Mist" | "Office" | "Pastel" | "Violet" | "Material" | "Bright" | "Carmine" | "Dark Moon" | "Dark Violet" | "Harmony Light"> = {
     "WaterSolubleVitamin": "Green Mist",
@@ -33,7 +35,6 @@ export default function MicroAnalyticsCharts({activePlan, selectedMealId, catego
                 <h1>No data yet</h1>
             )
         }
-    
         filteredSummary = microSummary.filter(micro => micro.category == category);
     } 
     else {
@@ -43,24 +44,40 @@ export default function MicroAnalyticsCharts({activePlan, selectedMealId, catego
         if ( microSummary.length === 0) {
             return 
         }
-    
         filteredSummary = microSummary.filter(micro => micro.category == category);
     }
-    
+
+    const microCalculations = () => {
+        // filteredSummary
+        // microCalc
+        if (microCalc == MicroNutrientCalculations[0]){
+            return filteredSummary
+        } else {
+            console.log(microCalc)
+            let result = filteredSummary.map((item) => {
+                return {
+                    ...item, 
+                }
+            });
+            return result;
+
+        }
+        
+    }
 
     return (
         <div>
             {}
             <Chart 
                 id={category}
-                dataSource={filteredSummary}
+                dataSource={microCalculations()}
                 animation={{enabled: true, duration: 500}}
                 palette={chartColor[category]}
                 >
                 <Series 
                     valueField="totalQuantity"
                     argumentField="nutrientId"
-                    name={filteredSummary[0].category} // How do i move this around?
+                    name={category}
                     type="bar"
                     >
                     <Label
@@ -76,8 +93,6 @@ export default function MicroAnalyticsCharts({activePlan, selectedMealId, catego
                     customizeTooltip={currentBar => {
                         var nutrientData = filteredSummary.find(nut => nut.nutrientId === currentBar.argument);
                         var nutrientName = nutrientData?.nutrientName ?? currentBar.argument;
-                        console.log(nutrientData);
-                        
                         return {
                             text: `${nutrientName}: ${currentBar.valueText}${nutrientData?.unit ?? ""}`
                         }

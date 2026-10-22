@@ -67,6 +67,16 @@ export type NutrientDTO = {
     defaultUnit: string | null; // g, mg
 }
 
+
+export type NutrientRecommendationDTO = {
+    nutrientId: string;
+    minAge: number;
+    maxAge: number;
+    gender: string;
+    quantity: number;
+    unit: string;
+}
+
 export type MicroSummary = {
     nutrientId: string;
     nutrientName: string;
@@ -74,6 +84,7 @@ export type MicroSummary = {
     unit: string;
     category: string;
 }
+
 
 export const NutrientCategories = {
     WaterSoluble: "WaterSolubleVitamin",
@@ -86,3 +97,13 @@ export const NutrientCategories = {
     Proximates: "Proximates",
     Other: "Other",
 }
+
+export const CalorieDistributionCalculations = [
+    "Grams",
+    "Energy"
+]
+
+export const MicroNutrientCalculations = [
+    "Total",
+    "Recommended intake"
+]
