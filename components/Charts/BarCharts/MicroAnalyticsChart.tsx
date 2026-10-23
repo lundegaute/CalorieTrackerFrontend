@@ -1,112 +1,181 @@
-"use client";
-import React from "react";
-import styles from "./AnalyticsCharts.module.css";
-import { DetailedMealDTO, DetailedCompleteOverviewDTO, MicroSummary, NutrientCategories, NutrientRecommendationDTO, MicroNutrientCalculations } from "@/Types/DetailedTypes";
-import { Chart, Series, ArgumentAxis, ValueAxis, Label, Format, Legend, Tooltip,Grid, SelectionStyle } from "devextreme-react/chart";
+'use client';
+import React from 'react';
+import styles from './AnalyticsCharts.module.css';
+import {
+    DetailedMealDTO,
+    DetailedCompleteOverviewDTO,
+    MicroSummary,
+    NutrientCategories,
+    NutrientRecommendationDTO,
+    MicroNutrientCalculations,
+    RecommendationsByNutrient,
+} from '@/Types/DetailedTypes';
+import {
+    Chart,
+    Series,
+    ArgumentAxis,
+    Label,
+    Format,
+    Legend,
+    Tooltip,
+    Grid,
+    SelectionStyle,
+    ValueAxis,
+    ConstantLine,
+    ConstantLineLabel,
+
+} from 'devextreme-react/chart';
+import { PointInfo } from 'devextreme/viz/chart';
 
 interface IMicroAnalyticsChart {
     activePlan: DetailedCompleteOverviewDTO;
     selectedMealId: number | null;
     category: string;
-    //nutrientRecommendations: NutrientRecommendationDTO[];
+    rdi: RecommendationsByNutrient;
     microCalc: string;
-    //groupOn: keyof MicroSummary; // For further development grouping charts on category or unit(grams, miligrams) or Quantity
 }
 
-export default function MicroAnalyticsCharts({activePlan, selectedMealId, category, microCalc}: IMicroAnalyticsChart) {
+export default function MicroAnalyticsCharts({
+    activePlan,
+    selectedMealId,
+    category,
+    microCalc,
+    rdi,
+}: IMicroAnalyticsChart) {
     var filteredSummary: MicroSummary[] = [];
-    const chartColor: Record<string, "Green Mist" | "Office" | "Pastel" | "Violet" | "Material" | "Bright" | "Carmine" | "Dark Moon" | "Dark Violet" | "Harmony Light"> = {
-    "WaterSolubleVitamin": "Green Mist",
-    "FatSolubleVitamin": "Office",
-    "LipidProfile": "Pastel",
-    "CarbProfile": "Violet",
-    "TraceMineral": "Bright",
-    "MacroMineral": "Material",
-    "MacroTotals": "Dark Moon",
-    "Proximates": "Carmine",
-    "Other": "Harmony Light",
-};
+    const chartColor: Record<
+        string,
+        | 'Green Mist'
+        | 'Office'
+        | 'Pastel'
+        | 'Violet'
+        | 'Material'
+        | 'Bright'
+        | 'Carmine'
+        | 'Dark Moon'
+        | 'Dark Violet'
+        | 'Harmony Light'
+    > = {
+        WaterSolubleVitamin: 'Green Mist',
+        FatSolubleVitamin: 'Office',
+        LipidProfile: 'Pastel',
+        CarbProfile: 'Violet',
+        TraceMineral: 'Bright',
+        MacroMineral: 'Material',
+        MacroTotals: 'Dark Moon',
+        Proximates: 'Carmine',
+        Other: 'Harmony Light',
+    };
 
-    // If 
-    if ( selectedMealId == null) {
+
+    if (selectedMealId == null) {
         let microSummary = Object.values(activePlan.microSummary);
-        if ( microSummary.length === 0 ) {
-            return (
-                <h1>No data yet</h1>
-            )
+        if (microSummary.length === 0) {
+            return <h1>No data yet</h1>;
         }
-        filteredSummary = microSummary.filter(micro => micro.category == category);
-    } 
-    else {
-        let currentMeal = activePlan.detailedMeals.find(meal => meal.id === selectedMealId)!
+        filteredSummary = microSummary.filter(
+            (micro) => micro.category === category
+        );
+    } else {
+        let currentMeal = activePlan.detailedMeals.find(
+            (meal) => meal.id === selectedMealId
+        )!;
         const microSummary = Object.values(currentMeal.microSummary);
         // This prevents the page from crashing when loading a specific meal
-        if ( microSummary.length === 0) {
-            return 
+        if (microSummary.length === 0) {
+            return;
         }
-        filteredSummary = microSummary.filter(micro => micro.category == category);
+        filteredSummary = microSummary.filter(
+            (micro) => micro.category === category
+        );
     }
 
     const microCalculations = () => {
         // filteredSummary
         // microCalc
-        if (microCalc == MicroNutrientCalculations[0]){
-            return filteredSummary
+        const age = 32;
+        const userGender = "Male";
+        if (microCalc == MicroNutrientCalculations[0]) {
+            return filteredSummary;
         } else {
-            console.log(microCalc)
             let result = filteredSummary.map((item) => {
-                return {
-                    ...item, 
+                const rdiItem = rdi[item.nutrientId]?.filter((x) => age >= x.minAge && age <= x.maxAge);
+                if ( !rdiItem)
+                    return {...item, totalQuantity: null}
+
+                const rec = rdiItem.find((x) => x.gender === userGender) ??
+                    rdiItem.find((x) => x.gender === "Both");
+
+                if (rec && rec?.quantity){
+                    const quant = rec.quantity;
+                    return {
+                        ...item,
+                        totalQuantity: Math.round(((item.totalQuantity / quant) * 1000) / 10),
+                    };
                 }
             });
             return result;
-
         }
-        
+    };
+
+    const customizeText = (currentBar: PointInfo) => {
+        if (microCalc === "Total"){
+            var nutrientData = filteredSummary.find((nut) => nut.nutrientId === currentBar.argument);
+            var nutrientName = nutrientData?.nutrientName ?? currentBar.argument;
+            return {
+                text: `${nutrientName}: ${currentBar.valueText}${nutrientData?.unit ?? ''}`,
+            };
+        } else {
+            var nutrientData = filteredSummary.find((nut) => nut.nutrientId === currentBar.argument);
+            var nutrientName = nutrientData?.nutrientName ?? currentBar.argument;
+            return {
+                text: `${nutrientName}: ${currentBar.valueText}%`
+            }
+        }
     }
 
+    const isPercent = microCalc === MicroNutrientCalculations[1]; // isPercent === "Recommended intake"
+  
     return (
         <div>
-            {}
-            <Chart 
+            <Chart
                 id={category}
                 dataSource={microCalculations()}
-                animation={{enabled: true, duration: 500}}
+                animation={{ enabled: true, duration: 400 }}
                 palette={chartColor[category]}
-                >
-                <Series 
+            >
+                <Series
                     valueField="totalQuantity"
                     argumentField="nutrientId"
                     name={category}
                     type="bar"
-                    >
-                    <Label
-                        position="top"
-                        visible                     
-                        >
-                    </Label>           
+                >
+                    <Label position="top" visible></Label>
                 </Series>
-                <Tooltip 
+
+                <ValueAxis>
+                    {isPercent && (
+                        <ConstantLine value={100} extendAxis width={2} dashStyle="dash" color="#0e8b61">
+                            <ConstantLineLabel text="100%" position="outside" horizontalAlignment="right" />
+                        </ConstantLine>
+                    )}
+
+                </ValueAxis>
+
+                <Tooltip
                     enabled={true}
                     location="edge"
                     font={{ size: 14 }}
-                    customizeTooltip={currentBar => {
-                        var nutrientData = filteredSummary.find(nut => nut.nutrientId === currentBar.argument);
-                        var nutrientName = nutrientData?.nutrientName ?? currentBar.argument;
-                        return {
-                            text: `${nutrientName}: ${currentBar.valueText}${nutrientData?.unit ?? ""}`
-                        }
-                    }}
-                /> 
-                <Legend 
-                    verticalAlignment="bottom" 
+                    customizeTooltip={customizeText}
+                />
+                <Legend
+                    verticalAlignment="bottom"
                     horizontalAlignment="center"
                     columnCount={3}
                     itemTextPosition="right"
-                    font={{ color: "#94a3b8", size: 12 , weight: 600}} 
+                    font={{ color: '#94a3b8', size: 12, weight: 600 }}
                 />
             </Chart>
-        
         </div>
-    )
+    );
 }

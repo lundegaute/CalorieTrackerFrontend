@@ -2,7 +2,7 @@
 import DetailedMealComponents from "@/components/Tables/DetailedTables/DetailedMealComponents";
 import {DetailedPlanSummary} from "@/components/DetailedComponents/DetailedMealPlan/PlanSummary";
 import SimpleDropdownMenu from "@/components/StandardHtml/DropDownMenues/SimpleDropdownMenu";
-import { ApiResponse, CalorieDistributionCalculations, DetailedCompleteOverviewDTO, DetailedMealDTO, MicroNutrientCalculations, NutrientCategories } from "@/Types/DetailedTypes";
+import { ApiResponse, CalorieDistributionCalculations, DetailedCompleteOverviewDTO, DetailedMealDTO, MicroNutrientCalculations, NutrientCategories, NutrientRecommendationDTO, RecommendationsByNutrient } from "@/Types/DetailedTypes";
 import { DetailedMealPlanRequest } from "@/Types/DetailedRequests";
 import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -18,6 +18,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { SweetAlertSingleInput } from "@/components/SweetAlert/DetailedSweetAlert/OneInputForm";
 import { DetailedDelete } from "@/Fetch/DetailedFetch/DetailedDelete";
 import { ToggleButtons } from "@/components/Toggle/Buttons/ToggleButton";
+import { fetchDetailedGet } from "@/Fetch/DetailedFetch/DetailedGet";
 
 
 export default function DetailedCompleteOverview() {
@@ -69,6 +70,12 @@ export default function DetailedCompleteOverview() {
         retry: 0
     });
 
+    const {data: rdi, isLoading: isLoadingRdi, error: rdiError} = useQuery<RecommendationsByNutrient>({
+        queryKey: ["nutrientRecommendations"],
+        queryFn: () => fetchDetailedGet("api/Foods"),
+        staleTime: Infinity,
+    });
+
     useEffect(() => {
         if ( apiResponse?.data?.[0] ){
             setActiveMealPlanId( activeMealPlanId ?? apiResponse.data[0].id);
@@ -88,12 +95,12 @@ export default function DetailedCompleteOverview() {
 
     }, [apiResponse, activeMealPlanId])
     
-    if (isLoading) {
+    if (isLoading || isLoadingRdi) {
         return (
             <h1>Fetching data...</h1>
         )
     }
-    if (error || !apiResponse?.data) {
+    if (error || isLoadingRdi || !apiResponse?.data) {
         return (
             <h1>Error during fetch: {error?.message}</h1>
         )
@@ -209,10 +216,12 @@ export default function DetailedCompleteOverview() {
                     </div>
                 </aside>
                 {/* Micro Nutrient Chart section */}
-                { hasPlans && activePlan ? (
+                { hasPlans && rdi && activePlan ? (
                     activePlan.microSummary && Object.keys(activePlan.microSummary).length > 0 &&(
                         <section className={`${styles.analyticsGridSection} border border-white/10 rounded-lg px-4 py-3`}>
+                            <div className={styles.toggleButtons}>
                                 <ToggleButtons names={microNutrientCalculations} value={microNutrientCalculation} setFunction={setMicroNutrientCalculation}/>
+                            </div>
                                 {categories.map((category) => (
                                     <MicroAnalyticsCharts 
                                         key={category}
@@ -220,7 +229,7 @@ export default function DetailedCompleteOverview() {
                                         selectedMealId={selectedMealId}
                                         category={category}
                                         microCalc={microNutrientCalculation}
-                                        //nutrientRecommendations={activePlan.nutrientRecommendations}
+                                        rdi={rdi}
                                     />
                                 ))}
                         </section>

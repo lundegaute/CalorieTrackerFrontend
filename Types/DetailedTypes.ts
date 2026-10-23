@@ -77,6 +77,8 @@ export type NutrientRecommendationDTO = {
     unit: string;
 }
 
+export type RecommendationsByNutrient = Record<string, NutrientRecommendationDTO[]>;
+
 export type MicroSummary = {
     nutrientId: string;
     nutrientName: string;

@@ -16,6 +16,7 @@ export const API_ENDPOINTS = {
     FOODSEARCH: `${BASE_URL}/FoodSql/Search`,
 
     DETAILED_MEAL_PLAN_OVERVIEW: `${BASE_URL}/DetailedMealPlan/overview`,
+    DETAILED_FOOD_RECOMMENDATIONS: `${BASE_URL}/DetailedFood/recommendations`,
 
     DETAILED_ADD_MEALPLAN: `${BASE_URL}/DetailedMealPlan/add`,
     DETAILED_ADD_MEAL: `${BASE_URL}/DetailedMeal/add`,

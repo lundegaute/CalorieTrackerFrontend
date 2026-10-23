@@ -53,6 +53,9 @@
   margin-top: 1rem;
   
 }
+.toggleButtons {
+    grid-column: span 2;
+}
 
 @media (min-width: 1024px) {
   .gridMatrix {
