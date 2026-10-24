@@ -119,15 +119,13 @@ export default function MicroAnalyticsCharts({
     };
 
     const customizeText = (currentBar: PointInfo) => {
+        var nutrientData = filteredSummary.find((nut) => nut.nutrientId === currentBar.argument);
+        var nutrientName = nutrientData?.nutrientName ?? currentBar.argument;
         if (microCalc === "Total"){
-            var nutrientData = filteredSummary.find((nut) => nut.nutrientId === currentBar.argument);
-            var nutrientName = nutrientData?.nutrientName ?? currentBar.argument;
             return {
                 text: `${nutrientName}: ${currentBar.valueText}${nutrientData?.unit ?? ''}`,
             };
         } else {
-            var nutrientData = filteredSummary.find((nut) => nut.nutrientId === currentBar.argument);
-            var nutrientName = nutrientData?.nutrientName ?? currentBar.argument;
             return {
                 text: `${nutrientName}: ${currentBar.valueText}%`
             }
