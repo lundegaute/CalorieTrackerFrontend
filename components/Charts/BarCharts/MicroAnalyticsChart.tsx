@@ -91,8 +91,6 @@ export default function MicroAnalyticsCharts({
     }
 
     const microCalculations = () => {
-        // filteredSummary
-        // microCalc
         const age = 32;
         const userGender = "Male";
         if (microCalc == MicroNutrientCalculations[0]) {
