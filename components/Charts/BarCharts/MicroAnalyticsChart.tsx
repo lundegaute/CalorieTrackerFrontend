@@ -103,7 +103,12 @@ export default function MicroAnalyticsCharts({
 
                 const rec = rdiItem.find((x) => x.gender === userGender) ??
                     rdiItem.find((x) => x.gender === "Both");
-
+                if ( rec && rec?.quantity === 0){
+                    return {
+                        ...item,
+                        totalQuantity: 0
+                    }
+                }
                 if (rec && rec?.quantity){
                     const quant = rec.quantity;
                     return {
