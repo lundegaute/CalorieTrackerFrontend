@@ -33,6 +33,7 @@ interface IMicroAnalyticsChart {
     category: string;
     rdi: RecommendationsByNutrient;
     microCalc: string;
+    gender: string;
 }
 
 export default function MicroAnalyticsCharts({
@@ -41,6 +42,7 @@ export default function MicroAnalyticsCharts({
     category,
     microCalc,
     rdi,
+    gender,
 }: IMicroAnalyticsChart) {
     var filteredSummary: MicroSummary[] = [];
     const chartColor: Record<
@@ -92,7 +94,6 @@ export default function MicroAnalyticsCharts({
 
     const microCalculations = () => {
         const age = 32;
-        const userGender = "Male";
         if (microCalc == MicroNutrientCalculations[0]) {
             return filteredSummary;
         } else {
@@ -101,7 +102,7 @@ export default function MicroAnalyticsCharts({
                 if ( !rdiItem)
                     return {...item, totalQuantity: null}
 
-                const rec = rdiItem.find((x) => x.gender === userGender) ??
+                const rec = rdiItem.find((x) => x.gender === gender) ??
                     rdiItem.find((x) => x.gender === "Both");
                 if ( rec && rec?.quantity === 0){
                     return {

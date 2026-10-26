@@ -109,3 +109,7 @@ export const MicroNutrientCalculations = [
     "Total",
     "Recommended intake"
 ]
+export const Genders = [
+    "Male",
+    "Female"
+]

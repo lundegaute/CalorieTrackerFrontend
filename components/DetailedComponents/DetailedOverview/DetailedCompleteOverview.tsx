@@ -2,7 +2,7 @@
 import DetailedMealComponents from "@/components/Tables/DetailedTables/DetailedMealComponents";
 import {DetailedPlanSummary} from "@/components/DetailedComponents/DetailedMealPlan/PlanSummary";
 import SimpleDropdownMenu from "@/components/StandardHtml/DropDownMenues/SimpleDropdownMenu";
-import { ApiResponse, CalorieDistributionCalculations, DetailedCompleteOverviewDTO, DetailedMealDTO, MicroNutrientCalculations, NutrientCategories, NutrientRecommendationDTO, RecommendationsByNutrient } from "@/Types/DetailedTypes";
+import { ApiResponse, CalorieDistributionCalculations, DetailedCompleteOverviewDTO, DetailedMealDTO, Genders, MicroNutrientCalculations, NutrientCategories, NutrientRecommendationDTO, RecommendationsByNutrient } from "@/Types/DetailedTypes";
 import { DetailedMealPlanRequest } from "@/Types/DetailedRequests";
 import DetailedMeals from "@/components/Tables/DetailedTables/DetailedMeals";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -30,6 +30,9 @@ export default function DetailedCompleteOverview() {
     const [distributionCalculation, setDistributionCalculation] = useState(macroDistributions[1]);
     const microNutrientCalculations = MicroNutrientCalculations;
     const [microNutrientCalculation, setMicroNutrientCalculation] = useState(MicroNutrientCalculations[0]);
+    const genders = Genders;
+    const [gender, setGender] = useState(Genders[0]);
+
     const categories = [
         NutrientCategories.MacroMineral,
         NutrientCategories.TraceMineral,
@@ -221,6 +224,7 @@ export default function DetailedCompleteOverview() {
                         <section className={`${styles.analyticsGridSection} border border-white/10 rounded-lg px-4 py-3`}>
                             <div className={styles.toggleButtons}>
                                 <ToggleButtons names={microNutrientCalculations} value={microNutrientCalculation} setFunction={setMicroNutrientCalculation}/>
+                                <ToggleButtons names={genders} value={gender} setFunction={setGender} isDisabled={microNutrientCalculation === "Total"}/>
                             </div>
                                 {categories.map((category) => (
                                     <MicroAnalyticsCharts 
@@ -229,6 +233,7 @@ export default function DetailedCompleteOverview() {
                                         selectedMealId={selectedMealId}
                                         category={category}
                                         microCalc={microNutrientCalculation}
+                                        gender={gender}
                                         rdi={rdi}
                                     />
                                 ))}

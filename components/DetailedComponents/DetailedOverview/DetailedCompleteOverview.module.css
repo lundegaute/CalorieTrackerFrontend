@@ -55,6 +55,8 @@
 }
 .toggleButtons {
     grid-column: span 2;
+    display: flex;
+    gap: 5px;
 }
 
 @media (min-width: 1024px) {

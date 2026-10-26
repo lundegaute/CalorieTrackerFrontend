@@ -7,9 +7,10 @@ interface toggleButtonProps {
     names: string[];
     value: string;
     setFunction: (value: string) => void;
+    isDisabled?: boolean;
 }
 
-export function ToggleButtons({ names, value, setFunction }: toggleButtonProps) {
+export function ToggleButtons({ names, value, setFunction, isDisabled = false }: toggleButtonProps) {
 
     const handleChange = useCallback(
         (event: React.MouseEvent<HTMLElement>, newValue: string) => {
@@ -22,6 +23,7 @@ export function ToggleButtons({ names, value, setFunction }: toggleButtonProps) 
     return (
         <div>
             <ToggleButtonGroup
+                disabled={isDisabled}
                 color="primary"
                 value={value}
                 exclusive
