@@ -131,6 +131,12 @@ export type LoginUserDTO = {
     password: string;
 }
 
+export type UserDTO = {
+    id: number;
+    email: string;
+    role: string;
+}
+
 export type LoginResponse = {
     token: string;
 }

@@ -1,11 +1,9 @@
 import { ErrorResponse } from "@/Types/types";
 import {useAuthStore} from "@/components/Zustand/AuthStore";
 import notLoggedInWarning from "@/components/SweetAlert/notLoggedIn";
+import { RedirectToLogin } from "@/HelperFunctions/RedirectToLogin";
 
 export async function fetchGet<T>(url: string): Promise<T> {
-    
-    console.log(`----- FETCH GET FUNCTION -----`);
-    console.log(url);
     try {
         const res = await fetch(url, {
             method: "GET",
@@ -15,10 +13,9 @@ export async function fetchGet<T>(url: string): Promise<T> {
             console.log("------ FETCH GET NOT OK -----"); 
             const errorData: ErrorResponse = await res.json();
             console.log(errorData.title);
-            if (errorData.type === "Authorization") {
+            if (errorData.type === "Authorization" || errorData.type === "Unauthorized") {
                 notLoggedInWarning().then(() => {
-                    useAuthStore.getState().checkTokenStatus();
-                    window.location.href = errorData.redirect || "/Auth/Login"; // Redirect to login if specified in error response
+                    RedirectToLogin();
                 });
             };
             throw (errorData);

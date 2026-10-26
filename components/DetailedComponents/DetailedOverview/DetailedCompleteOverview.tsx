@@ -59,10 +59,7 @@ export default function DetailedCompleteOverview() {
                 credentials: "include"
             });
             if ( res.status === 401) {
-                const authStatus: ApiResponse = await res.json();
-                alert("Login required");
                 router.push("/Auth/Login");
-                throw new Error(authStatus.errors[0]);
             }
             if (!res.ok) {
                 throw new Error(`Server Error! Status: ${res.status}`)

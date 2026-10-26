@@ -1,20 +1,12 @@
 import { API_ENDPOINTS } from "@/lib/constants";
 import { ErrorResponse, MealNameDTO } from "@/Types/types";
 import { NextResponse, NextRequest } from "next/server";
-import ValidateToken from "@/HelperFunctions/validateToken";
+
 
 export async function GET(req: NextRequest, {params}: { params: Promise<{id: string}>}) {
     const resolvedParams = await params;
-    console.log("----- WE IN HERE -----" );
-    // ----- Handle expired and invalid token
     const token = req.cookies.get("token")?.value;
-    const tokenResult: ErrorResponse = ValidateToken(token || "");
-    if ( tokenResult.title === "Token expired" || tokenResult.title === "Token invalid") {
-        return NextResponse.json(
-            { tokenResult},
-            { status: tokenResult.status}
-        );
-    };
+
     console.log(`${API_ENDPOINTS.MEAL_NAME}/${resolvedParams.id}`);
     try {
         const res = await fetch(`${API_ENDPOINTS.MEAL_NAME}/${resolvedParams.id}`, {
@@ -59,16 +51,7 @@ export async function DELETE(req: NextRequest, {params}: {params: Promise<{id: s
     const resolvedParams = await params;
     console.log("----- API DELETE -----");
     console.log(API_ENDPOINTS.MEAL_NAME + "/" + resolvedParams.id);
-
-    // ----- Handle expired and invalid token
     const token = req.cookies.get("token")?.value;
-    const tokenResult: ErrorResponse = ValidateToken(token || "");
-    if ( tokenResult.title === "Token expired" || tokenResult.title === "Token invalid") {
-        return NextResponse.json(
-            { tokenResult},
-            { status: tokenResult.status}
-        );
-    };
 
     try {
         const res = await fetch(`${API_ENDPOINTS.MEAL_NAME}/${encodeURIComponent(resolvedParams.id)}`, {

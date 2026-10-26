@@ -1,21 +1,12 @@
 import { ErrorResponse, MealSummary, DecodedToken, AddMealDTO, MealDTO } from "@/Types/types";
 import { NextResponse, NextRequest } from "next/server";
 import { API_ENDPOINTS } from "@/lib/constants";
-import ValidateToken from "@/HelperFunctions/validateToken";
+
 
 export async function GET(req: NextRequest) {
     console.log("---------- API ROUTE GET MEALS ----------");
     console.log(API_ENDPOINTS.MEAL);
     const token = req.cookies.get("token")?.value;
-    const tokenResult: ErrorResponse = ValidateToken(token || "");
-    // Handle expired and invalid token
-    if ( tokenResult.title === "Token expired" || tokenResult.title === "Token invalid" || tokenResult.title === "Token not found") {
-        return NextResponse.json(
-            tokenResult,
-            {status: tokenResult.status}
-        );
-    }
-
     try {
         const  res = await fetch(API_ENDPOINTS.MEAL, {
             method: "GET",

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ErrorResponse, ResponseMealPlanDTO, SuccessMessage } from "@/Types/types";
 import { API_ENDPOINTS } from "@/lib/constants";
-import ValidateToken from "@/HelperFunctions/validateToken";
 
 export async function GET(req: NextRequest, {params}: { params: Promise<{ id: string}>}) {
     const resolvedParams = await params;
@@ -48,13 +47,6 @@ export async function GET(req: NextRequest, {params}: { params: Promise<{ id: st
 export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id: string}>}) {
     const resolvedParams = await params;
     const token = await req.cookies.get("token")?.value;
-    const tokenResult: ErrorResponse = ValidateToken(token || "");
-    if ( tokenResult.title === "Token expired" || tokenResult.title === "Token invalid") {
-        return NextResponse.json(
-            { tokenResult},
-            { status: tokenResult.status}
-        );
-    };
     try {
         const res = await fetch(`${API_ENDPOINTS.MEALPLAN}/${encodeURIComponent(resolvedParams.id)}`, {
             method: "DELETE",

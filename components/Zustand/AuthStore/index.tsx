@@ -3,13 +3,12 @@ import {create} from 'zustand';
 import { persist } from 'zustand/middleware';
 import { API_ENDPOINTS } from '@/lib/constants';
 import Cookies from 'js-cookie';
-import ValidateToken from "@/HelperFunctions/validateToken";
 
 interface AuthState {
     isAuthenticated: boolean;
     login: () => void;
     logout: () => void;
-    checkTokenStatus: () => void;
+    checkTokenStatus: () => Promise<boolean>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -44,13 +43,15 @@ export const useAuthStore = create<AuthState>()(
             },
             checkTokenStatus: async () => {
                 try {
-                    const res = await fetch("/api/Auth/Status", {
+                    const res = await fetch("/api/Auth/CheckStatus", {
                         method: "GET",
                         credentials: "include"
                     })
                     set({ isAuthenticated: res.ok })
+                    return res.ok;
                 } catch {
                     set({ isAuthenticated: false })
+                    return false;
                 }
             }
         }),
