@@ -1,6 +1,6 @@
 import { Button, Popover } from '@mui/material';
 import { useState } from 'react';
-import { HexColorPicker, HexColorInput } from 'react-colorful';
+import { HexColorPicker, HexColorInput, HexAlphaColorPicker} from 'react-colorful';
 
 interface IColorCell {
     value: string;
@@ -11,9 +11,8 @@ interface IColorCell {
 export function ColorCell({ value, rowId, onSave }: IColorCell) {
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
     const [color, setColor] = useState(value);
-
     const onClose = () => {
-        onSave(color, rowId)
+        onSave(color, rowId);
         setAnchor(null);
     };
 
@@ -21,14 +20,13 @@ export function ColorCell({ value, rowId, onSave }: IColorCell) {
         <div>
             <Button
                 size="small"
-                variant="outlined"
+                variant="contained"
                 color="primary"
                 onClick={(e) => {
                     (setColor(value), setAnchor(e.currentTarget));
                 }}
             >
-                {' '}
-                Color{' '}
+                Color
             </Button>
             <Popover
                 open={Boolean(anchor)}
@@ -38,7 +36,7 @@ export function ColorCell({ value, rowId, onSave }: IColorCell) {
                 transformOrigin={{ vertical: 'top', horizontal: 'left' }}
             >
                 <div className="flex flex-col gap-2 p-3">
-                    <HexColorPicker color={color} onChange={setColor} />
+                    <HexAlphaColorPicker color={color} onChange={setColor} />
                     <HexColorInput color={color} onChange={setColor} prefixed />
                 </div>
             </Popover>

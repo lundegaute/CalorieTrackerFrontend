@@ -1,14 +1,13 @@
 'use client';
 import { BaseGrid } from '@/components/DataGrids/BaseGrid';
-import { GridColDef, GridRowParams } from '@mui/x-data-grid';
-import { HexColorPicker, HexColorInput } from "react-colorful";
+import { GridColDef, GridRow, GridRowProps } from '@mui/x-data-grid';
 import { BookDto } from '@/Types/BookTypes';
 import styles from './BookGrid.module.css';
 import { useState } from 'react';
 import { ColorCell } from './ColorCell';
+import {Books} from "./BooksMockData";
 
 export default function BookGrid() {
-    const [color, setColor] = useState();
     const months = [
         'Jan',
         'Feb',
@@ -23,24 +22,41 @@ export default function BookGrid() {
         'Nov',
         'Des',
     ];
+    const [rows, setRows] = useState<BookDto[]>(Books) 
 
+    // UseQuery to get Books data here
 
     const saveColorChange = (hex: string, rowId: number) => {
-        console.log(hex);
-        console.log(rowId);
-        const newRow = rows.map((row) => {
-            if ( row.id === rowId) {
-                return {
-                    ...row,
-                    color: hex
-                }
-            }
-            return {
-                ...row
-            }
-        })
-        rows = newRow;
-        
+        const book = rows.find(x => x.id === rowId);
+        setRows((prev) => {
+            const newRows = prev.map((row) => {
+                return row.series === book?.series ? {...row, color: hex} : row;
+            });
+            return newRows;
+        });
+    }
+
+    const GetTextColor = (hex: string): string => {
+        hex = hex.replace("#", "");
+        const r = parseInt(hex.slice(0,2), 16);
+        const g = parseInt(hex.slice(2,4), 16);
+        const b = parseInt(hex.slice(4,6), 16);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness > 150 ? '#111111' : '#ffffff';
+    }
+
+    const CustomizeRow = (props: GridRowProps) => {
+        const row = props.row as BookDto;
+        return (
+            <GridRow 
+                {...props}
+                style={{
+                    ...styles,
+                    backgroundColor: row.color,
+                    color: GetTextColor(row.color),
+                }}
+            />
+        )
     }
 
 
@@ -127,124 +143,15 @@ export default function BookGrid() {
             width: 120,
         }
     ];
-
-    let rows: BookDto[] = [
-        {
-            id: 1,
-            title: 'Dune',
-            author: {
-                firstName: 'Frank',
-                lastName: 'Herbert',
-                birth: '1920-10-08',
-                webUrl: 'https://en.wikipedia.org/wiki/Frank_Herbert',
-            },
-            genre: {
-                name: 'Science Fiction',
-            },
-            series: 'Dune Chronicles',
-            pages: 412,
-            startedReading: '2026-01-10T00:00:00Z',
-            endedReading: '2026-01-28T00:00:00Z',
-            releaseYear: 1965,
-            color: "#ffffff"
-        },
-        {
-            id: 2,
-            title: 'The Fellowship of the Ring',
-            author: {
-                firstName: 'J.R.R.',
-                lastName: 'Tolkien',
-                birth: '1892-01-03',
-                webUrl: 'https://en.wikipedia.org/wiki/J._R._R._Tolkien',
-            },
-            genre: {
-                name: 'Fantasy',
-            },
-            series: 'The Lord of the Rings',
-            pages: 423,
-            startedReading: '2026-02-01T00:00:00Z',
-            endedReading: '2026-02-20T00:00:00Z',
-            releaseYear: 1954,
-            color: "#ffffff"
-        },
-        {
-            id: 3,
-            title: 'Project Hail Mary',
-            author: {
-                firstName: 'Andy',
-                lastName: 'Weir',
-                birth: '1972-06-16',
-                webUrl: 'https://en.wikipedia.org/wiki/Andy_Weir',
-            },
-            genre: {
-                name: 'Science Fiction',
-            },
-            series: null,
-            pages: 496,
-            startedReading: '2026-03-05T00:00:00Z',
-            endedReading: null, // Currently reading
-            releaseYear: 2021,
-            color: "#ffffff"
-        },
-        {
-            id: 4,
-            title: 'The Hobbit',
-            author: {
-                firstName: 'J.R.R.',
-                lastName: 'Tolkien',
-                birth: '1892-01-03',
-                webUrl: 'https://en.wikipedia.org/wiki/J._R._R._Tolkien',
-            },
-            genre: {
-                name: 'Fantasy',
-            },
-            series: 'Middle-earth',
-            pages: 310,
-            startedReading: null,
-            endedReading: null,
-            releaseYear: 1937,
-            color: "#ffffff"
-        },
-        {
-            id: 5,
-            title: 'Neuromancer',
-            author: {
-                firstName: 'William',
-                lastName: 'Gibson',
-                birth: '1948-03-17',
-                webUrl: 'https://en.wikipedia.org/wiki/William_Gibson',
-            },
-            genre: {
-                name: 'Cyberpunk',
-            },
-            series: 'Sprawl Trilogy',
-            pages: 271,
-            startedReading: '2026-04-01T00:00:00Z',
-            endedReading: '2026-04-12T00:00:00Z',
-            releaseYear: 1984,
-            color: "#ffffff"
-        },
-    ];
-
-    const getRowClassName = (param: GridRowParams<BookDto>) => {
-        if (param.row.series === 'Dune Chronicles') return styles.rowDune;
-        if (param.row.series === 'The Lord of the Rings') return styles.rowLotr;
-        if (param.row.series === 'Malazan Book of the Fallen')
-            return styles.rowMalazan;
-        if (param.row.series === 'Middle-earth') return styles.rowMiddleEarth;
-        if (param.row.series === 'Lightbringer') return styles.rowLightbringer;
-        if (param.row.series === 'The First Law') return styles.rowTheFirstLaw;
-        if (param.row.series === 'Remembrance of Earths Past')
-            return styles.rowRemembranceOfEarthsPast;
-        return styles.rowDefault;
-    };
-
     return (
         <div className={styles.gridContainer}>
             <BaseGrid
                 columns={columns}
                 rows={rows}
-                getRowClassName={getRowClassName}
+                slots={{ row: CustomizeRow}}
+                sx={{
+                    '& .MuiDataGrid-row:hover': { filter: 'brightness(1.2)' }
+                }}
             />
         </div>
     );

@@ -23,11 +23,10 @@ export function BaseGrid<T extends GridValidRowModel>({
             columns={columns}
             rows={rows}
             getRowClassName={getRowClassName}
-            
             sx={{
                 boxShadow: 1,
             }}
-            //dataSource={dataSource}
+            //dataSource={dataSource} Not sure what this does in MUI, I use this in dev extreme
             {...restProps}
         />
     );
