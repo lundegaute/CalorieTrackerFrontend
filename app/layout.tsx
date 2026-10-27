@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ThemeProvider from "@/components/Theme/themeProvider";
 import QueryProvider from "@/components/Tanstack/tanstackProvider";
-import CheckAuthStatus from "@/components/Zustand/AuthStore/checkAuthStatus";
+import AddUserToAuthStore from "@/components/Zustand/AuthStore/AddUserToAuthStore";
 import NavigationLoadingOverlay from "@/components/UI/NavigationLoadingOverlay";
 
 
@@ -29,7 +29,7 @@ export default function RootLayout({
       <body className={`${inter.className} flex flex-col min-h-screen text-slate-100 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-800 selection:bg-emerald-400/30 selection:text-white`}>
         <ThemeProvider>
           <QueryProvider>
-            <CheckAuthStatus />
+            <AddUserToAuthStore />
             <NavigationLoadingOverlay />
             <Header />
             {/* 2. Added flex-grow so this section expands to fill all empty space */}

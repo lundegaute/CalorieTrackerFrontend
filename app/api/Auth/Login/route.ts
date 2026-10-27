@@ -5,7 +5,6 @@ import {API_ENDPOINTS} from '@/lib/constants';
 export async function POST(req: NextRequest) {
     console.log("---------- API LOGIN ROUTE ----------");
     console.log(API_ENDPOINTS.LOGIN);
-    console.log("Request body:", req.body);
     const body: LoginUserDTO = await req.json();
     try {
         const response = await fetch(API_ENDPOINTS.LOGIN, {

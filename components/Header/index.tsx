@@ -9,7 +9,7 @@ import LoadingLink from "@/components/UI/LoadingLink";
 
 function Header() {
     const pathname = usePathname();
-    const {isAuthenticated} = useAuthStore();
+    const isAuthenticated = useAuthStore().isAuthenticated;
 
     return (
         <header className="w-full px-8 py-5 flex items-center justify-between 
@@ -25,15 +25,19 @@ function Header() {
                     <li>
                         <LoadingLink href="/" className={`hover:text-emerald-300 transition-colors ${pathname == "/" ? "text-emerald-300": ""}`}>Home</LoadingLink>
                     </li>
-                    <li>
-                        <LoadingLink href="/Meals" className={`hover:text-emerald-300 transition-colors ${pathname == "/Meals" ? "text-emerald-300" : ""}`}>Meals</LoadingLink>
-                    </li>
-                    <li>
-                        <LoadingLink href="/DetailedMealPlans" className={`hover:text-emerald-300 transition-colors ${pathname == "/DetailedMealPlans" ? "text-emerald-300" : ""}`}>Detailed Mealplans</LoadingLink>
-                    </li>
-                    <li>
-                        <LoadingLink href="/Books" className={`hover:text-emerald-300 transition-colors ${pathname == "/Books" ? "text-emerald-300" : ""}`}>Boka mi</LoadingLink>
-                    </li>
+                    { isAuthenticated && (
+                        <>
+                            <li>
+                                <LoadingLink href="/Meals" className={`hover:text-emerald-300 transition-colors ${pathname == "/Meals" ? "text-emerald-300" : ""}`}>Meals</LoadingLink>
+                            </li>
+                            <li>
+                                <LoadingLink href="/DetailedMealPlans" className={`hover:text-emerald-300 transition-colors ${pathname == "/DetailedMealPlans" ? "text-emerald-300" : ""}`}>Detailed Mealplans</LoadingLink>
+                            </li>
+                            <li>
+                                <LoadingLink href="/Books" className={`hover:text-emerald-300 transition-colors ${pathname == "/Books" ? "text-emerald-300" : ""}`}>Boka mi</LoadingLink>
+                            </li>
+                        </>
+                    ) }
                     <li>
                         <LoadingLink href="/Aboutme" className={`hover:text-emerald-300 transition-colors ${pathname == "/Aboutme" ? "text-emerald-300" : ""}`}>About Me</LoadingLink>
                     </li>

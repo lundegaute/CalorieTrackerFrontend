@@ -9,13 +9,12 @@ import { useState } from 'react';
 
 function Login () {
     const router = useRouter();
-    const login = useAuthStore(state => state.login);
+    const fetchUser = useAuthStore(state => state.fetchUser);
     const [isLoading, setIsLoading] = useState(false);
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setIsLoading(true);
-        
         try {
             // Handle login logic here
             const formData = new FormData(event.currentTarget);
@@ -28,12 +27,12 @@ function Login () {
             console.log("---------- LOGIN COMPONENT FILE ----------");
             const res = await FetchLoginPost(loginUserDTO);
             if ( res.success ) {
-                login();
+                fetchUser();
                 router.push("/");
             } else {
-                const errorResponse = res.error;
-                console.log("Error Response:", errorResponse);
-                alert(`Error: ${errorResponse.message.Error[0]}`);
+                const message = res.error;
+                console.log("Error Response:", message);
+                alert(`Error: ${message}`);
             }
         } finally {
             setIsLoading(false);

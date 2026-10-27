@@ -6,13 +6,12 @@ export async function fetchDetailedGet<T>(apiUrl: string): Promise<T> {
     const res = await fetch(apiUrl, {
         method: 'GET',
     });
-    const body = (await res.json().catch(() => null)) as ApiResponse<T> | null; // Explain what happens here
+    const body = (await res.json().catch(() => null)) as ApiResponse<T> | null;
 
     if (!res.ok || !body || !body.isSuccess) {
         if (body?.types[0] === 'Unauthorized') {
             notLoggedInWarning().then(() => {
-                useAuthStore.getState().checkTokenStatus();
-                window.location.href = '/Auth/Login'; // Redirect to login if specified in error response
+                window.location.href = '/Auth/Login'; 
             });
         }
         throw new Error(body?.errors[0] ?? `Request failed (${res.status})`);

@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
         return Fail(res.status, 'Not authenticated', 'Unauthorized');
     }
     const apiResponse: ApiResponse<UserDTO> = await res.json();
-    return NextResponse.json(apiResponse, { status: res.status });
+    return NextResponse.json(apiResponse.data, { status: res.status });
 }
 
 function Fail(status: number, message: string, type: string) {

@@ -6,10 +6,6 @@ export async function POST(req: NextRequest) {
     try {
         await fetch(API_ENDPOINTS.LOGOUT, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include", // Include cookies stored in the browser
         });
         const response = NextResponse.json(
             { message: "Logout Successful" },

@@ -12,9 +12,8 @@ export async function fetchDelete(url: string, id: string) {
         if( !res.ok ) {
             console.log("----- FETCH DELETE NOT OK -----");
             const errorResponse: ErrorResponse = await res.json();
-            if ( errorResponse.type === "Authorization") {
+            if ( errorResponse.type === "Authorization" || errorResponse.type === "Unauthorized") {
                 alert("Access only for users");
-                useAuthStore.getState().checkTokenStatus();
                 window.location.href = errorResponse.redirect || "/Auth/Login"; // Redirect to login if specified in error response
                 return;
             }
