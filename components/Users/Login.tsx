@@ -30,9 +30,12 @@ function Login () {
                 fetchUser();
                 router.push("/");
             } else {
-                const message = res.error;
-                console.log("Error Response:", message);
-                alert(`Error: ${message}`);
+                const badResponse = res;
+                console.log("------------------");
+                console.log(badResponse.error);
+                
+                console.log("Error Response:", badResponse.error || "Error during login");
+                alert(`Error: ${badResponse.error}`);
             }
         } finally {
             setIsLoading(false);

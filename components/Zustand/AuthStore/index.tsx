@@ -5,8 +5,6 @@ import { UserDTO } from '@/Types/types';
 interface AuthState {
     user: UserDTO | null;
     isAuthenticated: boolean;
-    isInitialized: boolean;
-    setinitialized: () => void;
     logout: () => void;
     fetchUser: () => Promise<boolean>;
 }
@@ -15,12 +13,6 @@ export const useAuthStore = create<AuthState>()(
         (set) => ({
             user: null,
             isAuthenticated: false,
-            isInitialized: false,
-            setinitialized: () => {
-                set({
-                    isInitialized: true
-                });
-            },
             logout: async () => {
                 // Clear the state and remove from localStorage
                 try {

@@ -13,8 +13,11 @@ export async function FetchLoginPost(body: LoginUserDTO): Promise<{success: true
         body: JSON.stringify(body),
     });
     if (!res.ok) {
-        const errorData: {message: string}  = await res.json();
-        return {success: false, error: errorData.message || "An error occurred while fetching data"};
+        
+        const errorData: string  = await res.json();
+        console.log("-----------------------");
+        console.log(errorData);
+        return {success: false, error: errorData || "An error occurred while fetching data"};
     }
     console.log("---------- Login Success ----------");
     const data = await res.json();

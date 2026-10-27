@@ -8,7 +8,6 @@ function AddUserToAuthStore() {
         fetchUser().then(() => {
             console.log(`isAuthenticated status: ${useAuthStore.getState().isAuthenticated}`)
             console.log(`User: ${useAuthStore.getState().user?.email}`)
-            console.log(`Is initialized: ${useAuthStore.getState().isInitialized}`)
         });
     },[fetchUser])
 

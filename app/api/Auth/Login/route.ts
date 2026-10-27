@@ -3,8 +3,6 @@ import { LoginUserDTO, ErrorResponse, LoginResponse } from '@/Types/types';
 import {API_ENDPOINTS} from '@/lib/constants';
 
 export async function POST(req: NextRequest) {
-    console.log("---------- API LOGIN ROUTE ----------");
-    console.log(API_ENDPOINTS.LOGIN);
     const body: LoginUserDTO = await req.json();
     try {
         const response = await fetch(API_ENDPOINTS.LOGIN, {
@@ -16,20 +14,12 @@ export async function POST(req: NextRequest) {
             credentials: 'include', // Include cookies in the request
         });
 
-        // ADD DEBUGGING - Check what cookies the backend sent
-        console.log("Backend response headers:", response.headers);
-        console.log("Set-Cookie header:", response.headers.get('set-cookie'));
-
         if (!response.ok) {
-            const errorData: ErrorResponse = await response.json();
-            return NextResponse.json(errorData, { status: response.status });
+            const errorResponse: {message: string} = await response.json();
+            return NextResponse.json(errorResponse.message, { status: response.status });
         }
         
-        console.log("---------- API LOGIN ROUTE RESPONSE WITH TOKEN ----------");
         const data = await response.json();
-        // Set the cookie and return success
-        console.log("---------- TOKEN:");
-        console.log(data.token);
         const nextResponse = NextResponse.json({data}, { status: 200});
         nextResponse.cookies.set("token", data.token, {
             httpOnly: true,

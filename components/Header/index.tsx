@@ -11,6 +11,13 @@ function Header() {
     const pathname = usePathname();
     const isAuthenticated = useAuthStore().isAuthenticated;
 
+
+    const authLinks = [
+        {href: "/Meals",  label: "Meals"},
+        {href: "/DetailedMealPlans", label: "Detailed Mealplans"},
+        {href: "/Books",  label: "Boka mi"}
+    ]
+
     return (
         <header className="w-full px-8 py-5 flex items-center justify-between 
                  sticky top-0 z-40 w-full border-b border-white/10
@@ -25,19 +32,11 @@ function Header() {
                     <li>
                         <LoadingLink href="/" className={`hover:text-emerald-300 transition-colors ${pathname == "/" ? "text-emerald-300": ""}`}>Home</LoadingLink>
                     </li>
-                    { isAuthenticated && (
-                        <>
-                            <li>
-                                <LoadingLink href="/Meals" className={`hover:text-emerald-300 transition-colors ${pathname == "/Meals" ? "text-emerald-300" : ""}`}>Meals</LoadingLink>
+                    { isAuthenticated && authLinks.map(({href, label}) => (
+                            <li key={href}>
+                                <LoadingLink href={href} className={`hover:text-emerald-300 transition-colors ${pathname == href ? "text-emerald-300" : ""}`}>{label}</LoadingLink>
                             </li>
-                            <li>
-                                <LoadingLink href="/DetailedMealPlans" className={`hover:text-emerald-300 transition-colors ${pathname == "/DetailedMealPlans" ? "text-emerald-300" : ""}`}>Detailed Mealplans</LoadingLink>
-                            </li>
-                            <li>
-                                <LoadingLink href="/Books" className={`hover:text-emerald-300 transition-colors ${pathname == "/Books" ? "text-emerald-300" : ""}`}>Boka mi</LoadingLink>
-                            </li>
-                        </>
-                    ) }
+                    ))}
                     <li>
                         <LoadingLink href="/Aboutme" className={`hover:text-emerald-300 transition-colors ${pathname == "/Aboutme" ? "text-emerald-300" : ""}`}>About Me</LoadingLink>
                     </li>
