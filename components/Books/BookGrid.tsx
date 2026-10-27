@@ -1,10 +1,14 @@
 'use client';
 import { BaseGrid } from '@/components/DataGrids/BaseGrid';
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
+import { HexColorPicker, HexColorInput } from "react-colorful";
 import { BookDto } from '@/Types/BookTypes';
 import styles from './BookGrid.module.css';
+import { useState } from 'react';
+import { ColorCell } from './ColorCell';
 
 export default function BookGrid() {
+    const [color, setColor] = useState();
     const months = [
         'Jan',
         'Feb',
@@ -19,6 +23,26 @@ export default function BookGrid() {
         'Nov',
         'Des',
     ];
+
+
+    const saveColorChange = (hex: string, rowId: number) => {
+        console.log(hex);
+        console.log(rowId);
+        const newRow = rows.map((row) => {
+            if ( row.id === rowId) {
+                return {
+                    ...row,
+                    color: hex
+                }
+            }
+            return {
+                ...row
+            }
+        })
+        rows = newRow;
+        
+    }
+
 
     const columns: GridColDef<BookDto>[] = [
         {
@@ -94,9 +118,17 @@ export default function BookGrid() {
             headerName: 'Release Year',
             width: 150,
         },
+        {
+            field: "color",
+            headerName: "Color",
+            renderCell: (params) => (
+                <ColorCell value={params.value ? params.value : "#ffffff"} rowId={params.row.id} onSave={saveColorChange}/>
+            ),
+            width: 120,
+        }
     ];
 
-    const rows: BookDto[] = [
+    let rows: BookDto[] = [
         {
             id: 1,
             title: 'Dune',
@@ -114,6 +146,7 @@ export default function BookGrid() {
             startedReading: '2026-01-10T00:00:00Z',
             endedReading: '2026-01-28T00:00:00Z',
             releaseYear: 1965,
+            color: "#ffffff"
         },
         {
             id: 2,
@@ -132,6 +165,7 @@ export default function BookGrid() {
             startedReading: '2026-02-01T00:00:00Z',
             endedReading: '2026-02-20T00:00:00Z',
             releaseYear: 1954,
+            color: "#ffffff"
         },
         {
             id: 3,
@@ -150,6 +184,7 @@ export default function BookGrid() {
             startedReading: '2026-03-05T00:00:00Z',
             endedReading: null, // Currently reading
             releaseYear: 2021,
+            color: "#ffffff"
         },
         {
             id: 4,
@@ -168,6 +203,7 @@ export default function BookGrid() {
             startedReading: null,
             endedReading: null,
             releaseYear: 1937,
+            color: "#ffffff"
         },
         {
             id: 5,
@@ -186,6 +222,7 @@ export default function BookGrid() {
             startedReading: '2026-04-01T00:00:00Z',
             endedReading: '2026-04-12T00:00:00Z',
             releaseYear: 1984,
+            color: "#ffffff"
         },
     ];
 

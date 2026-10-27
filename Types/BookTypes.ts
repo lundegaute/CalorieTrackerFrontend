@@ -9,7 +9,8 @@ export type BookDto = {
     pages: number,
     startedReading: string | null,
     endedReading: string | null,
-    releaseYear: number
+    releaseYear: number,
+    color: string
 }
 
 export type AuthorDto = {

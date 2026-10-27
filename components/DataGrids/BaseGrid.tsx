@@ -23,6 +23,7 @@ export function BaseGrid<T extends GridValidRowModel>({
             columns={columns}
             rows={rows}
             getRowClassName={getRowClassName}
+            
             sx={{
                 boxShadow: 1,
             }}
