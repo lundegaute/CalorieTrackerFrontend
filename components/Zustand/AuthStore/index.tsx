@@ -4,7 +4,8 @@ import { UserDTO } from '@/Types/types';
 
 interface AuthState {
     user: UserDTO | null;
-    isAuthenticated: boolean;
+    isInitialized: boolean;
+    //isAuthenticated: boolean;
     logout: () => void;
     fetchUser: () => Promise<boolean>;
 }
@@ -12,7 +13,8 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
         (set) => ({
             user: null,
-            isAuthenticated: false,
+            isInitialized: false,
+            //isAuthenticated: false,
             logout: async () => {
                 // Clear the state and remove from localStorage
                 try {
@@ -27,7 +29,8 @@ export const useAuthStore = create<AuthState>()(
                     console.error('Logout failed:', error);
                 }
                 set({
-                    isAuthenticated: false,
+                    //isAuthenticated: false,
+                    isInitialized: false,
                     user: null,
                 });
             },
@@ -38,16 +41,18 @@ export const useAuthStore = create<AuthState>()(
                         credentials: 'include',
                     });
                     if (!res.ok) {
+                        set({isInitialized: true, user: null});
                         return res.ok;
                     }
                     const user: UserDTO = await res.json();
                     set({
-                        isAuthenticated: res.ok,
+                        //isAuthenticated: res.ok,
+                        isInitialized: true,
                         user: user
                     });
                     return res.ok;
                 } catch {
-                    set({ isAuthenticated: false });
+                    set({ isInitialized: true });
                     return false;
                 }
             },

@@ -9,7 +9,8 @@ import LoadingLink from "@/components/UI/LoadingLink";
 
 function Header() {
     const pathname = usePathname();
-    const isAuthenticated = useAuthStore().isAuthenticated;
+    const isInitialized = useAuthStore().isInitialized;
+    const user = useAuthStore().user;
 
 
     const authLinks = [
@@ -32,7 +33,7 @@ function Header() {
                     <li>
                         <LoadingLink href="/" className={`hover:text-emerald-300 transition-colors ${pathname == "/" ? "text-emerald-300": ""}`}>Home</LoadingLink>
                     </li>
-                    { isAuthenticated && authLinks.map(({href, label}) => (
+                    { isInitialized && user && authLinks.map(({href, label}) => (
                             <li key={href}>
                                 <LoadingLink href={href} className={`hover:text-emerald-300 transition-colors ${pathname == href ? "text-emerald-300" : ""}`}>{label}</LoadingLink>
                             </li>
@@ -40,7 +41,7 @@ function Header() {
                     <li>
                         <LoadingLink href="/Aboutme" className={`hover:text-emerald-300 transition-colors ${pathname == "/Aboutme" ? "text-emerald-300" : ""}`}>About Me</LoadingLink>
                     </li>
-                    {isAuthenticated ? (
+                    {isInitialized && user ? (
                         <li>
                             <LoggedIn />
                         </li>

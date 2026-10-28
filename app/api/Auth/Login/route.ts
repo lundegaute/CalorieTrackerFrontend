@@ -32,12 +32,9 @@ export async function POST(req: NextRequest) {
     } catch (error) {
         console.log("---------- API LOGIN ROUTE ERROR ----------");
         console.error("Error during login:", error);
-        const errorResponse: ErrorResponse = {
-            message: { Error: ["An unexpected error occurred during login, from /api/Auth/Login"] },
-            type: "InternalServerError",
-            title: "Login Error",
-            status: 500
+        const errorResponse: {message: string} = {
+            message: "Internal server error. Is api online?",
         }
-        return NextResponse.json(errorResponse, { status: 500 });
+        return NextResponse.json(errorResponse.message, { status: 500 });
     }
 }

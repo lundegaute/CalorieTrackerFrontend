@@ -23,3 +23,16 @@ export type AuthorDto = {
 export type GenreDto = {
     name: string
 }
+
+export type UpdateBookRequest = {
+    id: number,
+    title: string,
+    author: AuthorDto,
+    genre: GenreDto,
+    series: string | null,
+    pages: number,
+    startedReading: string | null,
+    endedReading: string | null,
+    releaseYear: number,
+    color: string
+}

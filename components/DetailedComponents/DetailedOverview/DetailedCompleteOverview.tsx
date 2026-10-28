@@ -19,6 +19,7 @@ import { SweetAlertSingleInput } from "@/components/SweetAlert/DetailedSweetAler
 import { DetailedDelete } from "@/Fetch/DetailedFetch/DetailedDelete";
 import { ToggleButtons } from "@/components/Toggle/Buttons/ToggleButton";
 import { fetchDetailedGet } from "@/Fetch/DetailedFetch/DetailedGet";
+import LoadingOverlay from "@/components/UI/PageLoadingProvider";
 
 
 export default function DetailedCompleteOverview() {
@@ -97,7 +98,7 @@ export default function DetailedCompleteOverview() {
     
     if (isLoading || isLoadingRdi) {
         return (
-            <h1>Fetching data...</h1>
+            <LoadingOverlay isLoading={isLoading} message={"Loading..."} />
         )
     }
     if (error || isLoadingRdi || !apiResponse?.data) {

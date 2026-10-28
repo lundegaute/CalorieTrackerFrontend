@@ -9,10 +9,10 @@ export default function LoadingOverlay({ isLoading, message = "Loading..." }: Lo
   if (!isLoading) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div className=" flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        <div className="h-10 w-10 rounded-full border-4 border-emerald-400/30 border-t-emerald-400 animate-spin" />
-        <p className="text-sm text-white">{message}</p>
+        <div className="h-10 w-10 rounded-full border-4 border-emerald-400/30 border-t-emerald-400 animate-spin" aria-label="Loading" />
+        <p className="text-sm text-slate-400">{message}</p>
       </div>
     </div>
   );

@@ -2,13 +2,13 @@ import { Button, Popover } from '@mui/material';
 import { useState } from 'react';
 import { HexColorPicker, HexColorInput, HexAlphaColorPicker} from 'react-colorful';
 
-interface IColorCell {
+interface IColorPicker {
     value: string;
     rowId: number;
     onSave: (hex: string, rowId: number) => void;
 }
 
-export function ColorCell({ value, rowId, onSave }: IColorCell) {
+export function ColorPicker({ value, rowId, onSave }: IColorPicker) {
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
     const [color, setColor] = useState(value);
     const onClose = () => {
