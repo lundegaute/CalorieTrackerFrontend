@@ -31,4 +31,7 @@ export const API_ENDPOINTS = {
 
     DETAILED_SEARCH: `${BASE_URL}/DetailedFood/search`,
 
+    BOOKS: `${BASE_URL}/Book/GetBooks`,
+    BOOKS_UPDATE: `${BASE_URL}/Book/Update`,
+    BOOKS_UPDATE_HEX: `${BASE_URL}/Book/UpdateHex`,
 }

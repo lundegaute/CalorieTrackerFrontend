@@ -7,17 +7,24 @@ export async function fetchDetailedGet<T>(apiUrl: string): Promise<T> {
         method: 'GET',
     });
     const body = (await res.json().catch(() => null)) as ApiResponse<T> | null;
-
     if (!res.ok || !body || !body.isSuccess) {
-        if (body?.types[0] === 'Unauthorized') {
+        if (res.status == 401) {
             notLoggedInWarning().then(() => {
                 window.location.href = '/Auth/Login'; 
             });
         }
+        
         throw new Error(body?.errors[0] ?? `Request failed (${res.status})`);
     }
-
-    if (body.data === null) throw new Error('Response contained no data');
     
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+    if (body.data === null) throw new Error('Response contained no data');
+    console.log(body);
     return body.data;
 }
