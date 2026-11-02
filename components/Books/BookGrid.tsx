@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation';
 import LoadingOverlay from '../UI/PageLoadingProvider';
 import { fetchDetailedPost } from '@/Fetch/fetchDetailedPost';
 import { Authors, Genres } from "./BooksMockData";
+import { booksQueryOptions } from '@/Fetch/TanstackQueryOptions/QueryOptions';
 
 export default function BookGrid() {
     const isInitialized = useAuthStore((s) => s.isInitialized);
@@ -45,13 +46,8 @@ export default function BookGrid() {
     }, [isInitialized, user]);
 
     // UseQuery to get Books data here
-    const {
-        data: books,
-        isLoading,
-        error,
-    } = useQuery<BookDto[]>({
-        queryKey: ['books'],
-        queryFn: async () => fetchDetailedGet('/api/Books'),
+    const {data: books, isLoading, error, } = useQuery({
+        ...booksQueryOptions(),
         retry: 0,
     });
 

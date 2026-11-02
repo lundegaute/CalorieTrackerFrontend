@@ -20,6 +20,7 @@ import { DetailedDelete } from "@/Fetch/DetailedFetch/DetailedDelete";
 import { ToggleButtons } from "@/components/Toggle/Buttons/ToggleButton";
 import { fetchDetailedGet } from "@/Fetch/DetailedFetch/DetailedGet";
 import LoadingOverlay from "@/components/UI/PageLoadingProvider";
+import { rdiQueryOptions } from "@/Fetch/TanstackQueryOptions/QueryOptions";
 
 
 export default function DetailedCompleteOverview() {
@@ -71,11 +72,12 @@ export default function DetailedCompleteOverview() {
         retry: 0
     });
 
-    const {data: rdi, isLoading: isLoadingRdi, error: rdiError} = useQuery<RecommendationsByNutrient>({
-        queryKey: ["nutrientRecommendations"],
-        queryFn: () => fetchDetailedGet("api/Foods"),
+    const {data: rdi, isLoading: isLoadingRdi, error: rdiError} = useQuery({
+        ...rdiQueryOptions(),
         staleTime: Infinity,
+        retry: 1,
     });
+
 
     useEffect(() => {
         if ( apiResponse?.data?.[0] ){
