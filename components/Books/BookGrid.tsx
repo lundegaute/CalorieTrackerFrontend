@@ -6,19 +6,26 @@ import {
     GridColDef,
     GridRow,
     GridRowProps,
+    GridSingleSelectColDef,
 } from '@mui/x-data-grid';
 import { BaseGrid } from '@/components/DataGrids/BaseGrid';
-import { BookDto, UpdateBookColorRequest, UpdateBookRequest } from '@/Types/BookTypes';
+import {
+    AuthorDto,
+    BookDto,
+    UpdateBookColorRequest,
+    UpdateBookRequest,
+} from '@/Types/BookTypes';
 import { ColorPicker } from './ColorCell';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
-import { fetchDetailedGet } from '@/Fetch/DetailedFetch/DetailedGet';
-import { CircularProgress } from '@mui/material';
 import { useAuthStore } from '../Zustand/AuthStore';
 import { useRouter } from 'next/navigation';
 import LoadingOverlay from '../UI/PageLoadingProvider';
 import { fetchDetailedPost } from '@/Fetch/fetchDetailedPost';
-import { Authors, Genres } from "./BooksMockData";
-import { booksQueryOptions } from '@/Fetch/TanstackQueryOptions/QueryOptions';
+import {
+    authorsQueryOptions,
+    booksQueryOptions,
+    genresQueryOptions,
+} from '@/Fetch/TanstackQueryOptions/QueryOptions';
 
 export default function BookGrid() {
     const isInitialized = useAuthStore((s) => s.isInitialized);
@@ -46,18 +53,38 @@ export default function BookGrid() {
     }, [isInitialized, user]);
 
     // UseQuery to get Books data here
-    const {data: books, isLoading, error, } = useQuery({
+    const {
+        data: books,
+        isLoading,
+        error,
+    } = useQuery({
         ...booksQueryOptions(),
-        retry: 0,
+    });
+    const {
+        data: authors,
+        isLoading: isLoadingAuthors,
+        error: errorAuthors,
+    } = useQuery({
+        ...authorsQueryOptions(),
+        staleTime: Infinity,
+    });
+    const {
+        data: genres,
+        isLoading: isLoadingGenders,
+        error: errorGenders,
+    } = useQuery({
+        ...genresQueryOptions(),
+        staleTime: Infinity,
     });
 
-    useEffect(() => {   
-        if (!error && books)
+    useEffect(() => {
+        if (!error && books) {
             setRows(books);
+        }
     }, [books]);
 
     const bookMutation = useMutation({
-        mutationFn: (book: BookDto) =>{
+        mutationFn: (book: BookDto) => {
             const updatedBook: UpdateBookRequest = {
                 bookId: book.id,
                 title: book.title,
@@ -68,11 +95,11 @@ export default function BookGrid() {
                 series: book.series,
                 pages: book.pages,
                 releaseYear: book.releaseYear,
-            }
+            };
             return fetchDetailedPost<string, UpdateBookRequest>(
                 'api/Book/Update',
                 updatedBook
-            )
+            );
         },
         onMutate: (book: BookDto) => {
             queryClient.cancelQueries({ queryKey: ['books'] });
@@ -85,6 +112,7 @@ export default function BookGrid() {
             return { previousBooks }; // if this fails, onError makes use of it i think
         },
         onError: (error, variables, context) => {
+            // onError must have these 3 args in this order. context carries the object onMutate returns
             console.log(error);
             return queryClient.setQueryData<BookDto[]>(
                 ['books'],
@@ -100,16 +128,16 @@ export default function BookGrid() {
         async (newRow: BookDto, oldRow: BookDto) => {
             await bookMutation.mutateAsync(newRow);
             return newRow;
-        },[]
+        },
+        []
     );
-
 
     /* const colorMutation = useMutation({
         mutationFn: (body: UpdateBookColorRequest) => 
     }) */
 
     const saveColorChange = (hex: string, rowId: number) => {
-        const book = rows.find((x) => x.id === rowId);
+        /* const book = rows.find((x) => x.id === rowId);
         setRows((prev) => {
             const newRows = prev.map((row) => {
                 return row.series === book?.series
@@ -117,17 +145,17 @@ export default function BookGrid() {
                     : row;
             });
             return newRows;
-        });
+        }); */
     };
 
-    const GetTextColor = (hex: string): string => {
+    /* const GetTextColor = (hex: string): string => {
         hex = hex.replace('#', '');
         const r = parseInt(hex.slice(0, 2), 16);
         const g = parseInt(hex.slice(2, 4), 16);
         const b = parseInt(hex.slice(4, 6), 16);
         const brightness = (r * 299 + g * 587 + b * 114) / 1000;
         return brightness > 150 ? '#3f3d3d' : '#e4e0e0';
-    };
+    }; */
 
     const CustomizeRow = (props: GridRowProps) => {
         const row = props.row as BookDto;
@@ -136,13 +164,30 @@ export default function BookGrid() {
                 {...props}
                 style={{
                     ...props.style,
-                    backgroundColor: row.color,
-                    color: GetTextColor(row.color),
+                    /* backgroundColor: row.color,
+                    color: GetTextColor(row.color), */
                 }}
             />
         );
     };
 
+    const valueGetter = (value: number, row: AuthorDto) => {
+        return row.authorId;
+    };
+    const valueSetter = (value: number, row: AuthorDto) => {
+        const author = authors?.find((x) => x.authorId === value);
+        return { ...row, author: author };
+    };
+
+    const authorColumn: GridSingleSelectColDef = {
+        field: 'author',
+        type: 'singleSelect',
+        headerName: 'Author',
+        width: 150,
+        valueOptions: authors,
+        valueSetter: (value: number, row: AuthorDto) => valueSetter(value, row),
+        valueGetter: (value: number, row: AuthorDto) => valueGetter(value, row),
+    };
 
     const columns: GridColDef<BookDto>[] = [
         {
@@ -164,21 +209,25 @@ export default function BookGrid() {
             ) */
         },
         {
+            //valueFormatter: (value: type of this field, row: type of this grids datasource) => returns string
             field: 'author',
             type: 'singleSelect',
             headerName: 'Author',
             width: 150,
-            valueOptions: {valueOptions}
-            valueSetter: {valueSetter} 
-            valueGetter: (value, row) =>
-                `${row.author.firstName} ${row.author.lastName}`,
+            valueOptions: authors?.map((b) => ({
+                value: b.authorId,
+                label: `${b.firstName} ${b.lastName}`,
+            })),
         },
         {
             field: 'genre',
             headerName: 'Genre',
             editable: true,
             type: 'singleSelect',
-            valueOptions: ['Fantasy', 'Crime', 'Horror', 'Science-Fiction'],
+            valueOptions: genres?.map((g) => ({
+                value: g.genreId,
+                label: g.name,
+            })),
             width: 150,
         },
         {
@@ -201,6 +250,10 @@ export default function BookGrid() {
             headerName: 'Started reading',
             width: 150,
             editable: true,
+            valueGetter: (value: string | null) => new Date(value), // string -> Date, for the grid
+            valueSetter: (value: Date | null, row: BookDto) =>
+                // Date -> string, back into the row
+                ({ ...row, startedReading: formatDateOnly(value) }),
         },
         {
             field: 'endedReading',
@@ -233,9 +286,9 @@ export default function BookGrid() {
     if (isLoading) {
         return <LoadingOverlay isLoading={isLoading} message={'Loading...'} />;
     }
-    if (!isLoading && error && (
-        <h1>{error.message}</h1>
-    ))
+
+    if (error) return <h1>{error.message}</h1>;
+
     return (
         <div className={styles.gridContainer}>
             <BaseGrid
@@ -246,7 +299,9 @@ export default function BookGrid() {
                 processRowUpdate={handleRowUpdate}
                 slots={{ row: CustomizeRow }}
                 sx={{
-                    '& .MuiDataGrid-row:hover': { filter: 'brightness(1.2)' },
+                    '& .MuiDataGrid-row:hover': {
+                        filter: 'brightness(1.2)',
+                    },
                 }}
             />
         </div>

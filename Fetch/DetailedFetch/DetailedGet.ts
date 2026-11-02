@@ -1,5 +1,4 @@
 import notLoggedInWarning from '@/components/SweetAlert/notLoggedIn';
-import { useAuthStore } from '@/components/Zustand/AuthStore';
 import { ApiResponse } from '@/Types/DetailedTypes';
 
 export async function fetchDetailedGet<T>(apiUrl: string): Promise<T> {
@@ -13,7 +12,6 @@ export async function fetchDetailedGet<T>(apiUrl: string): Promise<T> {
                 window.location.href = '/Auth/Login'; 
             });
         }
-        
         throw new Error(body?.errors[0] ?? `Request failed (${res.status})`);
     }
     if (body.data === null) throw new Error('Response contained no data');

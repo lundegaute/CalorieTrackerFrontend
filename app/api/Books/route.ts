@@ -19,5 +19,5 @@ export async function GET(req: NextRequest) {
         return Fail(res.status, "Error while fetching data", "Fetch error");
     }
     const response: ApiResponse<BookDto[]> = await res.json();
-    return NextResponse.json(response.data, {status: res.status});
+    return NextResponse.json(response, {status: res.status});
 }
