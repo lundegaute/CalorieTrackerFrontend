@@ -15,6 +15,6 @@ export async function fetchDetailedGet<T>(apiUrl: string): Promise<T> {
         throw new Error(body?.errors[0] ?? `Request failed (${res.status})`);
     }
     if (body.data === null) throw new Error('Response contained no data');
-    console.log(body);
+    //console.log(body);
     return body.data;
 }

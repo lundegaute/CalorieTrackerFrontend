@@ -10,7 +10,7 @@ export type BookDto = {
     startedReading: Date | null,
     endedReading: Date | null,
     releaseYear: number,
-    color: string
+    hex: string
 }
 
 export type AuthorDto = {
@@ -18,7 +18,7 @@ export type AuthorDto = {
     firstName: string,
     lastName: string,
     birth: string | null,
-    webUrl: string
+    webUrl: string | null,
 }
 
 export type GenreDto = {
@@ -33,9 +33,10 @@ export type UpdateBookRequest = {
     genreId: number,
     series: string | null,
     pages: number,
-    startedReading: Date | null,
-    endedReading: Date | null,
-    releaseYear: number
+    startedReading: string | null,
+    endedReading: string | null,
+    releaseYear: number,
+    hex: string,
 }
 
 export type UpdateBookColorRequest = {
