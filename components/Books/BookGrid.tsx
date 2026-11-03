@@ -73,8 +73,6 @@ export default function BookGrid() {
 
     const bookMutation = useMutation({
         mutationFn: (book: BookDto) => {
-            console.log("----------------------------")
-            console.log(book.releaseYear) 
             const updatedBook: UpdateBookRequest = {
                 bookId: book.id,
                 title: book.title,
@@ -99,6 +97,9 @@ export default function BookGrid() {
             ]);
             queryClient.setQueryData<BookDto[]>(['books'], (old) => {
                 return old?.map((b) => (b.id === book.id ? book : b));
+            });
+            queryClient.setQueryData<BookDto[]>(['books'], (old) => {
+                return old?.map((b) => (b.series === book.series ? {...b, hex: book.hex} : b));
             });
             return { previousBooks }; // if this fails, onError makes use of it i think
         },
