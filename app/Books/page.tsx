@@ -6,7 +6,7 @@ export default function Books() {
     
 
     return (
-        <div className={styles.booksPageContainer}>
+        <div className={`${styles.booksPageContainer}`}>
             <BookGrid />
         </div>
     );

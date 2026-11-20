@@ -43,3 +43,20 @@ export type UpdateBookColorRequest = {
     bookId: number,
     hex: string
 }
+
+export type AddBookRequest = {
+    title: string,
+    series: string | null,
+    pages: number | null,
+    startedReading: string | null,
+    releaseYear: number,
+}
+
+export type fieldType = 'string' | 'date' | 'number';
+
+export interface FieldConfig<T> {
+    name: keyof T & string;
+    label: string;
+    type: fieldType;
+    required?: boolean;
+}

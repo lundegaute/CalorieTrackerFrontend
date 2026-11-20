@@ -7,12 +7,15 @@
 }
 
 .booksPageContainer {
-    padding-top: 30px;
-    display: flex;
     align-items: center;
     justify-content: center;
     /* border: 1px, dotted, var(--border-color-soft); use to see the actual width of the grid */
     max-width: 1800px;
     width: 90%;
-    margin: 0 auto;
+    margin: 20px auto;
+
+    padding: 1.5rem;
+    background-color: var(--bg-panel-trans);
+    border: 1px solid var(--border-color-accent);
+    border-radius: 0.75rem; /* Clean modern rounded corners */
 }

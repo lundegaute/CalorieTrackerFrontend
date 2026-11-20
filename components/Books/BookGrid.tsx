@@ -3,7 +3,7 @@ import styles from './BookGrid.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import {GridActionsCell, GridColDef, GridRow, GridRowProps, GridSingleSelectColDef } from '@mui/x-data-grid';
 import { BaseGrid } from '@/components/DataGrids/BaseGrid';
-import { AuthorDto, BookDto, GenreDto, UpdateBookColorRequest, UpdateBookRequest } from '@/Types/BookTypes';
+import { AddBookRequest, AuthorDto, BookDto, FieldConfig, GenreDto, UpdateBookColorRequest, UpdateBookRequest } from '@/Types/BookTypes';
 import { ColorPicker } from './ColorCell';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../Zustand/AuthStore';
@@ -12,13 +12,15 @@ import LoadingOverlay from '../UI/PageLoadingProvider';
 import { fetchDetailedPost } from '@/Fetch/fetchDetailedPost';
 import { authorsQueryOptions, booksQueryOptions, genresQueryOptions } from '@/Fetch/TanstackQueryOptions/QueryOptions';
 import { fetchDetailedPut } from '@/Fetch/DetailedFetch/DetailedPut';
+import { GeneralForm } from '../Form/GeneralForm';
+import { bookFormFields } from './BookFormFields';
 
 export default function BookGrid() {
     const isInitialized = useAuthStore((s) => s.isInitialized);
     const user = useAuthStore((s) => s.user);
     const router = useRouter();
     const queryClient = useQueryClient();
-
+    const [addBook, setAddBook] = useState<AddBookRequest>();
 
     useEffect(() => {
         if (isInitialized && !user) router.replace('/Auth/Login');
@@ -179,6 +181,10 @@ export default function BookGrid() {
         return {...row, genre: genre};
     }
 
+    const onSubmit = (values: Record<string, string | Date | number>) => {
+
+    }
+
     const columns: GridColDef<BookDto>[] = [
         {
             field: 'title',
@@ -296,6 +302,9 @@ export default function BookGrid() {
                     },
                 }}
             />
+            <div className={styles.GeneralFormContainer}>
+                <GeneralForm<AddBookRequest> title={"Add Book"} submitLabel='Add book' fields={bookFormFields}/>
+            </div>
         </div>
     );
 }
